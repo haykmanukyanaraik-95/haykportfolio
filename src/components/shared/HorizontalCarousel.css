@@ -1,0 +1,57 @@
+/* Горизонтальная бесконечная карусель — для мобильных секций */
+
+.h-carousel {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Затемнение по краям — цвет фона #0a0a0a, без blur */
+.h-carousel::before,
+.h-carousel::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 10px;
+  z-index: 10;
+  pointer-events: none;
+}
+.h-carousel::before {
+  left: 0;
+  background: linear-gradient(to right, #0a0a0a, transparent);
+}
+.h-carousel::after {
+  right: 0;
+  background: linear-gradient(to left, #0a0a0a, transparent);
+}
+
+.h-carousel__track {
+  display: flex;
+  gap: var(--gap, 16px);
+  will-change: transform;
+  animation: h-scroll var(--speed, 30s) linear infinite;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Пауза при нажатии (touch / click) */
+.h-carousel__track:active,
+.h-carousel__track.paused {
+  animation-play-state: paused;
+}
+
+@keyframes h-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Обратное направление (справа налево → слева направо) */
+.h-carousel__track--reverse {
+  animation-name: h-scroll-reverse;
+}
+
+@keyframes h-scroll-reverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}

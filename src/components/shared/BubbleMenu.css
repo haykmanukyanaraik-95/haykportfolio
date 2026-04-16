@@ -1,0 +1,150 @@
+/* BubbleMenu — мобильное меню с bubble-анимацией */
+
+.bubble-menu {
+  left: 0;
+  right: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 1.5rem;
+  pointer-events: none;
+  z-index: 99;
+  height: 64px;
+}
+
+.bubble-menu.fixed { position: fixed; }
+.bubble-menu.absolute { position: absolute; }
+
+.bubble-menu .bubble {
+  --bubble-size: 36px;
+  width: var(--bubble-size);
+  height: var(--bubble-size);
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+.bubble-menu .logo-bubble {
+  width: auto;
+  min-height: var(--bubble-size);
+  height: var(--bubble-size);
+  padding: 0 12px;
+  border-radius: calc(var(--bubble-size) / 2);
+  gap: 8px;
+}
+
+.bubble-menu .toggle-bubble {
+  width: var(--bubble-size);
+  height: var(--bubble-size);
+}
+
+.bubble-menu .logo-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.bubble-menu .logo-content > img,
+.bubble-menu .logo-content > svg {
+  max-height: 60%;
+  max-width: 100%;
+}
+
+.bubble-menu .menu-btn {
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.bubble-menu .menu-line {
+  width: 20px;
+  height: 2px;
+  border-radius: 2px;
+  display: block;
+  margin: 0 auto;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform-origin: center;
+}
+
+.bubble-menu .menu-line + .menu-line { margin-top: 5px; }
+
+.bubble-menu .menu-btn.open .menu-line:first-child {
+  transform: translateY(3.5px) rotate(45deg);
+}
+.bubble-menu .menu-btn.open .menu-line:last-child {
+  transform: translateY(-3.5px) rotate(-45deg);
+}
+
+/* Overlay */
+.bubble-menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 98;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.bubble-menu-overlay .pill-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  pointer-events: auto;
+}
+
+.bubble-menu-overlay .pill-col {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.bubble-menu-overlay .pill-link {
+  --pill-bg: #ffffff;
+  --pill-color: #111;
+  --hover-bg: #f3f4f6;
+  --hover-color: #111;
+  width: 100%;
+  padding: 16px 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.2;
+  border-radius: 999px;
+  background: var(--pill-bg);
+  color: var(--pill-color);
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease, color 0.3s ease;
+  will-change: transform;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.bubble-menu-overlay .pill-link:active {
+  transform: scale(0.96);
+  background: var(--hover-bg);
+  color: var(--hover-color);
+}
+
+.bubble-menu-overlay .pill-label {
+  display: inline-block;
+  will-change: transform, opacity;
+}

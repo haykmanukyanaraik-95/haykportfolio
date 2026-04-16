@@ -1,0 +1,39 @@
+/* Вертикальная бесконечная карусель — 3 колонки с разным направлением */
+
+.vertical-carousel {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  contain: content;
+}
+
+.vertical-carousel__track {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap, 20px);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Вверх: от 0 до -50% (контент дублирован — бесшовная петля) */
+.vertical-carousel__track--up {
+  animation: vc-scroll-up var(--speed, 30s) linear infinite;
+}
+
+/* Вниз: от -50% до 0 */
+.vertical-carousel__track--down {
+  animation: vc-scroll-down var(--speed, 30s) linear infinite;
+}
+
+@keyframes vc-scroll-up {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+@keyframes vc-scroll-down {
+  0% { transform: translateY(-50%); }
+  100% { transform: translateY(0); }
+}
+

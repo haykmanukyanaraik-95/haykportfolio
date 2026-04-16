@@ -23,6 +23,8 @@
 # misc
 .DS_Store
 *.pem
+.mcp.json
+.vscode/
 
 # debug
 npm-debug.log*
@@ -39,6 +41,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# obsidian
+.obsidian/
+
+# claude working notes (obsidian vault, local only)
+_notes/
 
 # design reference files (local only)
 DESIGN-spotify.md
