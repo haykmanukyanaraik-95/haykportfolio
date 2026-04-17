@@ -21,9 +21,9 @@ const softSkills = [
 ];
 
 const socialLinks = [
-  { name: "LinkedIn", url: "https://www.linkedin.com/in/hayk-manukyanofficial/", icon: "/images/Scoial Link Icons/linkedin.svg" },
-  { name: "Instagram", url: "https://www.instagram.com/_______hayk_________/", icon: "/images/Scoial Link Icons/Instagram.svg" },
-  { name: "Behance", url: "https://www.behance.net/haykmanukyanofficial", icon: "/images/Scoial Link Icons/Behance.svg" },
+  { name: "LinkedIn", url: "https://www.linkedin.com/in/hayk-manukyanofficial/", icon: "/images/Social Link Icons/linkedin.svg" },
+  { name: "Instagram", url: "https://www.instagram.com/_______hayk_________/", icon: "/images/Social Link Icons/Instagram.svg" },
+  { name: "Behance", url: "https://www.behance.net/haykmanukyanofficial", icon: "/images/Social Link Icons/Behance.svg" },
 ];
 
 function SkillChip({ label }: { label: string }) {

@@ -251,7 +251,7 @@ hayk-portfolio/
 │       ├── projects/               — 6 обложек проектов
 │       ├── skills/                 — 21 SVG иконка скиллов
 │       ├── expertise/              — 6 SVG иконок для Expertise
-│       └── Scoial Link Icons/      — SVG логотипы соцсетей (LinkedIn, Instagram, Behance)
+│       └── Social Link Icons/      — SVG логотипы соцсетей (LinkedIn, Instagram, Behance)
 ├── CLAUDE.md                   — этот файл
 ├── README.md                   — короткое описание проекта
 ├── components.json             — shadcn конфиг (base-nova style, neutral palette)
