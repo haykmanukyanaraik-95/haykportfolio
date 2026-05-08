@@ -74,21 +74,24 @@ export default function Folder({
   const paper2 = paperColor;
   const paper3 = paperColor;
 
-  // Десктоп: открываем при наведении
-  const handleMouseEnter = () => {
+  // Десктоп: открываем при наведении (pointerType==='mouse', чтобы touch не триггерил hover)
+  const handlePointerEnter = (e: React.PointerEvent) => {
+    if (e.pointerType !== "mouse") return;
     setOpen(true);
   };
 
   // Десктоп: закрываем при уходе курсора
-  const handleMouseLeave = () => {
+  const handlePointerLeave = (e: React.PointerEvent) => {
+    if (e.pointerType !== "mouse") return;
     setOpen(false);
     setPaperOffsets(
       Array.from({ length: maxItems }, () => ({ x: 0, y: 0 }))
     );
   };
 
-  // Мобилка: tap toggle (open/close)
+  // Мобилка: tap toggle (open/close). На десктопе клик пропускаем — там работает hover.
   const handleClick = () => {
+    if (typeof window !== "undefined" && window.matchMedia("(hover: hover)").matches) return;
     setOpen((prev) => {
       if (prev) {
         setPaperOffsets(Array.from({ length: maxItems }, () => ({ x: 0, y: 0 })));
@@ -139,8 +142,8 @@ export default function Folder({
     <div
       style={{ transform: `scale(${size})`, transformOrigin: "top left" }}
       className={className}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onPointerEnter={handlePointerEnter}
+      onPointerLeave={handlePointerLeave}
       onClick={handleClick}
     >
       <div className={folderClassName} style={folderStyle}>

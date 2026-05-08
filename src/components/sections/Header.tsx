@@ -88,27 +88,17 @@ export default function Header() {
         </div>
       </header>
 
-      {/* BubbleMenu overlay — только содержимое меню */}
-      {mobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 z-[60]">
-          <BubbleMenu
-            logo={
-              <Image
-                src="/images/logo.svg"
-                alt="Hayk Manukyan logo"
-                width={24}
-                height={22}
-                priority
-              />
-            }
-            items={bubbleItems}
-            menuBg="#181818"
-            menuContentColor="#ffffff"
-            overlayBg="rgba(10, 10, 10, 0.97)"
-            onNavigate={() => setMobileMenuOpen(false)}
-          />
-        </div>
-      )}
+      {/* BubbleMenu overlay — controlled режим, только overlay (нав-бар уже выше у Header) */}
+      <div className="md:hidden">
+        <BubbleMenu
+          items={bubbleItems}
+          menuBg="#181818"
+          menuContentColor="#ffffff"
+          overlayBg="rgba(10, 10, 10, 0.97)"
+          open={mobileMenuOpen}
+          onNavigate={() => setMobileMenuOpen(false)}
+        />
+      </div>
 
       {/* Десктоп header — sticky */}
       <header

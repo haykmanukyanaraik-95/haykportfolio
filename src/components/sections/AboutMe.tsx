@@ -57,13 +57,14 @@ export default function AboutMe() {
     <Section id="about" variant="standard">
         <AnimatedContent distance={40} duration={0.8} delay={0} revealOverlay>
 
-          {/* lg:gap-16 (64px) — фиксированный отступ между блоками.
-              lg:items-center — оба блока выровнены по центру вертикально.
-              Левый расширен до 488px → текст короче по высоте → блоки ближе по высоте */}
-          <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 lg:items-center">
+          {/* xl:gap-16 (64px) — фиксированный отступ между блоками.
+              xl:items-center — оба блока выровнены по центру вертикально.
+              Side-by-side только на xl+ (1280+). На lg (1024-1279) layout ставится вертикально,
+              иначе 488 + 64 + 680 = 1232 не влезает в контейнер 976 */}
+          <div className="flex flex-col xl:flex-row gap-10 xl:gap-16 xl:items-center">
 
             {/* ЛЕВАЯ: заголовок + описание + текст про соцсети + папка */}
-            <div className="flex flex-col items-start lg:w-[488px] shrink-0">
+            <div className="flex flex-col items-start xl:w-[488px] shrink-0">
               <SectionHeading className="mb-2 lg:mb-2">About Me</SectionHeading>
 
               <p className="text-sm text-text-secondary leading-relaxed">
@@ -85,7 +86,7 @@ export default function AboutMe() {
 
             {/* ПРАВАЯ: Skills карточка — высота определяется контентом (короче левого блока).
                 space-y-8 — фиксированный отступ 32px между Hard и Soft Skills */}
-            <Card spotlight borderGlow className="p-4 lg:w-[680px] lg:shrink-0 space-y-8">
+            <Card spotlight borderGlow className="p-4 xl:w-[680px] xl:shrink-0 space-y-8">
               <div>
                 <h3 className="text-base font-semibold text-white mb-2">Hard Skills</h3>
                 <ul className="flex flex-wrap gap-2.5">

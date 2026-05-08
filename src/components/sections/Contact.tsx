@@ -54,16 +54,16 @@ export default function Contact() {
 
           {/* Левая колонка — электрический логотип (2x меньше + центр на мобилке) */}
             <div className="flex justify-center lg:justify-start items-center">
-              {/* Мобилка: 210x200, десктоп: 420x400 */}
+              {/* Мобилка: 320x305 (упирается в ширину viewport 375 минус padding), десктоп: 420x400 */}
               <div className="lg:hidden">
                 <ElectricLogo
                   logoSrc="/images/logo.svg"
-                  width={210}
-                  height={200}
+                  width={320}
+                  height={305}
                   color="var(--color-brand)"
                   speed={1}
                   chaos={0.12}
-                  thickness={1.5}
+                  thickness={2}
                 />
               </div>
               <div className="hidden lg:block">

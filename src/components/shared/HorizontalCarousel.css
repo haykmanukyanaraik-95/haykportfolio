@@ -5,24 +5,24 @@
   overflow: hidden;
 }
 
-/* Затемнение по краям — цвет фона #0a0a0a, без blur */
+/* Затемнение по краям — мягкий fade (15% ширины, 48-80px), gradient через rgba для плавного перехода */
 .h-carousel::before,
 .h-carousel::after {
   content: "";
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 10px;
+  width: clamp(48px, 15%, 80px);
   z-index: 10;
   pointer-events: none;
 }
 .h-carousel::before {
   left: 0;
-  background: linear-gradient(to right, #0a0a0a, transparent);
+  background: linear-gradient(to right, rgba(10, 10, 10, 1), rgba(10, 10, 10, 0));
 }
 .h-carousel::after {
   right: 0;
-  background: linear-gradient(to left, #0a0a0a, transparent);
+  background: linear-gradient(to left, rgba(10, 10, 10, 1), rgba(10, 10, 10, 0));
 }
 
 .h-carousel__track {

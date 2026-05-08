@@ -30,6 +30,12 @@ const rotatingWords = ["Research", "Design", "Create", "Innovate", "Orchestratin
 export default function Hero() {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [mounted, setMounted] = useState(false);
+  // На мобилке/планшете (< xl=1280) все элементы появляются синхронно (delay=0).
+  // На десктопе сохраняется каскад. Lazy init из window — корректное значение с первого
+  // клиентского рендера (анимации запускаются в useEffect AnimatedContent на mount).
+  const [isMobile] = useState(() =>
+    typeof window !== "undefined" && window.matchMedia("(max-width: 1279px)").matches
+  );
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -47,8 +53,9 @@ export default function Hero() {
 
   return (
     <Section id="home" variant="hero">
-        {/* Фото — сверху ТОЛЬКО на мобилке (вне grid) */}
-        <div className="lg:hidden mb-10 flex justify-center">
+        {/* Фото — сверху на мобилке/планшете/маленьком десктопе (< 1280).
+            На мобилке оборачиваем в AnimatedContent, чтобы синхронно появлялось с заголовком/кнопками */}
+        <AnimatedContent distance={40} duration={0.8} delay={0} className="xl:hidden mb-10 flex justify-center">
           <Card className="relative p-3">
             <TiltedCard
               imageSrc="/images/hayk-photo.png"
@@ -73,15 +80,15 @@ export default function Hero() {
               </div>
             </div>
           </Card>
-        </div>
+        </AnimatedContent>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 xl:gap-16 items-center">
 
-          {/* Левая колонка — текст, кнопки, статистика (центр на мобилке) */}
-          <div className="text-center lg:text-left">
+          {/* Левая колонка — текст, кнопки, статистика (центр до xl, слева на xl+) */}
+          <div className="text-center xl:text-left">
             {/* Заголовок */}
             <AnimatedContent distance={40} duration={0.8} delay={0}>
-              <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold leading-tight text-white select-none cursor-default">
+              <h1 className="text-2xl sm:text-3xl xl:text-5xl font-bold leading-tight text-white select-none cursor-default">
                 <span className="block">Hello I&apos;m A Designer With</span>
                 <span className="block mt-1 sm:mt-2 whitespace-nowrap">
                   Passion To{" "}
@@ -105,8 +112,8 @@ export default function Hero() {
             </AnimatedContent>
 
             {/* CTA кнопки */}
-            <AnimatedContent distance={40} duration={0.8} delay={0.2}>
-              <div className="flex flex-row justify-center lg:justify-start gap-3 sm:gap-6 mt-10 lg:mt-12">
+            <AnimatedContent distance={40} duration={0.8} delay={isMobile ? 0 : 0.2}>
+              <div className="flex flex-row justify-center xl:justify-start gap-3 sm:gap-6 mt-10 xl:mt-12">
                 <Button variant="primary" href="#work" icon="briefcase" centered>
                   View Work
                 </Button>
@@ -125,10 +132,10 @@ export default function Hero() {
             </AnimatedContent>
 
             {/* Статистика */}
-            <AnimatedContent distance={40} duration={0.8} delay={0.4}>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-14 lg:mt-20">
+            <AnimatedContent distance={40} duration={0.8} delay={isMobile ? 0 : 0.4}>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-14 xl:mt-20">
                 {stats.map((stat) => (
-                  <div key={stat.label} className="text-center lg:text-left">
+                  <div key={stat.label} className="text-center xl:text-left">
                     <span className="text-base font-semibold text-text-secondary">
                       <CountUp to={stat.value} duration={1.5} />
                       {stat.suffix}
@@ -140,9 +147,9 @@ export default function Hero() {
             </AnimatedContent>
           </div>
 
-          {/* Правая колонка — фото (только десктоп) */}
+          {/* Правая колонка — фото (только настоящий десктоп xl+, поэтому delay 0.3 не виден на мобилке) */}
           <AnimatedContent distance={60} duration={0.8} delay={0.3}>
-            <div className="relative hidden lg:flex justify-end items-start">
+            <div className="relative hidden xl:flex justify-end items-start">
               <Card className="relative p-3">
                 <TiltedCard
                   imageSrc="/images/hayk-photo.png"

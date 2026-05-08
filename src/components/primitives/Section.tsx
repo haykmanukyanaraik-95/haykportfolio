@@ -15,7 +15,9 @@ import { cn } from "@/lib/utils";
 type Variant = "hero" | "standard" | "compact" | "footer";
 
 const paddingMap: Record<Variant, string> = {
-  hero: "py-16 lg:pt-36 lg:pb-24",
+  // Hero — асимметричный padding активируется только на xl+ (1280+),
+  // т.к. на lg (1024-1279) Hero рендерится в стекированном виде
+  hero: "py-16 xl:pt-36 xl:pb-24",
   standard: "py-24 lg:py-44",
   compact: "py-16 lg:py-24",
   footer: "py-10",

@@ -14,12 +14,14 @@ interface MenuItem {
 }
 
 interface BubbleMenuProps {
-  logo: ReactNode;
+  logo?: ReactNode;
   items: MenuItem[];
   onNavigate?: () => void;
   menuBg?: string;
   menuContentColor?: string;
   overlayBg?: string;
+  /** Controlled mode: если передан — BubbleMenu не рендерит свой навбар, а только overlay управляется снаружи */
+  open?: boolean;
 }
 
 export default function BubbleMenu({
@@ -29,9 +31,12 @@ export default function BubbleMenu({
   menuBg = "#181818",
   menuContentColor = "#ffffff",
   overlayBg = "rgba(10, 10, 10, 0.97)",
+  open: controlledOpen,
 }: BubbleMenuProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [showOverlay, setShowOverlay] = useState(false);
+  const isControlled = controlledOpen !== undefined;
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isOpen = isControlled ? controlledOpen : internalOpen;
+  const [showOverlay, setShowOverlay] = useState(isControlled ? controlledOpen : false);
 
   const overlayRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
@@ -41,13 +46,18 @@ export default function BubbleMenu({
   const handleToggle = () => {
     const next = !isOpen;
     if (next) setShowOverlay(true);
-    setIsOpen(next);
+    if (!isControlled) setInternalOpen(next);
   };
 
   const handleLinkClick = () => {
-    setIsOpen(false);
+    if (!isControlled) setInternalOpen(false);
     onNavigate?.();
   };
+
+  // В controlled-режиме показ overlay синхронизируется с пропом open
+  useEffect(() => {
+    if (isControlled && controlledOpen) setShowOverlay(true);
+  }, [isControlled, controlledOpen]);
 
   useEffect(() => {
     const overlay = overlayRef.current;
@@ -102,24 +112,27 @@ export default function BubbleMenu({
 
   return (
     <>
-      {/* Навбар с логотипом и кнопкой */}
-      <nav className="bubble-menu fixed" aria-label="Main navigation">
-        <div className="bubble logo-bubble" style={{ background: menuBg }}>
-          <span className="logo-content">{logo}</span>
-        </div>
+      {/* Навбар с логотипом и кнопкой — рендерится только если НЕ controlled
+          (в controlled-режиме навбар управляется снаружи, например Header'ом) */}
+      {!isControlled && (
+        <nav className="bubble-menu fixed" aria-label="Main navigation">
+          <div className="bubble logo-bubble" style={{ background: menuBg }}>
+            <span className="logo-content">{logo}</span>
+          </div>
 
-        <button
-          type="button"
-          className={`bubble toggle-bubble menu-btn ${isOpen ? "open" : ""}`}
-          onClick={handleToggle}
-          aria-label="Toggle menu"
-          aria-pressed={isOpen}
-          style={{ background: menuBg }}
-        >
-          <span className="menu-line" style={{ background: menuContentColor }} />
-          <span className="menu-line" style={{ background: menuContentColor }} />
-        </button>
-      </nav>
+          <button
+            type="button"
+            className={`bubble toggle-bubble menu-btn ${isOpen ? "open" : ""}`}
+            onClick={handleToggle}
+            aria-label="Toggle menu"
+            aria-pressed={isOpen}
+            style={{ background: menuBg }}
+          >
+            <span className="menu-line" style={{ background: menuContentColor }} />
+            <span className="menu-line" style={{ background: menuContentColor }} />
+          </button>
+        </nav>
+      )}
 
       {/* Overlay с пилами */}
       {showOverlay && (
