@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from "react";
 import LogoLoop, { type LogoImageItem } from "@/components/shared/LogoLoop";
+import Section from "@/components/primitives/Section";
 
 // Список скиллов: порядок — дизайн → AI → research → код → communication
 const skills: LogoImageItem[] = [
@@ -38,7 +39,7 @@ const renderSkillItem = (item: LogoImageItem) => {
       <img
         src={item.src}
         alt={item.title ?? ""}
-        className={`h-[38px] w-auto grayscale ${isMaze ? "opacity-50" : ""}`}
+        className={`h-10 w-auto grayscale ${isMaze ? "opacity-50" : ""}`}
         loading="lazy"
         draggable={false}
       />
@@ -63,13 +64,13 @@ export default function SkillCarousel() {
   }, []);
 
   return (
-    <section id="skills-carousel" className="py-[85px] lg:py-[106px]">
+    <Section id="skills-carousel" variant="compact" bare>
       <LogoLoop
         logos={skills}
         speed={speed}
         gap={75}
         hoverSpeed={30}
-        logoHeight={38}
+        logoHeight={40}
         direction="left"
         fadeOut
         fadeOutColor="#0a0a0a"
@@ -77,6 +78,6 @@ export default function SkillCarousel() {
         renderItem={(item) => renderSkillItem(item as LogoImageItem)}
         ariaLabel="Skills carousel"
       />
-    </section>
+    </Section>
   );
 }

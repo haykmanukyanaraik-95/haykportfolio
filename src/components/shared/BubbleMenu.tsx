@@ -141,7 +141,7 @@ export default function BubbleMenu({
                   style={{
                     "--pill-bg": menuBg,
                     "--pill-color": menuContentColor,
-                    "--hover-bg": item.hoverStyles?.bgColor || "#F23F3B",
+                    "--hover-bg": item.hoverStyles?.bgColor || "var(--color-brand)",
                     "--hover-color": item.hoverStyles?.textColor || "#ffffff",
                   } as React.CSSProperties}
                   ref={(el) => { bubblesRef.current[idx] = el; }}

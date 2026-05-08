@@ -212,16 +212,22 @@ hayk-portfolio/
 │   │   ├── globals.css         — дизайн-система (цвета, переменные, @import tw-animate-css)
 │   │   └── favicon.ico
 │   ├── components/
+│   │   ├── primitives/             ← НОВОЕ (Этап 2, 2026-05-04)
+│   │   │   ├── Section.tsx              — обёртка секции (variant: hero/standard/compact/footer)
+│   │   │   ├── SectionHeading.tsx       — h2 единого стиля (text-3xl + mb)
+│   │   │   ├── Card.tsx                 — стеклянная карточка (опц. spotlight/hover/borderGlow)
+│   │   │   ├── Button.tsx               — primary (GlareHover) / secondary (StarBorder) с ShinyText
+│   │   │   └── IconBadge.tsx            — SVG-иконка через mask-image
 │   │   ├── sections/
-│   │   │   ├── Header.tsx          ✅ Десктоп sticky навбар + мобилка BubbleMenu overlay
-│   │   │   ├── Hero.tsx            ✅ Мобилка: фото сверху, центрирован, кнопки в ряд
-│   │   │   ├── Projects.tsx        ✅ Мобилка: горизонтальная карусель (h-carousel)
-│   │   │   ├── SkillCarousel.tsx   ✅ Мобилка: speed=40, десктоп: speed=80
-│   │   │   ├── Expertise.tsx       ✅ Мобилка: горизонтальная карусель (h-carousel)
-│   │   │   ├── AboutMe.tsx         ✅ Текст+папка слева + Skills карточка справа
-│   │   │   ├── Contact.tsx         ✅ Мобилка: лого 2x меньше, карточка p-4
-│   │   │   ├── Testimonials.tsx    ✅ Мобилка: 2 горизонт. карусели / десктоп: 3 вертикальных
-│   │   │   └── Footer.tsx          ✅ Мобилка: вертикальный layout / десктоп: горизонтальный
+│   │   │   ├── Header.tsx          ✅ Десктоп sticky навбар + мобилка BubbleMenu overlay (НЕ обёрнут в Section)
+│   │   │   ├── Hero.tsx            ✅ Section + Card + Button — мобилка: фото сверху, кнопки в ряд
+│   │   │   ├── Projects.tsx        ✅ Section + SectionHeading + Card + Button — мобилка карусель
+│   │   │   ├── SkillCarousel.tsx   ✅ Section bare compact — speed mobile=40 / desktop=80
+│   │   │   ├── Expertise.tsx       ✅ Section + SectionHeading + Card + IconBadge
+│   │   │   ├── AboutMe.tsx         ✅ Section + SectionHeading + Card + Folder (size=0.8)
+│   │   │   ├── Contact.tsx         ✅ Section + Card + Button (submit)
+│   │   │   ├── Testimonials.tsx    ✅ Section bare + SectionHeading (карточки кастомные — без blur, perf)
+│   │   │   └── Footer.tsx          ✅ Section as=footer variant=footer
 │   │   ├── shared/
 │   │   │   ├── AnimatedContent.tsx     — GSAP появление (+ `revealOverlay`)
 │   │   │   ├── BackgroundEffect.tsx    — обёртка PixelBlast (dynamic, ssr:false)
@@ -444,45 +450,72 @@ hayk-portfolio/
 
 ---
 
-## 🔖 Next Session Pickup — Финализация (все 9/9 секций готовы)
+## 🔖 Next Session Pickup — Этап 1+2 закрыты, идём дальше
 
 **ВАЖНО: это инструкция для новой сессии. При старте прочитай этот блок первым.**
-**ПОДРОБНАЯ ВЕРСИЯ**: `_notes/Next Session.md` — там детальный план.
+**ПОДРОБНАЯ ВЕРСИЯ**: `_notes/Next Session.md` — там полный план + текущие значения дизайн-системы.
 
-### Состояние проекта: 9 из 9 секций готовы ✅
-**Все секции завершены**: Header, Hero, Projects, SkillCarousel, Expertise, About Me, Contact, Testimonials, Footer + PixelBlast фон + полировка дизайн-системы.
+### Состояние проекта (2026-05-04)
+- ✅ 9/9 секций готовы (desktop + mobile)
+- ✅ Formspree подключён (`mlgajler`)
+- ✅ CV PDF в `public/Hayk_Manukyan_CV.pdf`
+- ✅ Деплой на Vercel: `https://vercel.com/haykmanukyanaraik-3843s-projects/haykportfolio`
+- ✅ **Perf fix**: PixelBlast паузится через IntersectionObserver на Testimonials/Footer
+- ✅ **Этап 1 (Токены) ЗАКРЫТ**: полный набор токенов в `globals.css`, brand-color refactor (нет хардкодов `#F23F3B` в JSX)
+- ✅ **Этап 2 (Примитивы) ЗАКРЫТ**: 5 компонентов в `src/components/primitives/` (Section, SectionHeading, Card, Button, IconBadge), раскатаны на все секции
+- 📍 **СЛЕДУЮЩЕЕ**: коммит → пользователь выбирает Этап 3 / 4 / 5 / 6
 
-### Порядок секций в page.tsx (финал 2026-04-17)
+### Порядок секций в page.tsx
 ```
 Hero (#home) → Projects (#work) → SkillCarousel → About Me (#about)
 → Expertise (#expertise) → Contact (#contact) → Testimonials → Footer
 ```
 
-### Следующие шаги — финализация
-1. **Formspree endpoint** для Contact — заменить console.log заглушку
-2. **CV PDF** для Hero Download CV button
-3. **Реальные отзывы** для Testimonials (сейчас 12 сгенерированных)
-4. **Текст About Me** — финализация (сейчас черновик)
-5. **Удалить `hayk-photo2.png`** — не используется (спросить пользователя)
-6. **Деплой на Vercel**
+### Стратегический план
+1. **Этап 1 — Токены** ✅ закрыт 2026-05-04
+2. **Этап 2 — Примитивы** ✅ закрыт 2026-05-04
+3. **Этап 3 — Responsive audit** (375 / 768 / 1280 / 1920) — pending
+4. **Этап 4 — Семантические цвета** (фундамент под светлую тему) — pending
+5. **Этап 5 — Светлая тема + переключатель** — у пользователя есть идея, спросить
+6. **Этап 6 — Multi-page** (`/`, `/work`, `/about`, `/contact`) — pending
+
+### При старте новой сессии
+1. Прочитать `_notes/Next Session.md` — там детали по этапам
+2. Прочитать `_notes/Sessions.md` (последняя запись 2026-05-04 — большая сводка)
+3. Прочитать `_notes/Decisions.md` (все дизайн-решения, особенно блок 2026-05-04)
+4. Резюмировать пользователю в 3 пунктах: где остановились / что ждём / открытые вопросы
+
+### Ждём от пользователя
+- **Решение**: коммитим сейчас? Какой этап начинаем (3, 4 или сразу 5/6)?
+- **Контент**: реальные отзывы для Testimonials (сейчас 12 сгенерированных)
+- **Контент**: финальный текст About Me (сейчас 2 параграфа на основе CV)
+- **Идея переключателя темы** (когда дойдём до Этапа 5)
+
+### ⏸ Отложено пользователем (не трогать без явной просьбы)
+- SEO (OG image, favicon, sitemap)
+- Accessibility (aria-labels, focus, контраст, prefers-reduced-motion)
+- Performance оптимизации (отключить PixelBlast на мобиле и т.д.)
 
 ### 📚 ОБЯЗАТЕЛЬНО прочитать в новой сессии (по приоритету)
-1. `_notes/Next Session.md` — полный план финализации
-2. `_notes/Sessions.md` — последние сессии (2026-04-17: mobile + About Me rebuild)
-3. `_notes/Decisions.md` — все дизайн-решения
-4. `_notes/Components.md` — справка по shared (BubbleMenu, HorizontalCarousel — новые)
+1. `_notes/Next Session.md` — главный план + актуальные значения дизайн-системы
+2. `_notes/Sessions.md` — последняя сессия (2026-05-04, итоги Этапов 1+2)
+3. `_notes/Decisions.md` — все дизайн-решения (блок 2026-05-04 в начале)
+4. `_notes/Components.md` — справка по primitives + shared
 5. `_notes/Open Questions.md` — отложенные вопросы
 
 ### Правила поведения
 - **ВСЕГДА уточнять перед решениями** (даже мелкими) — главное правило пользователя
 - Все комментарии в коде — **на русском**
 - Объяснения — **простыми словами**
+- При создании новых секций/страниц использовать **примитивы** в первую очередь (`<Section>`, `<Card>`, `<Button>`, `<IconBadge>`, `<SectionHeading>`)
 - Обновлять `_notes/Sessions.md` и `_notes/Next Session.md` по ходу работы
 - Обновлять `_notes/Decisions.md` **сразу** после принятия решения
-- В конце сессии — **чистка/обновление всех заметок** (пользователь всегда напоминает)
+- В конце сессии — **чистка/обновление всех заметок**
 
-### Дизайн-система (финал — применять ко всему новому)
-**Glass**: `bg-white/[0.015] backdrop-blur-[20px] border-white/10 hover:border-white/15`
-**Section padding** (финал 2026-04-17): Projects/Expertise/About/Testimonials `py-[102px] lg:py-[176px]`; Contact `py-[92px] lg:py-[161px]`; SkillCarousel `py-[85px] lg:py-[106px]`; Hero `pt-[82px] pb-[49px] lg:pt-[141px] lg:pb-[86px]`
-**Mobile carousels**: Projects 6s, Expertise 7s, Testimonials 8s/10s — `HorizontalCarousel.css`, dark fade 10px, pause on `:active`
-**Card padding по умолчанию**: `p-4`
+### Дизайн-система (актуальные значения)
+**Glass**: `bg-white/[0.015] backdrop-blur-[20px] border-white/10` (применять через `<Card>`)
+**Section padding**: hero `py-16 lg:pt-36 lg:pb-24` / standard `py-24 lg:py-44` / compact `py-16 lg:py-24` / footer `py-10` (применять через `<Section variant="...">`)
+**Typography**: hero h1 24/30/48 (`text-2xl sm:text-3xl lg:text-5xl`); section h2 30 uniform (`text-3xl`); body 14; caption 12
+**Brand**: `var(--color-brand)` — никаких хардкодов
+**Mobile carousels**: Projects 6s, Expertise 7s, Testimonials 8s/10s
+**Card padding**: 12 (sm) / 16 (md) / 24 (lg) — через `p-3 / p-4 / p-6`

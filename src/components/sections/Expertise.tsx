@@ -2,11 +2,14 @@
 // Карточка стилистически соответствует Projects (SpotlightCard + scale + border-hover)
 // Контент карточки — выровнен по левому краю (общее правило дизайн-системы)
 // Иконки — кастомные SVG из public/images/expertise/1.svg ... 6.svg
-// Цвет иконки — brand red (#F23F3B) через mask-image (независимо от исходного fill SVG)
+// Цвет иконки — brand red (через примитив IconBadge с mask-image)
 "use client";
 
 import AnimatedContent from "@/components/shared/AnimatedContent";
-import SpotlightCard from "@/components/shared/SpotlightCard";
+import Section from "@/components/primitives/Section";
+import SectionHeading from "@/components/primitives/SectionHeading";
+import Card from "@/components/primitives/Card";
+import IconBadge from "@/components/primitives/IconBadge";
 import "@/components/shared/HorizontalCarousel.css";
 
 // Данные областей экспертизы — iconSrc указывает на SVG в public/images/expertise/
@@ -51,12 +54,9 @@ const areas = [
 
 export default function Expertise() {
   return (
-    <section id="expertise" className="py-[102px] lg:py-[176px]">
-      <div className="mx-auto max-w-[1280px] px-6">
+    <Section id="expertise" variant="standard">
         {/* Заголовок секции — статический, без анимации */}
-        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-10 lg:mb-12">
-          Areas of Expertise
-        </h2>
+        <SectionHeading>Areas of Expertise</SectionHeading>
 
         {/* Мобилка: горизонтальная карусель с анимацией + затемнение */}
         <div className="sm:hidden h-carousel">
@@ -66,18 +66,11 @@ export default function Expertise() {
           >
             {[...areas, ...areas].map((area, i) => (
               <div key={`${area.title}-${i}`} className="w-[260px] shrink-0">
-                <SpotlightCard
-                  spotlightColor="rgba(242, 63, 59, 0.15)"
-                  className="h-full bg-white/[0.015] backdrop-blur-[20px] border border-white/10 rounded-lg p-4 flex flex-col items-start text-left"
-                >
-                  <div
-                    aria-hidden="true"
-                    className="mb-2"
-                    style={{ width: 36, height: 36, backgroundColor: "#F23F3B", WebkitMaskImage: `url("${encodeURI(area.iconSrc)}")`, maskImage: `url("${encodeURI(area.iconSrc)}")`, WebkitMaskRepeat: "no-repeat", maskRepeat: "no-repeat", WebkitMaskPosition: "center", maskPosition: "center", WebkitMaskSize: "contain", maskSize: "contain" }}
-                  />
+                <Card spotlight className="h-full p-4 flex flex-col items-start text-left">
+                  <IconBadge src={area.iconSrc} className="mb-2" />
                   <h3 className="text-sm font-semibold text-white mb-2">{area.title}</h3>
                   <p className="text-xs text-text-secondary leading-relaxed">{area.description}</p>
-                </SpotlightCard>
+                </Card>
               </div>
             ))}
           </div>
@@ -93,29 +86,8 @@ export default function Expertise() {
               delay={0}
               revealOverlay
             >
-              <SpotlightCard
-                spotlightColor="rgba(242, 63, 59, 0.15)"
-                className="h-full bg-white/[0.015] backdrop-blur-[20px] border border-white/10 hover:border-white/15 rounded-lg transition-transform duration-200 hover:scale-[1.02] p-4 flex flex-col items-start text-left"
-              >
-                {/* Иконка — 24×24 SVG, закрашен brand-red через mask-image
-                    URL оборачиваем в кавычки + encodeURI, чтобы пробелы в имени файла не ломали парсинг CSS */}
-                <div
-                  aria-hidden="true"
-                  className="mb-2"
-                  style={{
-                    width: 36,
-                    height: 36,
-                    backgroundColor: "#F23F3B",
-                    WebkitMaskImage: `url("${encodeURI(area.iconSrc)}")`,
-                    maskImage: `url("${encodeURI(area.iconSrc)}")`,
-                    WebkitMaskRepeat: "no-repeat",
-                    maskRepeat: "no-repeat",
-                    WebkitMaskPosition: "center",
-                    maskPosition: "center",
-                    WebkitMaskSize: "contain",
-                    maskSize: "contain",
-                  }}
-                />
+              <Card spotlight hover className="h-full p-4 flex flex-col items-start text-left transition-transform duration-200 hover:scale-[1.02]">
+                <IconBadge src={area.iconSrc} className="mb-2" />
 
                 {/* Заголовок */}
                 <h3 className="text-base font-semibold text-white mb-3">
@@ -126,11 +98,10 @@ export default function Expertise() {
                 <p className="text-sm text-text-secondary leading-relaxed">
                   {area.description}
                 </p>
-              </SpotlightCard>
+              </Card>
             </AnimatedContent>
           ))}
         </div>
-      </div>
-    </section>
+    </Section>
   );
 }

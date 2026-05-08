@@ -1,8 +1,20 @@
 // Анимированная папка — при наведении открывается и показывает "бумажки" (соцсети)
 "use client";
 
-import { useState, type ReactNode, type CSSProperties } from "react";
+import { useState, useEffect, type ReactNode, type CSSProperties } from "react";
 import "./Folder.css";
+
+// Резолвит CSS-переменную var(--xxx) в реальный hex (для функций darkenColor и т.п.)
+function resolveCssVar(value: string, fallback = "#F23F3B"): string {
+  if (typeof window === "undefined") return fallback;
+  if (value.startsWith("var(")) {
+    const varName = value.slice(4, -1).trim();
+    return (
+      getComputedStyle(document.documentElement).getPropertyValue(varName).trim() || fallback
+    );
+  }
+  return value;
+}
 
 // Затемняет hex-цвет на заданный процент
 function darkenColor(hex: string, percent: number): string {
@@ -33,7 +45,7 @@ interface FolderProps {
 }
 
 export default function Folder({
-  color = "#F23F3B",
+  color = "var(--color-brand)",
   size = 1,
   items = [],
   className = "",
@@ -49,10 +61,18 @@ export default function Folder({
     Array.from({ length: maxItems }, () => ({ x: 0, y: 0 }))
   );
 
-  const folderBackColor = darkenColor(color, 0.08);
-  const paper1 = darkenColor("#ffffff", 0.1);
-  const paper2 = darkenColor("#ffffff", 0.05);
-  const paper3 = "#ffffff";
+  // Резолвим CSS-переменную после монтирования (на сервере window нет)
+  const [resolvedColor, setResolvedColor] = useState(() => resolveCssVar(color));
+  useEffect(() => {
+    setResolvedColor(resolveCssVar(color));
+  }, [color]);
+
+  const folderBackColor = darkenColor(resolvedColor, 0.08);
+  // Все 3 бумажки — единый серый цвет (10% затемнение от белого)
+  const paperColor = darkenColor("#ffffff", 0.1);
+  const paper1 = paperColor;
+  const paper2 = paperColor;
+  const paper3 = paperColor;
 
   // Десктоп: открываем при наведении
   const handleMouseEnter = () => {
@@ -106,7 +126,7 @@ export default function Folder({
   };
 
   const folderStyle: CSSProperties & Record<string, string> = {
-    "--folder-color": color,
+    "--folder-color": resolvedColor,
     "--folder-back-color": folderBackColor,
     "--paper-1": paper1,
     "--paper-2": paper2,

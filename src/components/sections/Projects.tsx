@@ -5,9 +5,10 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import AnimatedContent from "@/components/shared/AnimatedContent";
-import SpotlightCard from "@/components/shared/SpotlightCard";
-import StarBorder from "@/components/shared/StarBorder";
-import ShinyText from "@/components/shared/ShinyText";
+import Section from "@/components/primitives/Section";
+import SectionHeading from "@/components/primitives/SectionHeading";
+import Card from "@/components/primitives/Card";
+import Button from "@/components/primitives/Button";
 import "@/components/shared/HorizontalCarousel.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -87,7 +88,7 @@ export default function Projects() {
   }, []);
 
   return (
-    <section id="work" className="py-[102px] lg:py-[176px]">
+    <Section id="work" variant="standard">
       <style>{`
         .project-tooltip-wrap {
           opacity: 0;
@@ -99,15 +100,11 @@ export default function Projects() {
           transition-delay: 0.5s;
         }
       `}</style>
-      <div className="mx-auto max-w-[1280px] px-6">
 
-        {/* Заголовок секции — рендерится с opacity:0 (invisible), анимация в useEffect выше */}
-        <h2
-          ref={headingRef}
-          className="invisible text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-10 lg:mb-12"
-        >
-          Latest Projects
-        </h2>
+      {/* Заголовок секции — рендерится с opacity:0 (invisible), анимация в useEffect выше */}
+      <SectionHeading ref={headingRef} className="invisible">
+        Latest Projects
+      </SectionHeading>
 
 
         {/* Мобилка: горизонтальный скролл / Десктоп: сетка 3x2 */}
@@ -120,10 +117,7 @@ export default function Projects() {
             {/* Дублируем для бесшовной петли */}
             {[...projects, ...projects].map((project, i) => (
               <div key={`${project.title}-${i}`} className="w-[260px] shrink-0">
-                <SpotlightCard
-                  spotlightColor="rgba(242, 63, 59, 0.15)"
-                  className="group bg-white/[0.015] backdrop-blur-[20px] border border-white/10 active:border-white/15 rounded-lg cursor-pointer"
-                >
+                <Card spotlight className="group active:border-white/15 cursor-pointer">
                   <div className="p-3 pb-0">
                     <div className="relative aspect-[16/10] w-full rounded-md overflow-hidden">
                       <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
@@ -132,12 +126,12 @@ export default function Projects() {
                   <div className="p-3 flex items-center justify-between gap-2">
                     <h3 className="text-sm font-semibold text-white whitespace-nowrap">{project.title}</h3>
                     <div className="flex items-center gap-1 shrink-0">
-                      <span className="text-[9px] font-medium text-white uppercase tracking-wider">{project.tags[0]}</span>
+                      <span className="text-[10px] font-medium text-white uppercase tracking-wider">{project.tags[0]}</span>
                       <i className={`${project.tags[1] === "Mobile App" ? "fi fi-sr-mobile-notch" : "fi fi-sr-browser"} text-[10px] text-brand leading-none flex items-center`} aria-hidden="true" />
-                      <span className="text-[9px] font-medium text-brand uppercase tracking-wider whitespace-nowrap">{project.tags[1]}</span>
+                      <span className="text-[10px] font-medium text-brand uppercase tracking-wider whitespace-nowrap">{project.tags[1]}</span>
                     </div>
                   </div>
-                </SpotlightCard>
+                </Card>
               </div>
             ))}
           </div>
@@ -153,10 +147,7 @@ export default function Projects() {
               delay={0}
               revealOverlay
             >
-              <SpotlightCard
-                spotlightColor="rgba(242, 63, 59, 0.15)"
-                className="group bg-white/[0.015] backdrop-blur-[20px] border border-white/10 hover:border-white/15 rounded-lg cursor-pointer transition-transform duration-200 hover:scale-[1.02]"
-              >
+              <Card spotlight hover className="group cursor-pointer transition-transform duration-200 hover:scale-[1.02]">
                 <div className="p-3 pb-0">
                   <div className="relative aspect-[16/10] w-full rounded-md overflow-hidden">
                     <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
@@ -169,33 +160,26 @@ export default function Projects() {
                 </div>
                 <div className="p-4 flex items-center justify-between">
                   <h3 className="text-base font-semibold text-white">{project.title}</h3>
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-2">
                     <span className="text-[10px] font-medium text-white uppercase tracking-wider">{project.tags[0]}</span>
-                    <i className={`${project.tags[1] === "Mobile App" ? "fi fi-sr-mobile-notch" : "fi fi-sr-browser"} text-[11px] text-brand leading-none flex items-center ml-1`} aria-hidden="true" />
+                    <i className={`${project.tags[1] === "Mobile App" ? "fi fi-sr-mobile-notch" : "fi fi-sr-browser"} text-[10px] text-brand leading-none flex items-center ml-1`} aria-hidden="true" />
                     <span className="text-[10px] font-medium text-brand uppercase tracking-wider">{project.tags[1]}</span>
                   </div>
                 </div>
-              </SpotlightCard>
+              </Card>
             </AnimatedContent>
           ))}
         </div>
 
-        {/* Кнопка "View All Works" — StarBorder как secondary в Hero */}
+        {/* Кнопка "View All Works" — secondary */}
         <div className="flex justify-center mt-12">
-          <AnimatedContent distance={30} duration={0.7} delay={0.6}>
-            <StarBorder color="#F23F3B" speed="8s">
-              <a
-                href="#"
-                className="group/btn inline-flex items-center text-white text-base font-medium px-5 py-3"
-              >
-                <i className="fi fi-rr-eye text-sm leading-[1] flex items-center overflow-hidden opacity-0 max-w-0 mr-0 group-hover/btn:opacity-100 group-hover/btn:max-w-[18px] group-hover/btn:mr-2 transition-all duration-300 ease-out" aria-hidden="true" />
-                <ShinyText text="View All Works" speed={3.5} delay={3} color="#b3b3b3" shineColor="#ffffff" className="leading-[1]" pauseOnHover />
-              </a>
-            </StarBorder>
+          <AnimatedContent distance={30} duration={0.7} delay={0}>
+            <Button variant="secondary" href="#" icon="eye">
+              View All Works
+            </Button>
           </AnimatedContent>
         </div>
 
-      </div>
-    </section>
+    </Section>
   );
 }

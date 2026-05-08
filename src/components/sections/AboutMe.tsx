@@ -3,8 +3,10 @@
 "use client";
 
 import AnimatedContent from "@/components/shared/AnimatedContent";
-import SpotlightCard from "@/components/shared/SpotlightCard";
 import Folder from "@/components/shared/Folder";
+import Section from "@/components/primitives/Section";
+import SectionHeading from "@/components/primitives/SectionHeading";
+import Card from "@/components/primitives/Card";
 
 const hardSkills = [
   "User Research", "Usability Testing", "Interaction Design",
@@ -20,22 +22,21 @@ const softSkills = [
   "Storytelling", "Active Listening", "Mentorship",
 ];
 
+// iconClass — индивидуальный размер иконки (Behance имеет внутренний padding в SVG, поэтому увеличен)
 const socialLinks = [
-  { name: "LinkedIn", url: "https://www.linkedin.com/in/hayk-manukyanofficial/", icon: "/images/Social Link Icons/linkedin.svg" },
-  { name: "Instagram", url: "https://www.instagram.com/_______hayk_________/", icon: "/images/Social Link Icons/Instagram.svg" },
-  { name: "Behance", url: "https://www.behance.net/haykmanukyanofficial", icon: "/images/Social Link Icons/Behance.svg" },
+  { name: "LinkedIn", url: "https://www.linkedin.com/in/hayk-manukyanofficial/", icon: "/images/Social Link Icons/linkedin.svg", iconClass: "w-10 h-10" },
+  { name: "Instagram", url: "https://www.instagram.com/_______hayk_________/", icon: "/images/Social Link Icons/Instagram.svg", iconClass: "w-10 h-10" },
+  { name: "Behance", url: "https://www.behance.net/haykmanukyanofficial", icon: "/images/Social Link Icons/Behance.svg", iconClass: "w-12 h-12" },
 ];
 
 function SkillChip({ label }: { label: string }) {
   return (
-    <li className="inline-flex items-center gap-1.5 border border-white/10 rounded-full px-3 py-1.5">
-      <i className="fi fi-sr-star text-[8px] text-brand leading-none flex items-center" aria-hidden="true" />
+    <li className="inline-flex items-center gap-2 border border-white/10 rounded-full px-3 py-1.5">
+      <i className="fi fi-sr-star text-[10px] text-brand leading-none flex items-center" aria-hidden="true" />
       <span className="text-xs text-text-secondary whitespace-nowrap">{label}</span>
     </li>
   );
 }
-
-const cardClass = "bg-white/[0.015] backdrop-blur-[20px] border border-white/10 rounded-lg";
 
 export default function AboutMe() {
   const folderItems = socialLinks.map((link) => (
@@ -48,23 +49,29 @@ export default function AboutMe() {
       onClick={(e) => e.stopPropagation()}
       className="flex items-center justify-center w-full h-full"
     >
-      <img src={link.icon} alt={link.name} className="w-10 h-10 object-contain" />
+      <img src={link.icon} alt={link.name} className={`${link.iconClass} object-contain`} />
     </a>
   ));
 
   return (
-    <section id="about" className="py-[102px] lg:py-[176px]">
-      <div className="mx-auto max-w-[1280px] px-6">
+    <Section id="about" variant="standard">
         <AnimatedContent distance={40} duration={0.8} delay={0} revealOverlay>
 
-          <div className="flex flex-col lg:flex-row gap-10 lg:gap-5 lg:items-center">
+          {/* lg:gap-16 (64px) — фиксированный отступ между блоками.
+              lg:items-center — оба блока выровнены по центру вертикально.
+              Левый расширен до 488px → текст короче по высоте → блоки ближе по высоте */}
+          <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 lg:items-center">
 
             {/* ЛЕВАЯ: заголовок + описание + текст про соцсети + папка */}
-            <div className="flex flex-col items-start lg:w-[403px] shrink-0">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">About Me</h2>
+            <div className="flex flex-col items-start lg:w-[488px] shrink-0">
+              <SectionHeading className="mb-2 lg:mb-2">About Me</SectionHeading>
 
               <p className="text-sm text-text-secondary leading-relaxed">
-                UX / Product Designer, 6+ years. Leading UX at Devteam.Space, pursuing a Master&apos;s in Interaction Design in Lisbon.
+                Accomplished Product Designer with 6+ years of experience delivering innovative digital solutions. Skilled in user research, wireframing, prototyping, and information architecture — with hands-on expertise in Figma, Framer, and AI-augmented design workflows.
+              </p>
+
+              <p className="text-sm text-text-secondary leading-relaxed mt-3">
+                I optimize usability and interface flows for responsive web and mobile platforms, collaborate closely with cross-functional teams in agile environments, and bring foundational front-end knowledge (HTML, CSS, JavaScript) to bridge design and development.
               </p>
 
               <p className="text-sm text-text-muted leading-relaxed mt-3">
@@ -72,34 +79,30 @@ export default function AboutMe() {
               </p>
 
               <div className="mt-10">
-                <Folder color="#F23F3B" size={1.2} items={folderItems} className="origin-top-left" />
+                <Folder color="var(--color-brand)" size={0.8} items={folderItems} className="origin-top-left" />
               </div>
             </div>
 
-            {/* ПРАВАЯ: Skills карточка — обнимает контент */}
-            <SpotlightCard
-              spotlightColor="rgba(242, 63, 59, 0.15)"
-              borderGlow
-              className={`${cardClass} p-4`}
-            >
-              <div className="mb-4">
+            {/* ПРАВАЯ: Skills карточка — высота определяется контентом (короче левого блока).
+                space-y-8 — фиксированный отступ 32px между Hard и Soft Skills */}
+            <Card spotlight borderGlow className="p-4 lg:w-[680px] lg:shrink-0 space-y-8">
+              <div>
                 <h3 className="text-base font-semibold text-white mb-2">Hard Skills</h3>
-                <ul className="flex flex-wrap gap-[7px]">
+                <ul className="flex flex-wrap gap-2.5">
                   {hardSkills.map((s) => <SkillChip key={s} label={s} />)}
                 </ul>
               </div>
               <div>
                 <h3 className="text-base font-semibold text-white mb-2">Soft Skills</h3>
-                <ul className="flex flex-wrap gap-[7px]">
+                <ul className="flex flex-wrap gap-2.5">
                   {softSkills.map((s) => <SkillChip key={s} label={s} />)}
                 </ul>
               </div>
-            </SpotlightCard>
+            </Card>
 
           </div>
 
         </AnimatedContent>
-      </div>
-    </section>
+    </Section>
   );
 }

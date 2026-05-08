@@ -20,7 +20,7 @@ export default function ElectricLogo({
   logoSrc,
   width,
   height,
-  color = '#F23F3B',
+  color = 'var(--color-brand)',
   speed = 1,
   chaos = 0.12,
   thickness = 2,
@@ -228,13 +228,20 @@ export default function ElectricLogo({
         { width: thickness, alpha: 1, blur: 0 },
       ];
 
+      // Если color передан как CSS var() — резолвим в реальный hex (canvas не понимает var())
+      const resolvedColor = color.startsWith('var(')
+        ? getComputedStyle(document.documentElement)
+            .getPropertyValue(color.slice(4, -1).trim())
+            .trim() || '#F23F3B'
+        : color;
+
       for (const layer of layers) {
-        ctx.strokeStyle = color;
+        ctx.strokeStyle = resolvedColor;
         ctx.globalAlpha = layer.alpha;
         ctx.lineWidth = layer.width;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
-        ctx.shadowColor = color;
+        ctx.shadowColor = resolvedColor;
         ctx.shadowBlur = layer.blur;
 
         for (let pi = 0; pi < sampled.length; pi++) {

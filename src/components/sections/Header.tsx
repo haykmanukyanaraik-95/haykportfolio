@@ -3,9 +3,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import ShinyText from "@/components/shared/ShinyText";
-import GlareHover from "@/components/shared/GlareHover";
 import BubbleMenu from "@/components/shared/BubbleMenu";
+import Button from "@/components/primitives/Button";
 
 // Ссылки навигации
 const navLinks = [
@@ -17,11 +16,11 @@ const navLinks = [
 
 // BubbleMenu items
 const bubbleItems = [
-  { label: "Home", href: "#home", hoverStyles: { bgColor: "#F23F3B", textColor: "#ffffff" } },
-  { label: "My Work", href: "#work", hoverStyles: { bgColor: "#F23F3B", textColor: "#ffffff" } },
-  { label: "About Me", href: "#about", hoverStyles: { bgColor: "#F23F3B", textColor: "#ffffff" } },
-  { label: "Contact Me", href: "#contact", hoverStyles: { bgColor: "#F23F3B", textColor: "#ffffff" } },
-  { label: "Let's talk", href: "#contact", hoverStyles: { bgColor: "#F23F3B", textColor: "#ffffff" } },
+  { label: "Home", href: "#home", hoverStyles: { bgColor: "var(--color-brand)", textColor: "#ffffff" } },
+  { label: "My Work", href: "#work", hoverStyles: { bgColor: "var(--color-brand)", textColor: "#ffffff" } },
+  { label: "About Me", href: "#about", hoverStyles: { bgColor: "var(--color-brand)", textColor: "#ffffff" } },
+  { label: "Contact Me", href: "#contact", hoverStyles: { bgColor: "var(--color-brand)", textColor: "#ffffff" } },
+  { label: "Let's talk", href: "#contact", hoverStyles: { bgColor: "var(--color-brand)", textColor: "#ffffff" } },
 ];
 
 export default function Header() {
@@ -139,7 +138,7 @@ export default function Header() {
               <a
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-[#b3b3b3] hover:text-white transition-colors"
+                className="text-sm font-medium text-text-secondary hover:text-white transition-colors"
               >
                 {link.label}
               </a>
@@ -147,26 +146,9 @@ export default function Header() {
           </nav>
 
           {/* CTA */}
-          <GlareHover
-            width="auto"
-            height="auto"
-            background="#F23F3B"
-            borderRadius="8px"
-            borderColor="transparent"
-            glareColor="#ffa8a8"
-            glareOpacity={0.3}
-            glareAngle={-30}
-            glareSize={275}
-            transitionDuration={800}
-          >
-            <a
-              href="#contact"
-              className="group/btn inline-flex items-center text-white text-base font-medium px-5 py-3"
-            >
-              <i className="fi fi-rr-comment text-sm leading-[1] flex items-center overflow-hidden opacity-0 max-w-0 mr-0 group-hover/btn:opacity-100 group-hover/btn:max-w-[18px] group-hover/btn:mr-2 transition-all duration-300 ease-out" aria-hidden="true" />
-              <ShinyText text="Let's talk" speed={3.5} delay={3} color="#ffffff" shineColor="#ffffff80" className="leading-[1]" pauseOnHover />
-            </a>
-          </GlareHover>
+          <Button variant="primary" href="#contact" icon="comment">
+            Let&apos;s talk
+          </Button>
         </div>
       </header>
     </>

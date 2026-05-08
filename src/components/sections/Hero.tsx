@@ -4,11 +4,11 @@
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import AnimatedContent from "@/components/shared/AnimatedContent";
-import ShinyText from "@/components/shared/ShinyText";
-import GlareHover from "@/components/shared/GlareHover";
-import StarBorder from "@/components/shared/StarBorder";
 import TiltedCard from "@/components/shared/TiltedCard";
 import CountUp from "@/components/shared/CountUp";
+import Section from "@/components/primitives/Section";
+import Card from "@/components/primitives/Card";
+import Button from "@/components/primitives/Button";
 
 // DecryptedText — только клиент (Math.random = hydration mismatch)
 const DecryptedText = dynamic(() => import("@/components/shared/DecryptedText"), {
@@ -46,11 +46,10 @@ export default function Hero() {
   }, [mounted]);
 
   return (
-    <section id="home" className="pt-[82px] pb-[49px] lg:pt-[141px] lg:pb-[86px]">
-      <div className="mx-auto max-w-[1280px] px-6">
+    <Section id="home" variant="hero">
         {/* Фото — сверху ТОЛЬКО на мобилке (вне grid) */}
         <div className="lg:hidden mb-10 flex justify-center">
-          <div className="relative bg-white/[0.015] backdrop-blur-[20px] border border-white/10 rounded-lg p-3">
+          <Card className="relative p-3">
             <TiltedCard
               imageSrc="/images/hayk-photo.png"
               altText="Hayk Manukyan — UX / Product Designer"
@@ -70,10 +69,10 @@ export default function Hero() {
                   <span className="motion-safe:animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-success" />
                 </span>
-                <span className="text-[11px] font-medium text-white whitespace-nowrap">Available for freelance</span>
+                <span className="text-xs font-medium text-white whitespace-nowrap">Available for freelance</span>
               </div>
             </div>
-          </div>
+          </Card>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -108,41 +107,20 @@ export default function Hero() {
             {/* CTA кнопки */}
             <AnimatedContent distance={40} duration={0.8} delay={0.2}>
               <div className="flex flex-row justify-center lg:justify-start gap-3 sm:gap-6 mt-10 lg:mt-12">
-                {/* Primary */}
-                <GlareHover
-                  width="auto"
-                  height="auto"
-                  background="#F23F3B"
-                  borderRadius="8px"
-                  borderColor="transparent"
-                  glareColor="#ffa8a8"
-                  glareOpacity={0.3}
-                  glareAngle={-30}
-                  glareSize={275}
-                  transitionDuration={800}
+                <Button variant="primary" href="#work" icon="briefcase" centered>
+                  View Work
+                </Button>
+                <Button
+                  variant="secondary"
+                  href="/Hayk_Manukyan_CV.pdf"
+                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  icon="download"
+                  centered
                 >
-                  <a
-                    href="#work"
-                    className="group/btn inline-flex items-center justify-center text-white text-base font-medium px-5 py-3"
-                  >
-                    <i className="fi fi-rr-briefcase text-sm leading-[1] flex items-center overflow-hidden opacity-0 max-w-0 mr-0 group-hover/btn:opacity-100 group-hover/btn:max-w-[18px] group-hover/btn:mr-2 transition-all duration-300 ease-out" aria-hidden="true" />
-                    <ShinyText text="View Work" speed={3.5} delay={3} color="#ffffff" shineColor="#ffffff80" className="leading-[1]" pauseOnHover />
-                  </a>
-                </GlareHover>
-
-                {/* Secondary — StarBorder эффект */}
-                <StarBorder color="#F23F3B" speed="8s">
-                  <a
-                    href="/Hayk_Manukyan_CV.pdf"
-                    download
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group/btn inline-flex items-center justify-center text-white text-base font-medium px-5 py-3"
-                  >
-                    <i className="fi fi-rr-download text-sm leading-[1] flex items-center overflow-hidden opacity-0 max-w-0 mr-0 group-hover/btn:opacity-100 group-hover/btn:max-w-[18px] group-hover/btn:mr-2 transition-all duration-300 ease-out" aria-hidden="true" />
-                    <ShinyText text="Download CV" speed={3.5} delay={3} color="#b3b3b3" shineColor="#ffffff" className="leading-[1]" pauseOnHover />
-                  </a>
-                </StarBorder>
+                  Download CV
+                </Button>
               </div>
             </AnimatedContent>
 
@@ -155,7 +133,7 @@ export default function Hero() {
                       <CountUp to={stat.value} duration={1.5} />
                       {stat.suffix}
                     </span>
-                    <p className="text-[11px] text-text-muted mt-0.5 leading-tight">{stat.label}</p>
+                    <p className="text-xs text-text-muted mt-1 leading-tight">{stat.label}</p>
                   </div>
                 ))}
               </div>
@@ -165,7 +143,7 @@ export default function Hero() {
           {/* Правая колонка — фото (только десктоп) */}
           <AnimatedContent distance={60} duration={0.8} delay={0.3}>
             <div className="relative hidden lg:flex justify-end items-start">
-              <div className="relative bg-white/[0.015] backdrop-blur-[20px] border border-white/10 rounded-lg p-3">
+              <Card className="relative p-3">
                 <TiltedCard
                   imageSrc="/images/hayk-photo.png"
                   altText="Hayk Manukyan — UX / Product Designer"
@@ -192,12 +170,11 @@ export default function Hero() {
                     </span>
                   </div>
                 </div>
-              </div>
+              </Card>
             </div>
           </AnimatedContent>
 
         </div>
-      </div>
-    </section>
+    </Section>
   );
 }

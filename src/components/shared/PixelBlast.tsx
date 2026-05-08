@@ -326,11 +326,17 @@ const PixelBlast = ({
   speed = 0.5,
   transparent = true,
   edgeFade = 0.5,
-  noiseAmount = 0
+  noiseAmount = 0,
+  paused = false
 }) => {
   const containerRef = useRef(null);
   const visibilityRef = useRef({ visible: true });
+  const pausedRef = useRef(paused);
   const speedRef = useRef(speed);
+
+  useEffect(() => {
+    pausedRef.current = paused;
+  }, [paused]);
 
   const threeRef = useRef(null);
   const prevConfigRef = useRef(null);
@@ -501,7 +507,7 @@ const PixelBlast = ({
       });
       let raf = 0;
       const animate = () => {
-        if (autoPauseOffscreen && !visibilityRef.current.visible) {
+        if (pausedRef.current || (autoPauseOffscreen && !visibilityRef.current.visible)) {
           raf = requestAnimationFrame(animate);
           return;
         }

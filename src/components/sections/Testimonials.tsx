@@ -3,6 +3,8 @@
 "use client";
 
 import AnimatedContent from "@/components/shared/AnimatedContent";
+import Section from "@/components/primitives/Section";
+import SectionHeading from "@/components/primitives/SectionHeading";
 import "@/components/shared/VerticalCarousel.css";
 import "@/components/shared/HorizontalCarousel.css";
 
@@ -98,7 +100,7 @@ const column3: Testimonial[] = [
 // Карточка отзыва — glass-style
 function TestimonialCard({ t }: { t: Testimonial }) {
   return (
-    <div className="bg-white/[0.015] backdrop-blur-[20px] border border-white/10 rounded-lg p-4">
+    <div className="bg-white/[0.03] border border-white/10 rounded-lg p-4">
       {/* Аватар-инициалы + имя + роль */}
       <div className="flex items-center gap-3 mb-3">
         <div
@@ -144,16 +146,14 @@ function VerticalColumn({
 
 export default function Testimonials() {
   return (
-    <section id="testimonials" className="py-[102px] lg:py-[176px] relative" style={{ contain: "layout style" }}>
+    <Section id="testimonials" variant="standard" bare className="relative" style={{ contain: "layout style" }}>
       {/* Сплошной фон #0a0a0a — перекрывает PixelBlast, выступает на 10px за секцию */}
       <div className="absolute -top-[4px] -bottom-[4px] -left-[4px] -right-[4px] bg-[#0a0a0a]" />
 
       <div className="relative mx-auto max-w-[1280px] px-6">
 
         {/* Заголовок секции */}
-        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-10 lg:mb-12">
-          What People Saying
-        </h2>
+        <SectionHeading>What People Saying</SectionHeading>
 
         {/* Мобилка: 2 горизонтальные карусели с анимацией + затемнение */}
         <div className="lg:hidden space-y-4">
@@ -202,6 +202,6 @@ export default function Testimonials() {
         </AnimatedContent>
 
       </div>
-    </section>
+    </Section>
   );
 }

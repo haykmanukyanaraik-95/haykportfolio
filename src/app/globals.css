@@ -61,6 +61,64 @@
   --color-text-muted: #6b6b6b;
   --color-border-subtle: #2a2a2a;
   --color-border-card: #333333;
+
+  /* === SPACING — единая шкала на базе 4px === */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+  --space-36: 144px;
+
+  /* === SECTION PADDING (вертикальный) === */
+  /* Hero — симметричный, mobile 64 / desktop 96 */
+  --section-py-hero-mobile: 64px;
+  --section-py-hero-desktop: 96px;
+  /* Стандартные секции — Projects/Expertise/About/Contact/Testimonials */
+  --section-py-standard-mobile: 96px;
+  --section-py-standard-desktop: 144px;
+  /* Compact — SkillCarousel */
+  --section-py-compact-mobile: 64px;
+  --section-py-compact-desktop: 96px;
+  /* Footer — минимальный */
+  --section-py-footer: 40px;
+
+  /* === TYPOGRAPHY (font-size) === */
+  --text-hero-mobile: 30px;       /* text-3xl */
+  --text-hero-desktop: 48px;      /* text-5xl */
+  --text-section-mobile: 24px;    /* text-2xl */
+  --text-section-desktop: 30px;   /* text-3xl */
+  --text-card-mobile: 14px;       /* text-sm */
+  --text-card-desktop: 16px;      /* text-base */
+  --text-body: 14px;              /* text-sm */
+  --text-caption: 12px;           /* text-xs */
+  --text-micro: 10px;             /* только для мини-тегов */
+
+  /* === ICON SIZES === */
+  --icon-xs: 12px;
+  --icon-sm: 16px;
+  --icon-md: 20px;
+  --icon-lg: 24px;
+  --icon-xl: 32px;
+
+  /* === CARD PADDING === */
+  --card-p-sm: 12px;   /* компактные (Projects mobile, Testimonials) */
+  --card-p-md: 16px;   /* стандарт (большинство) */
+  --card-p-lg: 24px;   /* крупные (Contact form desktop) */
+
+  /* === HEADING MARGINS === */
+  --heading-mb-section-mobile: 40px;   /* h2 секции (mobile) */
+  --heading-mb-section-desktop: 48px;  /* h2 секции (desktop) */
+  --heading-mb-card: 8px;              /* h3 в карточке */
+  --heading-mb-subtle: 12px;           /* мелкие подзаголовки */
 }
 
 /*

@@ -1,8 +1,9 @@
 // Секция 8: Footer — копирайт (лево) + цитата (центр) + подпись SVG (право)
+import Section from "@/components/primitives/Section";
+
 export default function Footer() {
   return (
-    <footer className="py-10">
-      <div className="mx-auto max-w-[1280px] px-6">
+    <Section as="footer" variant="footer">
         {/* Разделительная линия */}
         <div className="h-px bg-white/10 mb-10" />
 
@@ -31,7 +32,6 @@ export default function Footer() {
             className="h-10 w-auto opacity-30"
           />
         </div>
-      </div>
-    </footer>
+    </Section>
   );
 }
