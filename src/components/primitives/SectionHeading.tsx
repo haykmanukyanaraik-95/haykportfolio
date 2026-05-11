@@ -15,7 +15,7 @@ const SectionHeading = forwardRef<HTMLHeadingElement, SectionHeadingProps>(
     return (
       <h2
         ref={ref}
-        className={cn("text-3xl font-bold text-white mb-10 lg:mb-12", className)}
+        className={cn("text-3xl font-bold text-text-primary mb-10 lg:mb-12", className)}
       >
         {children}
       </h2>

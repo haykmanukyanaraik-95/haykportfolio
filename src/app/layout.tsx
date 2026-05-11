@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import BackgroundEffect from "@/components/shared/BackgroundEffect";
+import ThemeToggle from "@/components/primitives/ThemeToggle";
 import "./globals.css";
 
 // Шрифт Roboto — основной шрифт портфолио
@@ -42,6 +43,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${roboto.variable} h-full antialiased`}>
       <head>
+        {/* Init темы — ставим data-theme на <html> ДО hydration, чтобы не было
+            "вспышки" неправильной темы при загрузке. Источник: localStorage,
+            а если его нет — системная настройка пользователя. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var s=localStorage.getItem('theme');var t=s||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();`,
+          }}
+        />
         {/* Flaticon uicons — библиотека иконок (regular + solid) */}
         <link
           rel="stylesheet"
@@ -55,6 +64,8 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col relative">
         <BackgroundEffect />
         <div className="relative z-10 flex flex-col min-h-full">{children}</div>
+        {/* Плавающий переключатель темы — поверх всех секций */}
+        <ThemeToggle />
       </body>
     </html>
   );

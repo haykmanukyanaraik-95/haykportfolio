@@ -71,12 +71,12 @@ export default function Hero() {
               showMobileWarning={false}
             />
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10">
-              <div className="bg-black/20 backdrop-blur-2xl border border-white/10 rounded-full px-4 py-2 flex items-center gap-2">
+              <div className="bg-surface-overlay-light backdrop-blur-2xl border border-border-subtle rounded-full px-4 py-2 flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
-                  <span className="motion-safe:animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-success" />
+                  <span className="motion-safe:animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-success opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-success" />
                 </span>
-                <span className="text-xs font-medium text-white whitespace-nowrap">Available for freelance</span>
+                <span className="text-xs font-medium text-text-primary whitespace-nowrap">Available for freelance</span>
               </div>
             </div>
           </Card>
@@ -88,7 +88,7 @@ export default function Hero() {
           <div className="text-center xl:text-left">
             {/* Заголовок */}
             <AnimatedContent distance={40} duration={0.8} delay={0}>
-              <h1 className="text-2xl sm:text-3xl xl:text-5xl font-bold leading-tight text-white select-none cursor-default">
+              <h1 className="text-2xl sm:text-3xl xl:text-5xl font-bold leading-tight text-text-primary select-none cursor-default">
                 <span className="block">Hello I&apos;m A Designer With</span>
                 <span className="block mt-1 sm:mt-2 whitespace-nowrap">
                   Passion To{" "}
@@ -167,12 +167,12 @@ export default function Hero() {
 
                 {/* Бейдж "Available for freelance" — поверх фото */}
                 <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
-                  <div className="bg-black/20 backdrop-blur-2xl border border-white/10 rounded-full px-5 py-2.5 flex items-center gap-2.5">
+                  <div className="bg-surface-overlay-light backdrop-blur-2xl border border-border-subtle rounded-full px-5 py-2.5 flex items-center gap-2.5">
                     <span className="relative flex h-2.5 w-2.5">
-                      <span className="motion-safe:animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75" />
-                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-success" />
+                      <span className="motion-safe:animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-success opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent-success" />
                     </span>
-                    <span className="text-xs font-medium text-white whitespace-nowrap">
+                    <span className="text-xs font-medium text-text-primary whitespace-nowrap">
                       Available for freelance
                     </span>
                   </div>

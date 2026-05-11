@@ -68,7 +68,7 @@ export default function Expertise() {
               <div key={`${area.title}-${i}`} className="w-[260px] shrink-0">
                 <Card spotlight className="h-full p-4 flex flex-col items-start text-left">
                   <IconBadge src={area.iconSrc} className="mb-2" />
-                  <h3 className="text-sm font-semibold text-white mb-2">{area.title}</h3>
+                  <h3 className="text-sm font-semibold text-text-primary mb-2">{area.title}</h3>
                   <p className="text-xs text-text-secondary leading-relaxed">{area.description}</p>
                 </Card>
               </div>
@@ -90,7 +90,7 @@ export default function Expertise() {
                 <IconBadge src={area.iconSrc} className="mb-2" />
 
                 {/* Заголовок */}
-                <h3 className="text-base font-semibold text-white mb-3">
+                <h3 className="text-base font-semibold text-text-primary mb-3">
                   {area.title}
                 </h3>
 

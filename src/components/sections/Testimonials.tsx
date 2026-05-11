@@ -100,16 +100,16 @@ const column3: Testimonial[] = [
 // Карточка отзыва — glass-style
 function TestimonialCard({ t }: { t: Testimonial }) {
   return (
-    <div className="bg-white/[0.03] border border-white/10 rounded-lg p-4">
+    <div className="bg-surface-glass-strong border border-border-subtle rounded-lg p-4">
       {/* Аватар-инициалы + имя + роль */}
       <div className="flex items-center gap-3 mb-3">
         <div
-          className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold text-white shrink-0 bg-brand"
+          className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold text-text-on-brand shrink-0 bg-brand"
         >
           {t.initials}
         </div>
         <div>
-          <p className="text-sm font-medium text-white leading-tight">{t.name}</p>
+          <p className="text-sm font-medium text-text-primary leading-tight">{t.name}</p>
           <p className="text-xs text-text-muted leading-tight">{t.role}</p>
         </div>
       </div>
@@ -147,8 +147,8 @@ function VerticalColumn({
 export default function Testimonials() {
   return (
     <Section id="testimonials" variant="standard" bare className="relative" style={{ contain: "layout style" }}>
-      {/* Сплошной фон #0a0a0a — перекрывает PixelBlast, выступает на 10px за секцию */}
-      <div className="absolute -top-[4px] -bottom-[4px] -left-[4px] -right-[4px] bg-[#0a0a0a]" />
+      {/* Сплошной фон цвета страницы — перекрывает PixelBlast, выступает на 4px за секцию */}
+      <div className="absolute -top-[4px] -bottom-[4px] -left-[4px] -right-[4px] bg-surface-page" />
 
       <div className="relative mx-auto max-w-[1280px] px-6">
 
@@ -196,8 +196,8 @@ export default function Testimonials() {
             </div>
 
             {/* Gradient fade */}
-            <div className="absolute top-0 left-0 right-0 h-24 z-10 pointer-events-none" style={{ background: "linear-gradient(to bottom, #0a0a0a, transparent)" }} />
-            <div className="absolute bottom-0 left-0 right-0 h-24 z-10 pointer-events-none" style={{ background: "linear-gradient(to top, #0a0a0a, transparent)" }} />
+            <div className="absolute top-0 left-0 right-0 h-24 z-10 pointer-events-none" style={{ background: "linear-gradient(to bottom, var(--surface-page), transparent)" }} />
+            <div className="absolute bottom-0 left-0 right-0 h-24 z-10 pointer-events-none" style={{ background: "linear-gradient(to top, var(--surface-page), transparent)" }} />
           </div>
         </AnimatedContent>
 

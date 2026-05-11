@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <Section as="footer" variant="footer">
         {/* Разделительная линия */}
-        <div className="h-px bg-white/10 mb-10" />
+        <div className="h-px bg-border-divider mb-10" />
 
         {/* Мобилка: вертикально по центру */}
         <div className="flex flex-col items-center gap-4 sm:hidden">

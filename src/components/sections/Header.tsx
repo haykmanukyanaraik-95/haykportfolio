@@ -16,11 +16,11 @@ const navLinks = [
 
 // BubbleMenu items
 const bubbleItems = [
-  { label: "Home", href: "#home", hoverStyles: { bgColor: "var(--color-brand)", textColor: "#ffffff" } },
-  { label: "My Work", href: "#work", hoverStyles: { bgColor: "var(--color-brand)", textColor: "#ffffff" } },
-  { label: "About Me", href: "#about", hoverStyles: { bgColor: "var(--color-brand)", textColor: "#ffffff" } },
-  { label: "Contact Me", href: "#contact", hoverStyles: { bgColor: "var(--color-brand)", textColor: "#ffffff" } },
-  { label: "Let's talk", href: "#contact", hoverStyles: { bgColor: "var(--color-brand)", textColor: "#ffffff" } },
+  { label: "Home", href: "#home", hoverStyles: { bgColor: "var(--brand)", textColor: "var(--text-on-brand)" } },
+  { label: "My Work", href: "#work", hoverStyles: { bgColor: "var(--brand)", textColor: "var(--text-on-brand)" } },
+  { label: "About Me", href: "#about", hoverStyles: { bgColor: "var(--brand)", textColor: "var(--text-on-brand)" } },
+  { label: "Contact Me", href: "#contact", hoverStyles: { bgColor: "var(--brand)", textColor: "var(--text-on-brand)" } },
+  { label: "Let's talk", href: "#contact", hoverStyles: { bgColor: "var(--brand)", textColor: "var(--text-on-brand)" } },
 ];
 
 export default function Header() {
@@ -47,7 +47,7 @@ export default function Header() {
     <>
       {/* Мобильный навбар — sticky, show/hide on scroll */}
       <header
-        className={`md:hidden sticky top-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/5 transition-transform duration-300 ${
+        className={`md:hidden sticky top-0 z-50 bg-surface-page/80 backdrop-blur-xl border-b border-border-subtle transition-transform duration-300 ${
           visible ? "translate-y-0" : "-translate-y-full"
         }`}
       >
@@ -70,17 +70,17 @@ export default function Header() {
             aria-label="Toggle menu"
           >
             <span
-              className={`block w-5 h-0.5 bg-white transition-transform duration-300 ${
+              className={`block w-5 h-0.5 bg-text-primary transition-transform duration-300 ${
                 mobileMenuOpen ? "rotate-45 translate-y-[4px]" : ""
               }`}
             />
             <span
-              className={`block w-5 h-0.5 bg-white transition-opacity duration-300 ${
+              className={`block w-5 h-0.5 bg-text-primary transition-opacity duration-300 ${
                 mobileMenuOpen ? "opacity-0" : ""
               }`}
             />
             <span
-              className={`block w-5 h-0.5 bg-white transition-transform duration-300 ${
+              className={`block w-5 h-0.5 bg-text-primary transition-transform duration-300 ${
                 mobileMenuOpen ? "-rotate-45 -translate-y-[4px]" : ""
               }`}
             />
@@ -92,9 +92,9 @@ export default function Header() {
       <div className="md:hidden">
         <BubbleMenu
           items={bubbleItems}
-          menuBg="#181818"
-          menuContentColor="#ffffff"
-          overlayBg="rgba(10, 10, 10, 0.97)"
+          menuBg="var(--surface-elevated-1)"
+          menuContentColor="var(--text-primary)"
+          overlayBg="color-mix(in srgb, var(--surface-page) 97%, transparent)"
           open={mobileMenuOpen}
           onNavigate={() => setMobileMenuOpen(false)}
         />
@@ -102,7 +102,7 @@ export default function Header() {
 
       {/* Десктоп header — sticky */}
       <header
-        className={`hidden md:block sticky top-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/5 transition-transform duration-300 ${
+        className={`hidden md:block sticky top-0 z-50 bg-surface-page/80 backdrop-blur-xl border-b border-border-subtle transition-transform duration-300 ${
           visible ? "translate-y-0" : "-translate-y-full"
         }`}
       >
@@ -117,7 +117,7 @@ export default function Header() {
               priority
             />
             <span className="text-lg font-medium">
-              <span className="text-white">Hayk</span>{" "}
+              <span className="text-text-primary">Hayk</span>{" "}
               <span className="text-text-muted">Manukyan</span>
             </span>
           </a>
@@ -128,7 +128,7 @@ export default function Header() {
               <a
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-text-secondary hover:text-white transition-colors"
+                className="text-sm font-medium text-text-secondary hover:text-text-primary transition-colors"
               >
                 {link.label}
               </a>

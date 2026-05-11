@@ -31,9 +31,9 @@
 
 .inner-content {
   position: relative;
-  border: 1px solid #222;
-  background: #0a0a0a;
-  color: white;
+  border: 1px solid var(--border-strong, #222);
+  background: var(--surface-page, #0a0a0a);
+  color: var(--text-primary, white);
   font-size: 16px;
   text-align: center;
   border-radius: 8px;

@@ -1,10 +1,10 @@
 // Card — стеклянная карточка дизайн-системы.
-// База: bg-white/[0.015] + backdrop-blur + border + rounded-lg.
+// База: bg-surface-glass + backdrop-blur + border-border-subtle + rounded-lg.
 //
 // Опции:
-//   spotlight  — оборачивает в SpotlightCard (красный radial-эффект при наведении)
+//   spotlight  — оборачивает в SpotlightCard (brand-tint radial-эффект при наведении)
 //   borderGlow — прокидывается в SpotlightCard для свечения границы
-//   hover      — добавляет hover:border-white/15 (light-up рамки при наведении)
+//   hover      — добавляет hover:border-border-strong (light-up рамки при наведении)
 //
 // Padding/layout/scale/cursor-pointer и др. — передаются через className.
 
@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 import SpotlightCard from "@/components/shared/SpotlightCard";
 
 const baseGlass =
-  "bg-white/[0.015] backdrop-blur-[20px] border border-white/10 rounded-lg";
+  "bg-surface-glass backdrop-blur-[20px] border border-border-subtle rounded-lg";
 
 interface CardProps {
   spotlight?: boolean;
@@ -31,12 +31,12 @@ export default function Card({
   style,
   children,
 }: CardProps) {
-  const classes = cn(baseGlass, hover && "hover:border-white/15", className);
+  const classes = cn(baseGlass, hover && "hover:border-border-strong", className);
 
   if (spotlight) {
     return (
       <SpotlightCard
-        spotlightColor="rgba(242, 63, 59, 0.15)"
+        spotlightColor="var(--brand-tint)"
         borderGlow={borderGlow}
         className={classes}
       >

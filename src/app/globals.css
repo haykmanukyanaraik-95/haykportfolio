@@ -48,19 +48,50 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
 
-  /* Кастомные цвета бренда */
-  --color-brand: #F23F3B;
-  --color-brand-hover: #D93531;
-  --color-success: #22c55e;
-  --color-surface-0: #0a0a0a;
-  --color-surface-1: #181818;
-  --color-surface-2: #1f1f1f;
-  --color-surface-3: #252525;
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #b3b3b3;
-  --color-text-muted: #6b6b6b;
-  --color-border-subtle: #2a2a2a;
-  --color-border-card: #333333;
+  /* === СЕМАНТИЧЕСКИЕ ЦВЕТА (роли, не значения) ===
+     Реальные значения определены в :root ниже. Tailwind генерирует утилиты
+     bg-*, text-*, border-* для каждого --color-*.
+     Для светлой темы переопределяются только переменные в :root[data-theme="light"]. */
+
+  /* Поверхности */
+  --color-surface-page: var(--surface-page);
+  --color-surface-elevated-1: var(--surface-elevated-1);
+  --color-surface-elevated-2: var(--surface-elevated-2);
+  --color-surface-elevated-3: var(--surface-elevated-3);
+  --color-surface-glass: var(--surface-glass);
+  --color-surface-glass-strong: var(--surface-glass-strong);
+  --color-surface-input: var(--surface-input);
+  --color-surface-input-focus: var(--surface-input-focus);
+  --color-surface-overlay-light: var(--surface-overlay-light);
+  --color-surface-overlay-medium: var(--surface-overlay-medium);
+  --color-surface-overlay-strong: var(--surface-overlay-strong);
+
+  /* Текст */
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-text-on-brand: var(--text-on-brand);
+
+  /* Бренд */
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-tint: var(--brand-tint);
+
+  /* Границы */
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+  --color-border-divider: var(--border-divider);
+
+  /* Аксессуары */
+  --color-accent-success: var(--accent-success);
+
+  /* Legacy aliases (для обратной совместимости со старыми утилитами bg-surface-0 и т.д.) */
+  --color-surface-0: var(--surface-page);
+  --color-surface-1: var(--surface-elevated-1);
+  --color-surface-2: var(--surface-elevated-2);
+  --color-surface-3: var(--surface-elevated-3);
+  --color-success: var(--accent-success);
+  --color-border-card: var(--border-strong);
 
   /* === SPACING — единая шкала на базе 4px === */
   --space-1: 4px;
@@ -122,14 +153,55 @@
 }
 
 /*
-  Сайт всегда тёмный — цвета задаём в :root напрямую.
-  Фоны из Spotify: #121212, #181818, #1f1f1f, #252525
+  Сайт всегда тёмный по умолчанию — значения семантических токенов задаются в :root.
+  Фоны: #0a0a0a (page), #181818, #1f1f1f, #252525 (elevated)
   Акцент (бренд): #F23F3B
+  Для светлой темы достаточно переопределить эти же переменные через :root[data-theme="light"].
 */
 :root {
-  /* Фон и текст */
-  --background: #0a0a0a;
-  --foreground: #ffffff;
+  /* === СЕМАНТИЧЕСКИЕ ТОКЕНЫ (тёмная тема — default) ===
+     Каждая переменная — это РОЛЬ. Цвет бренда = "акцент", #0E0C0B = "фон страницы".
+     В компонентах используем bg-surface-glass, text-text-primary и т.д. — НЕ хардкоды
+     Палитра теплее чистого чёрного — пары с кремовой светлой темой. */
+
+  /* Поверхности — тёплые тёмные тона (warm dark, не чисто чёрный) */
+  --surface-page: #0E0C0B;                              /* тёплый dark — softer чем #0a0a0a */
+  --surface-elevated-1: #1A1816;
+  --surface-elevated-2: #211E1B;
+  --surface-elevated-3: #272421;
+  --surface-glass: rgba(255, 255, 255, 0.015);          /* стандартная стеклянная карточка */
+  --surface-glass-strong: rgba(255, 255, 255, 0.03);    /* без backdrop-blur (Testimonials) */
+  --surface-input: rgba(255, 255, 255, 0.04);
+  --surface-input-focus: rgba(255, 255, 255, 0.06);
+  --surface-overlay-light: rgba(0, 0, 0, 0.20);         /* бейджи поверх фото */
+  --surface-overlay-medium: rgba(0, 0, 0, 0.60);
+  --surface-overlay-strong: rgba(0, 0, 0, 0.80);        /* тултипы */
+
+  /* Текст — тёплый off-white вместо чистого #fff (меньше глазного контраста) */
+  --text-primary: #F2EFE9;
+  --text-secondary: #b3b3b3;
+  --text-muted: #6b6b6b;
+  --text-on-brand: #ffffff;
+
+  /* Бренд */
+  --brand: #F23F3B;
+  --brand-hover: #D93531;
+  --brand-tint: rgba(242, 63, 59, 0.15);                /* для spotlight в карточках */
+
+  /* Границы */
+  --border-subtle: rgba(255, 255, 255, 0.10);
+  --border-strong: rgba(255, 255, 255, 0.15);
+  --border-divider: rgba(255, 255, 255, 0.10);
+
+  /* Аксессуары */
+  --accent-success: #22c55e;
+
+  /* Декоративный фон (PixelBlast WebGL) — будет переопределён для светлой темы */
+  --bg-pattern: #1c1315;
+
+  /* === Legacy shadcn-токены (используются shadcn инфраструктурой, не трогаем) === */
+  --background: var(--surface-page);
+  --foreground: var(--text-primary);
 
   /* Карточки */
   --card: #181818;
@@ -182,6 +254,68 @@
   --sidebar-accent-foreground: #ffffff;
   --sidebar-border: #2a2a2a;
   --sidebar-ring: #F23F3B;
+}
+
+/* ===========================================================================
+   СВЕТЛАЯ ТЕМА — кремовая палитра в духе trifecta.framer.media
+   Переопределяются ТОЛЬКО семантические токены — компоненты не трогаем.
+   Активируется через <html data-theme="light">.
+   =========================================================================== */
+:root[data-theme="light"] {
+  /* Поверхности — тёплый кремовый фон + ЧИСТО БЕЛЫЕ карточки (без стекла) */
+  --surface-page: #F5F1EA;                              /* тёплый кремовый фон */
+  --surface-elevated-1: #FFFFFF;                        /* белые карточки */
+  --surface-elevated-2: #FAF7F2;                        /* лёгкая elevation */
+  --surface-elevated-3: #F0EBE2;                        /* hover/active поверхности */
+  --surface-glass: #FFFFFF;                             /* СПЛОШНОЙ белый — не стеклянная */
+  --surface-glass-strong: #FFFFFF;                      /* тоже сплошной */
+  --surface-input: rgba(0, 0, 0, 0.04);
+  --surface-input-focus: rgba(0, 0, 0, 0.07);
+  --surface-overlay-light: rgba(0, 0, 0, 0.20);         /* бейджи поверх фото — фото яркие, dark overlay ok */
+  --surface-overlay-medium: rgba(0, 0, 0, 0.50);
+  --surface-overlay-strong: rgba(0, 0, 0, 0.80);        /* тултипы — dark на photo */
+
+  /* Текст — тёплый тёмный (не чисто чёрный) */
+  --text-primary: #1F1B19;
+  --text-secondary: #5A554F;
+  --text-muted: #9A958F;
+  --text-on-brand: #ffffff;                             /* белый на красном — сохраняется */
+
+  /* Бренд — красный остаётся (хорошо читается и на тёмном, и на кремовом) */
+  --brand: #F23F3B;
+  --brand-hover: #D93531;
+  --brand-tint: rgba(242, 63, 59, 0.08);                /* очень мягко на светлом */
+
+  /* Границы — очень светлые, минимальный контур у карточек */
+  --border-subtle: rgba(0, 0, 0, 0.06);
+  --border-strong: rgba(0, 0, 0, 0.12);
+  --border-divider: rgba(0, 0, 0, 0.08);
+
+  /* Аксессуары — зелёный темнее для контраста на светлом */
+  --accent-success: #16a34a;
+
+  /* Декоративный фон (PixelBlast) — едва заметный паттерн, почти сливается с фоном */
+  --bg-pattern: #EFE9DD;
+
+  /* Legacy shadcn-токены — обновляем чтобы shadcn-компоненты не остались тёмными */
+  --card: #FFFFFF;
+  --card-foreground: #1a1614;
+  --popover: #FFFFFF;
+  --popover-foreground: #1a1614;
+  --secondary: #F0EBE2;
+  --secondary-foreground: #1a1614;
+  --muted: #FAF7F2;
+  --muted-foreground: #8a857f;
+  --accent: #F0EBE2;
+  --accent-foreground: #1a1614;
+  --border: rgba(0, 0, 0, 0.10);
+  --input: rgba(0, 0, 0, 0.10);
+
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #1a1614;
+  --sidebar-accent: #F0EBE2;
+  --sidebar-accent-foreground: #1a1614;
+  --sidebar-border: rgba(0, 0, 0, 0.10);
 }
 
 @layer base {

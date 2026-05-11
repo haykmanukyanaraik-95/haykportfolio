@@ -82,7 +82,7 @@ export default function Contact() {
           {/* Правая колонка — glass-карточка (p-4 на мобилке как Expertise, p-6 на десктопе) */}
             <Card className="p-4 lg:p-6">
               {/* Заголовок и подзаголовок формы — статические, без анимации */}
-              <h2 className="text-xl lg:text-2xl font-bold text-white mb-2">
+              <h2 className="text-xl lg:text-2xl font-bold text-text-primary mb-2">
                 Let&apos;s Create Something Together
               </h2>
               <p className="text-sm text-text-secondary mb-8">
@@ -104,7 +104,7 @@ export default function Contact() {
                       onChange={(e) => setName(e.target.value)}
                       required
                       placeholder="Your name"
-                      className="bg-white/[0.04] border border-white/10 rounded-lg px-4 py-3 text-sm text-white placeholder:text-text-muted outline-none transition-colors focus:border-brand focus:bg-white/[0.06]"
+                      className="bg-surface-input border border-border-subtle rounded-lg px-4 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none transition-colors focus:border-brand focus:bg-surface-input-focus"
                     />
                   </div>
                   <div className="flex flex-col gap-2">
@@ -118,7 +118,7 @@ export default function Contact() {
                       onChange={(e) => setEmail(e.target.value)}
                       required
                       placeholder="you@example.com"
-                      className="bg-white/[0.04] border border-white/10 rounded-lg px-4 py-3 text-sm text-white placeholder:text-text-muted outline-none transition-colors focus:border-brand focus:bg-white/[0.06]"
+                      className="bg-surface-input border border-border-subtle rounded-lg px-4 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none transition-colors focus:border-brand focus:bg-surface-input-focus"
                     />
                   </div>
                 </div>
@@ -135,7 +135,7 @@ export default function Contact() {
                     required
                     rows={4}
                     placeholder="Tell me about your project…"
-                    className="bg-white/[0.04] border border-white/10 rounded-lg px-4 py-3 text-sm text-white placeholder:text-text-muted outline-none resize-none transition-colors focus:border-brand focus:bg-white/[0.06]"
+                    className="bg-surface-input border border-border-subtle rounded-lg px-4 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none resize-none transition-colors focus:border-brand focus:bg-surface-input-focus"
                   />
                 </div>
 

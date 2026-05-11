@@ -47,7 +47,7 @@ const AnimatedContent: React.FC<AnimatedContentProps> = ({
   delay = 0,
   onComplete,
   revealOverlay = false,
-  revealColor = '#0a0a0a',
+  revealColor = 'var(--surface-page)',
   className = '',
   ...props
 }) => {

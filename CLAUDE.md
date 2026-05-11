@@ -450,20 +450,30 @@ hayk-portfolio/
 
 ---
 
-## 🔖 Next Session Pickup — Этап 1+2 закрыты, идём дальше
+## 🔖 Next Session Pickup — Этапы 1-5 готовы, ждут ревью + коммита
 
 **ВАЖНО: это инструкция для новой сессии. При старте прочитай этот блок первым.**
-**ПОДРОБНАЯ ВЕРСИЯ**: `_notes/Next Session.md` — там полный план + текущие значения дизайн-системы.
+**ПОДРОБНАЯ ВЕРСИЯ**: `_notes/Next Session.md` — там полный план + значения дизайн-системы.
 
-### Состояние проекта (2026-05-04)
+### Состояние проекта (2026-05-11)
 - ✅ 9/9 секций готовы (desktop + mobile)
 - ✅ Formspree подключён (`mlgajler`)
 - ✅ CV PDF в `public/Hayk_Manukyan_CV.pdf`
 - ✅ Деплой на Vercel: `https://vercel.com/haykmanukyanaraik-3843s-projects/haykportfolio`
-- ✅ **Perf fix**: PixelBlast паузится через IntersectionObserver на Testimonials/Footer
-- ✅ **Этап 1 (Токены) ЗАКРЫТ**: полный набор токенов в `globals.css`, brand-color refactor (нет хардкодов `#F23F3B` в JSX)
-- ✅ **Этап 2 (Примитивы) ЗАКРЫТ**: 5 компонентов в `src/components/primitives/` (Section, SectionHeading, Card, Button, IconBadge), раскатаны на все секции
-- 📍 **СЛЕДУЮЩЕЕ**: коммит → пользователь выбирает Этап 3 / 4 / 5 / 6
+- ✅ **Этапы 1+2+3 закоммичены** (`9a08ce7`, `06ef3bf`)
+- 🔄 **Этап 4 (Семантические цвета)** — готов в коде, **НЕ закоммичен**
+- 🔄 **Этап 5 (Светлая тема + переключатель)** — готов в коде, **НЕ закоммичен**
+- 📍 **СЛЕДУЮЩЕЕ**: финальное визуальное ревью → большой коммит (Этапы 4+5) → Этап 6
+
+### Этап 5 — что реализовано (2026-05-11)
+1. **Светлая тема** — кремовая палитра (`#F5F1EA` фон, белые карточки, warm-dark текст), референс trifecta.framer.media
+2. **Тёмная тема обновлена** — warm dark (`#0E0C0B` вместо `#0a0a0a`, `#F2EFE9` вместо `#fff`)
+3. **Плавающий переключатель** `ThemeToggle.tsx` — `fixed bottom-6 right-6`, 48×48px кругляш, sun/moon иконка
+4. **Init-скрипт** в `layout.tsx <head>` — ставит `data-theme` до hydration, без вспышки
+5. **localStorage** + `prefers-color-scheme` fallback
+6. **`BackgroundEffect`** — MutationObserver перечитывает `--bg-pattern` для PixelBlast при смене темы
+7. **Логотип `/images/logo.svg`** — `fill="#F23F3B"` вместо `white` (всегда красный)
+8. **Карточки в светлой теме** — сплошные белые (`--surface-glass: #FFFFFF`)
 
 ### Порядок секций в page.tsx
 ```
@@ -472,34 +482,39 @@ Hero (#home) → Projects (#work) → SkillCarousel → About Me (#about)
 ```
 
 ### Стратегический план
-1. **Этап 1 — Токены** ✅ закрыт 2026-05-04
-2. **Этап 2 — Примитивы** ✅ закрыт 2026-05-04
-3. **Этап 3 — Responsive audit** (375 / 768 / 1280 / 1920) — pending
-4. **Этап 4 — Семантические цвета** (фундамент под светлую тему) — pending
-5. **Этап 5 — Светлая тема + переключатель** — у пользователя есть идея, спросить
-6. **Этап 6 — Multi-page** (`/`, `/work`, `/about`, `/contact`) — pending
+1. **Этап 1 — Токены** ✅ 2026-05-04
+2. **Этап 2 — Примитивы** ✅ 2026-05-04
+3. **Этап 3 — Responsive audit + 5 mobile UX** ✅ 2026-05-07
+4. **Этап 4 — Семантические цвета** 🔄 готов, ждёт коммита
+5. **Этап 5 — Светлая тема + переключатель** 🔄 готов, ждёт ревью + коммита
+6. **Этап 6 — Multi-page split** (`/`, `/work`, `/about`, `/contact`) — pending
 
 ### При старте новой сессии
-1. Прочитать `_notes/Next Session.md` — там детали по этапам
-2. Прочитать `_notes/Sessions.md` (последняя запись 2026-05-04 — большая сводка)
-3. Прочитать `_notes/Decisions.md` (все дизайн-решения, особенно блок 2026-05-04)
-4. Резюмировать пользователю в 3 пунктах: где остановились / что ждём / открытые вопросы
+1. Прочитать `_notes/Next Session.md` — детальный план Этапа 5/6
+2. Прочитать `_notes/Sessions.md` (последняя запись 2026-05-11)
+3. Прочитать `_notes/Decisions.md` (блок 🌗 Этап 5 в начале — палитры + архитектура)
+4. Резюмировать пользователю: 18 файлов изменены + 1 новый, ждут коммита; нужно финальное ревью светлой темы
 
 ### Ждём от пользователя
-- **Решение**: коммитим сейчас? Какой этап начинаем (3, 4 или сразу 5/6)?
-- **Контент**: реальные отзывы для Testimonials (сейчас 12 сгенерированных)
-- **Контент**: финальный текст About Me (сейчас 2 параграфа на основе CV)
-- **Идея переключателя темы** (когда дойдём до Этапа 5)
+- **Финальное ОК** на светлую/тёмную тему (или точечные правки)
+- **Решение** коммитить большой пакет (Этап 4+5) — один коммит на 19 файлов
+- **Контент**: реальные отзывы для Testimonials
+- **Контент**: финальный текст About Me
 
 ### ⏸ Отложено пользователем (не трогать без явной просьбы)
 - SEO (OG image, favicon, sitemap)
 - Accessibility (aria-labels, focus, контраст, prefers-reduced-motion)
 - Performance оптимизации (отключить PixelBlast на мобиле и т.д.)
 
+### Известные потенциальные шероховатости светлой темы (не проверены глазами)
+- **Folder paper colors** `#E6E6E6` — на кремовой странице могут быть бледными
+- **ShinyText shine** на secondary кнопках — dark gray → white shine может выглядеть резко
+- **ElectricLogo** в Contact — не проверен на светлой
+
 ### 📚 ОБЯЗАТЕЛЬНО прочитать в новой сессии (по приоритету)
-1. `_notes/Next Session.md` — главный план + актуальные значения дизайн-системы
-2. `_notes/Sessions.md` — последняя сессия (2026-05-04, итоги Этапов 1+2)
-3. `_notes/Decisions.md` — все дизайн-решения (блок 2026-05-04 в начале)
+1. `_notes/Next Session.md` — план Этапа 5/6 + актуальные значения тем
+2. `_notes/Sessions.md` — последняя сессия (2026-05-11)
+3. `_notes/Decisions.md` — блок 🌗 Этап 5 (палитры + архитектура темизации)
 4. `_notes/Components.md` — справка по primitives + shared
 5. `_notes/Open Questions.md` — отложенные вопросы
 
@@ -507,15 +522,23 @@ Hero (#home) → Projects (#work) → SkillCarousel → About Me (#about)
 - **ВСЕГДА уточнять перед решениями** (даже мелкими) — главное правило пользователя
 - Все комментарии в коде — **на русском**
 - Объяснения — **простыми словами**
-- При создании новых секций/страниц использовать **примитивы** в первую очередь (`<Section>`, `<Card>`, `<Button>`, `<IconBadge>`, `<SectionHeading>`)
+- При создании новых секций/страниц использовать **примитивы** (`<Section>`, `<Card>`, `<Button>`, `<IconBadge>`, `<SectionHeading>`)
+- Темизация: **только через CSS-переменные** — компоненты НЕ знают про тему
 - Обновлять `_notes/Sessions.md` и `_notes/Next Session.md` по ходу работы
 - Обновлять `_notes/Decisions.md` **сразу** после принятия решения
 - В конце сессии — **чистка/обновление всех заметок**
 
 ### Дизайн-система (актуальные значения)
-**Glass**: `bg-white/[0.015] backdrop-blur-[20px] border-white/10` (применять через `<Card>`)
-**Section padding**: hero `py-16 lg:pt-36 lg:pb-24` / standard `py-24 lg:py-44` / compact `py-16 lg:py-24` / footer `py-10` (применять через `<Section variant="...">`)
-**Typography**: hero h1 24/30/48 (`text-2xl sm:text-3xl lg:text-5xl`); section h2 30 uniform (`text-3xl`); body 14; caption 12
-**Brand**: `var(--color-brand)` — никаких хардкодов
+**Темизация**: `data-theme="dark"` (default) | `data-theme="light"` — переопределение токенов в `:root[data-theme="light"]` (`globals.css`)
+**Glass card** (через `<Card>`): `bg-surface-glass backdrop-blur-[20px] border border-border-subtle rounded-lg`
+- Тёмная: glass = `rgba(255,255,255,0.015)` (полупрозрачное стекло)
+- Светлая: glass = `#FFFFFF` (сплошной белый)
+
+**Section padding**: hero `py-16 xl:pt-36 xl:pb-24` / standard `py-24 lg:py-44` / compact `py-16 lg:py-24` / footer `py-10` (применять через `<Section variant="...">`)
+**Typography**: hero h1 24/30/48 (`text-2xl sm:text-3xl xl:text-5xl`); section h2 30 uniform (`text-3xl`); body 14; caption 12
+**Brand**: `var(--brand)` или `bg-brand`/`text-brand` — НИКОГДА хардкоды
 **Mobile carousels**: Projects 6s, Expertise 7s, Testimonials 8s/10s
 **Card padding**: 12 (sm) / 16 (md) / 24 (lg) — через `p-3 / p-4 / p-6`
+
+**ThemeToggle**: плавающий `fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50`, 48×48px кругляш с тенью
+**Логотип**: `/images/logo.svg` имеет `fill="#F23F3B"` — всегда красный, тема не меняет

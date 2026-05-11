@@ -73,7 +73,7 @@ export default function SkillCarousel() {
         logoHeight={40}
         direction="left"
         fadeOut
-        fadeOutColor="#0a0a0a"
+        fadeOutColor="var(--surface-page)"
         scaleOnHover
         renderItem={(item) => renderSkillItem(item as LogoImageItem)}
         ariaLabel="Skills carousel"

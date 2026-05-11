@@ -1,5 +1,5 @@
 // Фоновый эффект PixelBlast — фиксированный на всю страницу
-// Пауза WebGL когда Testimonials/Footer в зоне видимости (там сплошной #0a0a0a поверх)
+// Пауза WebGL когда Testimonials/Footer в зоне видимости (там сплошной surface-page поверх)
 "use client";
 
 import dynamic from "next/dynamic";
@@ -9,8 +9,34 @@ const PixelBlast = dynamic(() => import("@/components/shared/PixelBlast"), {
   ssr: false,
 });
 
+const DEFAULT_PATTERN_COLOR = "#1c1315";
+
 export default function BackgroundEffect() {
   const [paused, setPaused] = useState(false);
+  // Three.js не понимает CSS переменные — резолвим var(--bg-pattern) в hex после монтирования
+  const [patternColor, setPatternColor] = useState(DEFAULT_PATTERN_COLOR);
+
+  // Читаем --bg-pattern из CSS-переменных и подписываемся на смену темы.
+  // При переключении data-theme на <html> — перечитываем цвет (CSS меняет
+  // переменную, но Three.js про CSS-переменные не знает — нужно вручную).
+  useEffect(() => {
+    const readPattern = () => {
+      const value = getComputedStyle(document.documentElement)
+        .getPropertyValue("--bg-pattern")
+        .trim();
+      if (value) setPatternColor(value);
+    };
+
+    readPattern();
+
+    const observer = new MutationObserver(readPattern);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     // Ищем секции, которые полностью перекрывают PixelBlast сплошным цветом
@@ -41,7 +67,7 @@ export default function BackgroundEffect() {
       <PixelBlast
         variant="square"
         pixelSize={8}
-        color="#1c1315"
+        color={patternColor}
         patternScale={4.5}
         patternDensity={1}
         enableRipples

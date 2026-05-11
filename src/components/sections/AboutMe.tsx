@@ -31,7 +31,7 @@ const socialLinks = [
 
 function SkillChip({ label }: { label: string }) {
   return (
-    <li className="inline-flex items-center gap-2 border border-white/10 rounded-full px-3 py-1.5">
+    <li className="inline-flex items-center gap-2 border border-border-subtle rounded-full px-3 py-1.5">
       <i className="fi fi-sr-star text-[10px] text-brand leading-none flex items-center" aria-hidden="true" />
       <span className="text-xs text-text-secondary whitespace-nowrap">{label}</span>
     </li>
@@ -88,13 +88,13 @@ export default function AboutMe() {
                 space-y-8 — фиксированный отступ 32px между Hard и Soft Skills */}
             <Card spotlight borderGlow className="p-4 xl:w-[680px] xl:shrink-0 space-y-8">
               <div>
-                <h3 className="text-base font-semibold text-white mb-2">Hard Skills</h3>
+                <h3 className="text-base font-semibold text-text-primary mb-2">Hard Skills</h3>
                 <ul className="flex flex-wrap gap-2.5">
                   {hardSkills.map((s) => <SkillChip key={s} label={s} />)}
                 </ul>
               </div>
               <div>
-                <h3 className="text-base font-semibold text-white mb-2">Soft Skills</h3>
+                <h3 className="text-base font-semibold text-text-primary mb-2">Soft Skills</h3>
                 <ul className="flex flex-wrap gap-2.5">
                   {softSkills.map((s) => <SkillChip key={s} label={s} />)}
                 </ul>

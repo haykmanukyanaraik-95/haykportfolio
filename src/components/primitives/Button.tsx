@@ -54,7 +54,7 @@ export default function Button({
   className,
 }: ButtonProps) {
   const innerClasses = cn(
-    "group/btn inline-flex items-center text-white text-base font-medium px-5 py-3",
+    "group/btn inline-flex items-center text-text-on-brand text-base font-medium px-5 py-3",
     centered && "justify-center",
     fullWidth && "w-full",
     disabled && "disabled:opacity-60",
@@ -71,8 +71,8 @@ export default function Button({
         text={children}
         speed={3.5}
         delay={3}
-        color={variant === "primary" ? "#ffffff" : "#b3b3b3"}
-        shineColor={variant === "primary" ? "#ffffff80" : "#ffffff"}
+        color={variant === "primary" ? "var(--text-on-brand)" : "var(--text-secondary)"}
+        shineColor={variant === "primary" ? "color-mix(in srgb, var(--text-on-brand) 50%, transparent)" : "var(--text-on-brand)"}
         className="leading-[1]"
         pauseOnHover
       />
