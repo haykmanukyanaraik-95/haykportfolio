@@ -450,7 +450,7 @@ hayk-portfolio/
 
 ---
 
-## 🔖 Next Session Pickup — Этап 5 v3 готов в коде, ждёт коммита
+## 🔖 Next Session Pickup — Этап 5 закрыт ✅, готовы к Этапу 6
 
 **ВАЖНО: это инструкция для новой сессии. При старте прочитай этот блок первым.**
 **ПОДРОБНАЯ ВЕРСИЯ**: `_notes/Next Session.md` — там полный план + значения дизайн-системы.
@@ -462,8 +462,8 @@ hayk-portfolio/
 - ✅ Деплой на Vercel: `https://vercel.com/haykmanukyanaraik-3843s-projects/haykportfolio`
 - ✅ **Этапы 1+2+3 закоммичены** (`9a08ce7`, `06ef3bf`)
 - ✅ **Этап 5 v1 закоммичен** (`776f549`)
-- 🔄 **Этап 5 v2 + v3 — финальная полировка светлой темы (2026-05-12 + 2026-05-13)** — готов в коде, **НЕ закоммичен**
-- 📍 **СЛЕДУЮЩЕЕ**: удалить старое light-фото → коммит большого пакета 20 файлов → push → Этап 6
+- ✅ **Этап 5 v2+v3 закоммичен и запушен** (`3c861d2`, 2026-05-13) — финальная полировка светлой темы, 21 файл, на GitHub, Vercel автодеплой
+- 📍 **СЛЕДУЮЩЕЕ**: Этап 6 (Multi-page split) или контент (отзывы Testimonials, текст About Me, CV PDF)
 
 ### Этап 5 v3 — финальные правки (2026-05-13)
 1. **Светлая тема = DEFAULT** (`localStorage || 'light'` в init-script, system pref игнорируется)
@@ -491,8 +491,8 @@ hayk-portfolio/
 - **Secondary border**: `transparent` в покое, hover gray (логика в `StarBorder.css`)
 - **Все цвета** через CSS-переменные — никаких хардкодов в JSX
 
-### 🗑 Перед коммитом — удалить
-`public/images/hayk-photo 1Light.png` (1.1 MB) — старая light-версия, не используется.
+### Cleanup history
+`public/images/hayk-photo 1Light.png` (1.1 MB) — удалён в коммите `3c861d2` (старая light-версия, заменена на `hayk-photo 1light new.png`).
 
 ### Порядок секций в page.tsx
 ```
