@@ -119,16 +119,18 @@ export default function Projects() {
               <div key={`${project.title}-${i}`} className="w-[260px] shrink-0">
                 <Card spotlight className="group active:border-border-strong cursor-pointer">
                   <div className="p-3 pb-0">
-                    <div className="relative aspect-[16/10] w-full rounded-md overflow-hidden">
+                    <div className="relative aspect-[16/10] w-full rounded overflow-hidden">
                       <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
                     </div>
                   </div>
                   <div className="p-3 flex items-center justify-between gap-2">
-                    <h3 className="text-sm font-semibold text-text-primary whitespace-nowrap">{project.title}</h3>
+                    <div>
+                      <h3 className="text-sm font-semibold text-text-primary">{project.title}</h3>
+                      <p className="text-[10px] font-medium text-brand uppercase tracking-wider mt-1">{project.tags[0]}</p>
+                    </div>
                     <div className="flex items-center gap-1 shrink-0">
-                      <span className="text-[10px] font-medium text-text-primary uppercase tracking-wider">{project.tags[0]}</span>
-                      <i className={`${project.tags[1] === "Mobile App" ? "fi fi-sr-mobile-notch" : "fi fi-sr-browser"} text-[10px] text-brand leading-none flex items-center`} aria-hidden="true" />
-                      <span className="text-[10px] font-medium text-brand uppercase tracking-wider whitespace-nowrap">{project.tags[1]}</span>
+                      <i className={`${project.tags[1] === "Mobile App" ? "fi fi-sr-mobile-notch" : "fi fi-sr-browser"} text-[10px] text-text-secondary leading-none flex items-center`} aria-hidden="true" />
+                      <span className="text-[10px] font-medium text-text-secondary uppercase tracking-wider whitespace-nowrap">{project.tags[1]}</span>
                     </div>
                   </div>
                 </Card>
@@ -149,21 +151,23 @@ export default function Projects() {
             >
               <Card spotlight hover className="group cursor-pointer transition-transform duration-200 hover:scale-[1.02]">
                 <div className="p-3 pb-0">
-                  <div className="relative aspect-[16/10] w-full rounded-md overflow-hidden">
+                  <div className="relative aspect-[16/10] w-full rounded overflow-hidden">
                     <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
                     <div className="project-tooltip-wrap absolute inset-0 flex items-center justify-center">
-                      <span className="bg-surface-overlay-strong border border-border-subtle text-text-primary/80 text-xs font-medium px-4 py-2 rounded-lg">
+                      <span className="bg-surface-overlay-strong border border-white/10 text-text-on-brand text-xs font-medium px-4 py-2 rounded-lg">
                         View Page — Coming Soon
                       </span>
                     </div>
                   </div>
                 </div>
-                <div className="p-4 flex items-center justify-between">
-                  <h3 className="text-base font-semibold text-text-primary">{project.title}</h3>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-medium text-text-primary uppercase tracking-wider">{project.tags[0]}</span>
-                    <i className={`${project.tags[1] === "Mobile App" ? "fi fi-sr-mobile-notch" : "fi fi-sr-browser"} text-[10px] text-brand leading-none flex items-center ml-1`} aria-hidden="true" />
-                    <span className="text-[10px] font-medium text-brand uppercase tracking-wider">{project.tags[1]}</span>
+                <div className="p-4 flex items-center justify-between gap-2">
+                  <div>
+                    <h3 className="text-base font-semibold text-text-primary">{project.title}</h3>
+                    <p className="text-[10px] font-medium text-brand uppercase tracking-wider mt-1">{project.tags[0]}</p>
+                  </div>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <i className={`${project.tags[1] === "Mobile App" ? "fi fi-sr-mobile-notch" : "fi fi-sr-browser"} text-[10px] text-text-secondary leading-none flex items-center`} aria-hidden="true" />
+                    <span className="text-[10px] font-medium text-text-secondary uppercase tracking-wider whitespace-nowrap">{project.tags[1]}</span>
                   </div>
                 </div>
               </Card>

@@ -18,7 +18,7 @@ const paddingMap: Record<Variant, string> = {
   // Hero — асимметричный padding активируется только на xl+ (1280+),
   // т.к. на lg (1024-1279) Hero рендерится в стекированном виде
   hero: "py-16 xl:pt-36 xl:pb-24",
-  standard: "py-24 lg:py-44",
+  standard: "py-24 lg:py-36",
   compact: "py-16 lg:py-24",
   footer: "py-10",
 };

@@ -39,7 +39,7 @@ const renderSkillItem = (item: LogoImageItem) => {
       <img
         src={item.src}
         alt={item.title ?? ""}
-        className={`h-10 w-auto grayscale ${isMaze ? "opacity-50" : ""}`}
+        className={`h-10 w-auto ${isMaze ? "opacity-50" : ""}`}
         loading="lazy"
         draggable={false}
       />
@@ -53,11 +53,11 @@ const renderSkillItem = (item: LogoImageItem) => {
 };
 
 export default function SkillCarousel() {
-  // Мобилка: 40px/s (медленно), десктоп: 80px/s
-  const [speed, setSpeed] = useState(80);
+  // Мобилка: 32px/s, десктоп: 64px/s (на 20% медленнее предыдущих значений 40/80)
+  const [speed, setSpeed] = useState(64);
 
   useEffect(() => {
-    const update = () => setSpeed(window.innerWidth < 768 ? 40 : 80);
+    const update = () => setSpeed(window.innerWidth < 768 ? 32 : 64);
     update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);

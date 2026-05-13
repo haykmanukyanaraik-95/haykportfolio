@@ -192,12 +192,22 @@
   --border-subtle: rgba(255, 255, 255, 0.10);
   --border-strong: rgba(255, 255, 255, 0.15);
   --border-divider: rgba(255, 255, 255, 0.10);
+  /* Border при hover secondary-кнопок — намеренно мягче чем border-strong (~50%) */
+  --border-button-hover: rgba(255, 255, 255, 0.075);
 
   /* Аксессуары */
   --accent-success: #22c55e;
 
   /* Декоративный фон (PixelBlast WebGL) — будет переопределён для светлой темы */
-  --bg-pattern: #1c1315;
+  --bg-pattern: #2A1B1D;
+
+  /* Тень для карточек — мягкая, для elevated-эффекта.
+     В тёмной теме слабая (карточки и так темнее фона), в светлой — заметнее. */
+  --shadow-card: 0 4px 14px rgba(0, 0, 0, 0.14);
+
+  /* Header в тёмной теме — surface-page/80 + blur (texture-стекло) */
+  --header-bg: color-mix(in srgb, var(--surface-page) 80%, transparent);
+  --header-blur: blur(20px);
 
   /* === Legacy shadcn-токены (используются shadcn инфраструктурой, не трогаем) === */
   --background: var(--surface-page);
@@ -262,15 +272,15 @@
    Активируется через <html data-theme="light">.
    =========================================================================== */
 :root[data-theme="light"] {
-  /* Поверхности — тёплый кремовый фон + ЧИСТО БЕЛЫЕ карточки (без стекла) */
-  --surface-page: #F5F1EA;                              /* тёплый кремовый фон */
-  --surface-elevated-1: #FFFFFF;                        /* белые карточки */
-  --surface-elevated-2: #FAF7F2;                        /* лёгкая elevation */
-  --surface-elevated-3: #F0EBE2;                        /* hover/active поверхности */
-  --surface-glass: #FFFFFF;                             /* СПЛОШНОЙ белый — не стеклянная */
-  --surface-glass-strong: #FFFFFF;                      /* тоже сплошной */
-  --surface-input: rgba(0, 0, 0, 0.04);
-  --surface-input-focus: rgba(0, 0, 0, 0.07);
+  /* Поверхности — почти белый фон с лёгкой кремовой ноткой + чисто белые карточки */
+  --surface-page: #FCFAF5;                              /* ещё светлее, очень близко к белому */
+  --surface-elevated-1: #FFFFFF;                        /* чистый белый — для бейджей и т.д. */
+  --surface-elevated-2: #FDFBF6;                        /* off-white вспом. поверхности */
+  --surface-elevated-3: #F2EEE5;                        /* hover/active поверхности */
+  --surface-glass: #FFFFFF;                             /* ВСЕ карточки — чистый белый */
+  --surface-glass-strong: #FFFFFF;                      /* тот же */
+  --surface-input: #FBF9F5;                             /* close to page bg, lightly off-white */
+  --surface-input-focus: #F5F3EE;                       /* focus чуть темнее (доп. индикатор) */
   --surface-overlay-light: rgba(0, 0, 0, 0.20);         /* бейджи поверх фото — фото яркие, dark overlay ok */
   --surface-overlay-medium: rgba(0, 0, 0, 0.50);
   --surface-overlay-strong: rgba(0, 0, 0, 0.80);        /* тултипы — dark на photo */
@@ -290,12 +300,21 @@
   --border-subtle: rgba(0, 0, 0, 0.06);
   --border-strong: rgba(0, 0, 0, 0.12);
   --border-divider: rgba(0, 0, 0, 0.08);
+  /* Border при hover secondary-кнопок — мягче чем border-strong (~50%) */
+  --border-button-hover: rgba(0, 0, 0, 0.06);
 
   /* Аксессуары — зелёный темнее для контраста на светлом */
   --accent-success: #16a34a;
 
-  /* Декоративный фон (PixelBlast) — едва заметный паттерн, почти сливается с фоном */
-  --bg-pattern: #EFE9DD;
+  /* Декоративный фон (PixelBlast) — паттерн ближе к фону (контраст уменьшен ~50%) */
+  --bg-pattern: #F6EDE8;
+
+  /* Тень карточек в светлой теме — мягкая, без сильного контраста (по запросу пользователя −25-30%) */
+  --shadow-card: 0 6px 18px rgba(0, 0, 0, 0.07);
+
+  /* Header в светлой теме — цвет фона страницы с низкой прозрачностью + blur */
+  --header-bg: color-mix(in srgb, var(--surface-page) 70%, transparent);
+  --header-blur: blur(20px);
 
   /* Legacy shadcn-токены — обновляем чтобы shadcn-компоненты не остались тёмными */
   --card: #FFFFFF;
@@ -379,4 +398,28 @@
       -webkit-tap-highlight-color: transparent;
     }
   }
+
+  /* === Custom theme-aware utilities === */
+
+  /* Тень для карточек — берёт из CSS-переменной, авто-меняется при смене темы */
+  .card-shadow {
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Стекло Header — в тёмной полупрозрачное+blur, в светлой сплошной белый без blur */
+  .site-header-glass {
+    background: var(--header-bg);
+    backdrop-filter: var(--header-blur);
+    -webkit-backdrop-filter: var(--header-blur);
+  }
+
+}
+
+/* В светлой теме у всех карточек/secondary-кнопок/тогглера обводка полностью снимается.
+   Используем `border: 0` (не border-color: transparent) — иначе 1px прозрачной обводки
+   создаёт видимый зазор между фоном страницы и фоном карточки.
+   ВНЕ @layer — иначе Tailwind utilities перебивают из-за приоритета каскада слоёв. */
+:root[data-theme="light"] .card-shadow,
+:root[data-theme="light"] .theme-toggle-btn {
+  border: 0;
 }

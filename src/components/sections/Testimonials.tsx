@@ -100,7 +100,7 @@ const column3: Testimonial[] = [
 // Карточка отзыва — glass-style
 function TestimonialCard({ t }: { t: Testimonial }) {
   return (
-    <div className="bg-surface-glass-strong border border-border-subtle rounded-lg p-4">
+    <div className="bg-surface-glass-strong backdrop-blur-[20px] border border-border-subtle rounded-lg p-4 card-shadow">
       {/* Аватар-инициалы + имя + роль */}
       <div className="flex items-center gap-3 mb-3">
         <div
@@ -133,7 +133,7 @@ function VerticalColumn({
     <div className="vertical-carousel h-full">
       <div
         className={`vertical-carousel__track vertical-carousel__track--${direction}`}
-        style={{ "--speed": `${speed}s`, "--gap": "20px" } as React.CSSProperties}
+        style={{ "--speed": `${speed}s`, "--gap": "28px" } as React.CSSProperties}
       >
         {/* Оригинал + дубликат = бесшовный loop */}
         {[...items, ...items].map((t, i) => (
@@ -147,8 +147,8 @@ function VerticalColumn({
 export default function Testimonials() {
   return (
     <Section id="testimonials" variant="standard" bare className="relative" style={{ contain: "layout style" }}>
-      {/* Сплошной фон цвета страницы — перекрывает PixelBlast, выступает на 4px за секцию */}
-      <div className="absolute -top-[4px] -bottom-[4px] -left-[4px] -right-[4px] bg-surface-page" />
+      {/* Раньше тут был сплошной фон, перекрывавший PixelBlast — убран,
+          теперь PixelBlast виден сквозь секцию. Карточки сверху сами по себе непрозрачные. */}
 
       <div className="relative mx-auto max-w-[1280px] px-6">
 
@@ -189,7 +189,7 @@ export default function Testimonials() {
         <AnimatedContent distance={40} duration={0.8} delay={0} revealOverlay>
           <div className="relative h-[600px] overflow-hidden hidden lg:block">
 
-            <div className="grid grid-cols-3 gap-5 h-full">
+            <div className="grid grid-cols-3 gap-8 h-full">
               <VerticalColumn items={column1} direction="down" speed={28} />
               <VerticalColumn items={column2} direction="up" speed={24} />
               <VerticalColumn items={column3} direction="down" speed={28} />

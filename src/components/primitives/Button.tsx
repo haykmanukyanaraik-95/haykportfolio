@@ -53,29 +53,42 @@ export default function Button({
   centered,
   className,
 }: ButtonProps) {
+  // Primary — текст белый, иконка через currentColor = белая.
+  // Secondary — текст серый (text-secondary), иконка отдельно brand-red.
+  //            Обёртывается в StarBorder → анимированная красная обводка по периметру,
+  //            а статичный 1px серый border + белая заливка живут в .inner-content (StarBorder.css).
   const innerClasses = cn(
-    "group/btn inline-flex items-center text-text-on-brand text-base font-medium px-5 py-3",
+    "group/btn inline-flex items-center text-base font-medium px-5 py-3",
+    variant === "primary" ? "text-text-on-brand" : "text-text-secondary",
     centered && "justify-center",
     fullWidth && "w-full",
     disabled && "disabled:opacity-60",
     className
   );
 
+  // Иконка изначально схлопнута (max-w-0, mr-0, opacity-0). На hover расширяется.
+  // Для secondary иконка покрашена в brand-red отдельно от цвета текста.
+  // Primary получает ShinyText (переливание), secondary — просто <span>.
+  const iconColorClass = variant === "secondary" ? "text-brand" : "";
   const inner = (
     <>
       <i
-        className={`fi fi-rr-${icon} text-sm leading-[1] flex items-center overflow-hidden opacity-0 max-w-0 mr-0 group-hover/btn:opacity-100 group-hover/btn:max-w-[18px] group-hover/btn:mr-2 transition-all duration-300 ease-out`}
+        className={`fi fi-rr-${icon} ${iconColorClass} text-sm leading-[1] flex items-center overflow-hidden opacity-0 max-w-0 mr-0 group-hover/btn:opacity-100 group-hover/btn:max-w-[18px] group-hover/btn:mr-2 transition-all duration-300 ease-out`}
         aria-hidden="true"
       />
-      <ShinyText
-        text={children}
-        speed={3.5}
-        delay={3}
-        color={variant === "primary" ? "var(--text-on-brand)" : "var(--text-secondary)"}
-        shineColor={variant === "primary" ? "color-mix(in srgb, var(--text-on-brand) 50%, transparent)" : "var(--text-on-brand)"}
-        className="leading-[1]"
-        pauseOnHover
-      />
+      {variant === "primary" ? (
+        <ShinyText
+          text={children}
+          speed={3.5}
+          delay={3}
+          color="var(--text-on-brand)"
+          shineColor="color-mix(in srgb, var(--text-on-brand) 50%, transparent)"
+          className="leading-[1]"
+          pauseOnHover
+        />
+      ) : (
+        <span className="leading-[1]">{children}</span>
+      )}
     </>
   );
 
@@ -119,8 +132,10 @@ export default function Button({
     );
   }
 
+  // Secondary — StarBorder даёт анимированную красную обводку по периметру.
+  // Статичная серая 1px рамка + белая заливка живут в .inner-content (StarBorder.css).
   return (
-    <StarBorder color="var(--color-brand)" speed="8s">
+    <StarBorder color="var(--color-brand)" speed="6s">
       {element}
     </StarBorder>
   );

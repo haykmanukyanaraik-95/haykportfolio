@@ -450,30 +450,49 @@ hayk-portfolio/
 
 ---
 
-## 🔖 Next Session Pickup — Этапы 1-5 готовы, ждут ревью + коммита
+## 🔖 Next Session Pickup — Этап 5 v3 готов в коде, ждёт коммита
 
 **ВАЖНО: это инструкция для новой сессии. При старте прочитай этот блок первым.**
 **ПОДРОБНАЯ ВЕРСИЯ**: `_notes/Next Session.md` — там полный план + значения дизайн-системы.
 
-### Состояние проекта (2026-05-11)
+### Состояние проекта (2026-05-13)
 - ✅ 9/9 секций готовы (desktop + mobile)
 - ✅ Formspree подключён (`mlgajler`)
 - ✅ CV PDF в `public/Hayk_Manukyan_CV.pdf`
 - ✅ Деплой на Vercel: `https://vercel.com/haykmanukyanaraik-3843s-projects/haykportfolio`
 - ✅ **Этапы 1+2+3 закоммичены** (`9a08ce7`, `06ef3bf`)
-- 🔄 **Этап 4 (Семантические цвета)** — готов в коде, **НЕ закоммичен**
-- 🔄 **Этап 5 (Светлая тема + переключатель)** — готов в коде, **НЕ закоммичен**
-- 📍 **СЛЕДУЮЩЕЕ**: финальное визуальное ревью → большой коммит (Этапы 4+5) → Этап 6
+- ✅ **Этап 5 v1 закоммичен** (`776f549`)
+- 🔄 **Этап 5 v2 + v3 — финальная полировка светлой темы (2026-05-12 + 2026-05-13)** — готов в коде, **НЕ закоммичен**
+- 📍 **СЛЕДУЮЩЕЕ**: удалить старое light-фото → коммит большого пакета 20 файлов → push → Этап 6
 
-### Этап 5 — что реализовано (2026-05-11)
-1. **Светлая тема** — кремовая палитра (`#F5F1EA` фон, белые карточки, warm-dark текст), референс trifecta.framer.media
-2. **Тёмная тема обновлена** — warm dark (`#0E0C0B` вместо `#0a0a0a`, `#F2EFE9` вместо `#fff`)
-3. **Плавающий переключатель** `ThemeToggle.tsx` — `fixed bottom-6 right-6`, 48×48px кругляш, sun/moon иконка
-4. **Init-скрипт** в `layout.tsx <head>` — ставит `data-theme` до hydration, без вспышки
-5. **localStorage** + `prefers-color-scheme` fallback
-6. **`BackgroundEffect`** — MutationObserver перечитывает `--bg-pattern` для PixelBlast при смене темы
-7. **Логотип `/images/logo.svg`** — `fill="#F23F3B"` вместо `white` (всегда красный)
-8. **Карточки в светлой теме** — сплошные белые (`--surface-glass: #FFFFFF`)
+### Этап 5 v3 — финальные правки (2026-05-13)
+1. **Светлая тема = DEFAULT** (`localStorage || 'light'` в init-script, system pref игнорируется)
+2. **Все карточки**: `#FFFFFF` + soft shadow + НЕТ border в светлой (cascade fix вне @layer base)
+3. **Inputs + skill chips**: единый цвет `#FBF9F5` (между bg и white) — `bg-surface-input`
+4. **Secondary buttons**: red animation в покое + grey static border на hover + red icon + НЕТ shine
+5. **Primary buttons**: убран `scale(1.04)` из GlareHover
+6. **Form icons**: Flaticon (`fi-rr-user/envelope/pencil`) в `<span w-4 h-4 flex>` + 3-state цвет + auto-capitalize первой буквы
+7. **Hero**: Available badge `rgba(0,0,0,0.15)` + `bg-green-400` dot, photo swap (light=`hayk-photo 1light new.png`)
+8. **Projects layout**: title+sphere LEFT (red), type RIGHT (gray) — flex justify-between
+9. **Header**: `grid grid-cols-3` + instant nav hover + `backdrop-blur-md` fallback
+10. **PixelBlast**: `position: fixed` + CSS radial mask (центр прозрачный, паттерн по бокам) + no ripples
+11. **Footer**: copyright LEFT, quote ABS CENTERED, signature RIGHT — text-lg quote
+12. **ThemeToggle**: `rounded-lg` + Flaticon (`fi-rr-moon`/`fi-rr-sun` = current theme) + muted/hover-red
+13. **Section padding**: `lg:py-40` → `lg:py-36`
+14. **Testimonials**: backdrop-blur на карточках + bigger gaps + `overflow-y: clip`
+15. **About Me**: удалён 2-й параграф, Skills card как Projects/Expertise (без borderGlow)
+16. **SkillCarousel**: -20% speed (80/40 → 64/32), цветные иконки
+
+### ⚠️ Архитектурные правила (важно)
+- **Cascade**: override Tailwind utilities должны быть ВНЕ `@layer base` (иначе перебиваются)
+- **Header layout**: `grid grid-cols-3` ОБЯЗАТЕЛЬНО (не flex) — иначе nav сдвигается при hover CTA
+- **PixelBlast positioning**: `fixed inset-0` (не absolute) + CSS mask на center
+- **Form icons**: Flaticon font-glyphs в обёртке `w-4 h-4 inline-flex items-center justify-center`
+- **Secondary border**: `transparent` в покое, hover gray (логика в `StarBorder.css`)
+- **Все цвета** через CSS-переменные — никаких хардкодов в JSX
+
+### 🗑 Перед коммитом — удалить
+`public/images/hayk-photo 1Light.png` (1.1 MB) — старая light-версия, не используется.
 
 ### Порядок секций в page.tsx
 ```
@@ -485,19 +504,21 @@ Hero (#home) → Projects (#work) → SkillCarousel → About Me (#about)
 1. **Этап 1 — Токены** ✅ 2026-05-04
 2. **Этап 2 — Примитивы** ✅ 2026-05-04
 3. **Этап 3 — Responsive audit + 5 mobile UX** ✅ 2026-05-07
-4. **Этап 4 — Семантические цвета** 🔄 готов, ждёт коммита
-5. **Этап 5 — Светлая тема + переключатель** 🔄 готов, ждёт ревью + коммита
+4. **Этап 4 — Семантические цвета** ✅ 2026-05-11 (коммит `776f549`)
+5. **Этап 5 v1 — Светлая тема + переключатель** ✅ 2026-05-11 (коммит `776f549`)
+5b. **Этап 5 v2 — Полировка по фидбэку** 🔄 готов в коде, ждёт ревью + коммита
 6. **Этап 6 — Multi-page split** (`/`, `/work`, `/about`, `/contact`) — pending
 
 ### При старте новой сессии
-1. Прочитать `_notes/Next Session.md` — детальный план Этапа 5/6
-2. Прочитать `_notes/Sessions.md` (последняя запись 2026-05-11)
-3. Прочитать `_notes/Decisions.md` (блок 🌗 Этап 5 в начале — палитры + архитектура)
-4. Резюмировать пользователю: 18 файлов изменены + 1 новый, ждут коммита; нужно финальное ревью светлой темы
+1. Прочитать `_notes/Next Session.md` — детальный план + открытый вопрос про фото
+2. Прочитать `_notes/Sessions.md` (последняя запись 2026-05-12)
+3. Прочитать `_notes/Decisions.md` (блок 🌗 Этап 5 v2 в начале — все правки v2)
+4. Резюмировать: 13 файлов + 2 фото изменены, ждут ревью; уточнить какой light-photo использовать
 
 ### Ждём от пользователя
-- **Финальное ОК** на светлую/тёмную тему (или точечные правки)
-- **Решение** коммитить большой пакет (Этап 4+5) — один коммит на 19 файлов
+- **Решение по светлому фото** (2 файла, какой использовать)
+- **Финальное ОК** на v2 светлой темы (или точечные правки)
+- **Коммит** Этапа 5 v2 одним пакетом (13 файлов + 1-2 фото)
 - **Контент**: реальные отзывы для Testimonials
 - **Контент**: финальный текст About Me
 
@@ -512,9 +533,9 @@ Hero (#home) → Projects (#work) → SkillCarousel → About Me (#about)
 - **ElectricLogo** в Contact — не проверен на светлой
 
 ### 📚 ОБЯЗАТЕЛЬНО прочитать в новой сессии (по приоритету)
-1. `_notes/Next Session.md` — план Этапа 5/6 + актуальные значения тем
-2. `_notes/Sessions.md` — последняя сессия (2026-05-11)
-3. `_notes/Decisions.md` — блок 🌗 Этап 5 (палитры + архитектура темизации)
+1. `_notes/Next Session.md` — открытый вопрос про фото + план + актуальные значения тем
+2. `_notes/Sessions.md` — последняя сессия (2026-05-12 — Этап 5 v2)
+3. `_notes/Decisions.md` — блок 🌗 Этап 5 v2 (Header grid, кнопки, карточки без бордера, и т.д.)
 4. `_notes/Components.md` — справка по primitives + shared
 5. `_notes/Open Questions.md` — отложенные вопросы
 
@@ -534,11 +555,13 @@ Hero (#home) → Projects (#work) → SkillCarousel → About Me (#about)
 - Тёмная: glass = `rgba(255,255,255,0.015)` (полупрозрачное стекло)
 - Светлая: glass = `#FFFFFF` (сплошной белый)
 
-**Section padding**: hero `py-16 xl:pt-36 xl:pb-24` / standard `py-24 lg:py-44` / compact `py-16 lg:py-24` / footer `py-10` (применять через `<Section variant="...">`)
+**Section padding**: hero `py-16 xl:pt-36 xl:pb-24` / standard `py-24 lg:py-36` / compact `py-16 lg:py-24` / footer `py-10` (применять через `<Section variant="...">`)
 **Typography**: hero h1 24/30/48 (`text-2xl sm:text-3xl xl:text-5xl`); section h2 30 uniform (`text-3xl`); body 14; caption 12
 **Brand**: `var(--brand)` или `bg-brand`/`text-brand` — НИКОГДА хардкоды
 **Mobile carousels**: Projects 6s, Expertise 7s, Testimonials 8s/10s
 **Card padding**: 12 (sm) / 16 (md) / 24 (lg) — через `p-3 / p-4 / p-6`
 
-**ThemeToggle**: плавающий `fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50`, 48×48px кругляш с тенью
+**ThemeToggle**: плавающий `fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50`, 48×48px **`rounded-lg`** + мягкая тень `rgba(0,0,0,0.10)`. Flaticon-иконка `fi-rr-moon` (в тёмной) / `fi-rr-sun` (в светлой) — показывает ТЕКУЩУЮ тему. Цвет: `text-text-muted opacity-60` → `hover:text-brand hover:opacity-100`
 **Логотип**: `/images/logo.svg` имеет `fill="#F23F3B"` — всегда красный, тема не меняет
+**Header layout**: **`grid grid-cols-3`** (не flex!) — чтобы CTA расширялась без сдвига навигации. Логотип `justify-self-start`, навигация `justify-self-center`, кнопка обёрнута в `<div className="justify-self-end">`.
+**Карточки**: класс `.card-shadow` (применяется через Card primitive автоматически + вручную в Testimonials). В светлой теме border у `.card-shadow` принудительно `transparent`.

@@ -5,6 +5,8 @@
   overflow: hidden;
 }
 
+/* Бегущие красные градиенты — видны В ПОКОЕ.
+   При hover контейнера — opacity 0 (анимация продолжается невидимо, но визуально гаснет). */
 .border-gradient-bottom {
   position: absolute;
   width: 300%;
@@ -15,6 +17,7 @@
   border-radius: 50%;
   animation: star-movement-bottom linear infinite alternate;
   z-index: 0;
+  transition: opacity 0.2s ease;
 }
 
 .border-gradient-top {
@@ -27,12 +30,20 @@
   border-radius: 50%;
   animation: star-movement-top linear infinite alternate;
   z-index: 0;
+  transition: opacity 0.2s ease;
 }
 
+.star-border-container:hover .border-gradient-bottom,
+.star-border-container:hover .border-gradient-top {
+  opacity: 0;
+}
+
+/* В покое border ПРОЗРАЧНЫЙ — красная анимация видна по периметру.
+   На hover становится серым → анимация скрыта, выглядит как статичная кнопка. */
 .inner-content {
   position: relative;
-  border: 1px solid var(--border-strong, #222);
-  background: var(--surface-page, #0a0a0a);
+  border: 1px solid transparent;
+  background: var(--surface-elevated-1, #0a0a0a);
   color: var(--text-primary, white);
   font-size: 16px;
   text-align: center;
@@ -42,7 +53,7 @@
 }
 
 .star-border-container:hover .inner-content {
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: var(--border-button-hover);
 }
 
 @keyframes star-movement-bottom {

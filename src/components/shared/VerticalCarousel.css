@@ -3,9 +3,12 @@
 .vertical-carousel {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  /* overflow-y: clip — клипает только по вертикали (для бесшовной анимации),
+     горизонталь остаётся visible → тени карточек видны между колонками.
+     contain: content (== layout style paint) убрали — paint клипает тени. */
+  overflow-y: clip;
   position: relative;
-  contain: content;
+  contain: layout style;
 }
 
 .vertical-carousel__track {

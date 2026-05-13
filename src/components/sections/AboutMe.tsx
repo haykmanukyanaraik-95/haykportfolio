@@ -31,7 +31,7 @@ const socialLinks = [
 
 function SkillChip({ label }: { label: string }) {
   return (
-    <li className="inline-flex items-center gap-2 border border-border-subtle rounded-full px-3 py-1.5">
+    <li className="inline-flex items-center gap-2 bg-surface-input border border-border-subtle rounded-full px-3 py-1.5">
       <i className="fi fi-sr-star text-[10px] text-brand leading-none flex items-center" aria-hidden="true" />
       <span className="text-xs text-text-secondary whitespace-nowrap">{label}</span>
     </li>
@@ -71,10 +71,6 @@ export default function AboutMe() {
                 Accomplished Product Designer with 6+ years of experience delivering innovative digital solutions. Skilled in user research, wireframing, prototyping, and information architecture — with hands-on expertise in Figma, Framer, and AI-augmented design workflows.
               </p>
 
-              <p className="text-sm text-text-secondary leading-relaxed mt-3">
-                I optimize usability and interface flows for responsive web and mobile platforms, collaborate closely with cross-functional teams in agile environments, and bring foundational front-end knowledge (HTML, CSS, JavaScript) to bridge design and development.
-              </p>
-
               <p className="text-sm text-text-muted leading-relaxed mt-3">
                 Want to see my social media? Feel free to explore the red folder below.
               </p>
@@ -86,16 +82,16 @@ export default function AboutMe() {
 
             {/* ПРАВАЯ: Skills карточка — высота определяется контентом (короче левого блока).
                 space-y-8 — фиксированный отступ 32px между Hard и Soft Skills */}
-            <Card spotlight borderGlow className="p-4 xl:w-[680px] xl:shrink-0 space-y-8">
+            <Card spotlight hover className="p-4 xl:w-[680px] xl:shrink-0 space-y-8">
               <div>
                 <h3 className="text-base font-semibold text-text-primary mb-2">Hard Skills</h3>
-                <ul className="flex flex-wrap gap-2.5">
+                <ul className="flex flex-wrap gap-x-2.5 gap-y-3">
                   {hardSkills.map((s) => <SkillChip key={s} label={s} />)}
                 </ul>
               </div>
               <div>
                 <h3 className="text-base font-semibold text-text-primary mb-2">Soft Skills</h3>
-                <ul className="flex flex-wrap gap-2.5">
+                <ul className="flex flex-wrap gap-x-2.5 gap-y-3">
                   {softSkills.map((s) => <SkillChip key={s} label={s} />)}
                 </ul>
               </div>

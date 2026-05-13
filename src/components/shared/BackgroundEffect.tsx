@@ -1,5 +1,6 @@
-// Фоновый эффект PixelBlast — фиксированный на всю страницу
-// Пауза WebGL когда Testimonials/Footer в зоне видимости (там сплошной surface-page поверх)
+// Фоновый эффект PixelBlast — фиксированный на ВСЮ страницу (без паузы).
+// Ripples (интерактив мышью) отключены → меньше нагрузка на GPU, нет глича
+// на тестимониалс/футере.
 "use client";
 
 import dynamic from "next/dynamic";
@@ -12,7 +13,6 @@ const PixelBlast = dynamic(() => import("@/components/shared/PixelBlast"), {
 const DEFAULT_PATTERN_COLOR = "#1c1315";
 
 export default function BackgroundEffect() {
-  const [paused, setPaused] = useState(false);
   // Three.js не понимает CSS переменные — резолвим var(--bg-pattern) в hex после монтирования
   const [patternColor, setPatternColor] = useState(DEFAULT_PATTERN_COLOR);
 
@@ -38,46 +38,28 @@ export default function BackgroundEffect() {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    // Ищем секции, которые полностью перекрывают PixelBlast сплошным цветом
-    const targets = ["#testimonials", "footer"]
-      .map((sel) => document.querySelector(sel))
-      .filter((el): el is Element => Boolean(el));
-
-    if (targets.length === 0) return;
-
-    const visibleSet = new Set<Element>();
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) visibleSet.add(entry.target);
-          else visibleSet.delete(entry.target);
-        });
-        setPaused(visibleSet.size > 0);
-      },
-      { threshold: 0.05 }
-    );
-
-    targets.forEach((t) => observer.observe(t));
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <div className="absolute inset-0 z-0 pointer-events-none h-full">
+    <div
+      className="fixed inset-0 z-0 pointer-events-none"
+      style={{
+        // Радиальная маска: центр прозрачный → к краям проявляется паттерн.
+        // По запросу пользователя — пиксели "по бокам", не в центре.
+        maskImage:
+          "radial-gradient(ellipse 60% 50% at center, transparent 0%, transparent 25%, black 75%)",
+        WebkitMaskImage:
+          "radial-gradient(ellipse 60% 50% at center, transparent 0%, transparent 25%, black 75%)",
+      }}
+    >
       <PixelBlast
         variant="square"
         pixelSize={8}
         color={patternColor}
         patternScale={4.5}
         patternDensity={1}
-        enableRipples
-        rippleSpeed={0.3}
-        rippleThickness={0.23}
-        rippleIntensityScale={1}
+        enableRipples={false}
         speed={1}
         transparent
         edgeFade={0.2}
-        paused={paused}
         className=""
         style={undefined}
       />

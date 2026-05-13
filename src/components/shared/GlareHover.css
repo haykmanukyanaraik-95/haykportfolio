@@ -10,16 +10,10 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 0.2s ease;
 }
 
-.glare-hover:hover {
-  transform: scale(1.04);
-}
-
-.glare-hover:active {
-  transform: scale(0.97);
-}
+/* Scale на hover/active убран — по запросу пользователя primary-кнопки
+   не должны "прыгать" в масштабе. Анимация остаётся только через glare-эффект. */
 
 .glare-hover::before {
   content: '';

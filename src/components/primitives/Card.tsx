@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 import SpotlightCard from "@/components/shared/SpotlightCard";
 
 const baseGlass =
-  "bg-surface-glass backdrop-blur-[20px] border border-border-subtle rounded-lg";
+  "bg-surface-glass backdrop-blur-[20px] border border-border-subtle rounded-lg card-shadow";
 
 interface CardProps {
   spotlight?: boolean;

@@ -14,12 +14,28 @@ const ElectricLogo = dynamic(() => import("@/components/shared/ElectricLogo"), {
   loading: () => null,
 });
 
+type Field = "name" | "email" | "message";
+
 export default function Contact() {
   // Состояние полей формы
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [focused, setFocused] = useState<Field | null>(null);
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+
+  // Возвращает класс цвета иконки в зависимости от состояния поля:
+  // — focused: brand-red
+  // — filled (but not focused): text-primary (тёмный)
+  // — default: text-muted С opacity 60% (чуть светлее placeholder-текста)
+  const fieldColor = (field: Field, value: string) => {
+    if (focused === field) return "text-brand";
+    if (value) return "text-text-primary";
+    return "text-text-muted opacity-60";
+  };
+
+  // Капитализирует первую букву строки. Применяется к onChange всех инпутов.
+  const capitalize = (s: string) => (s.length > 0 ? s.charAt(0).toUpperCase() + s.slice(1) : s);
 
   // Отправка формы через Formspree
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -91,52 +107,86 @@ export default function Contact() {
 
               {/* Форма */}
               <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                {/* Линия 1: Name + Email в одной горизонтальной линии */}
+                {/* Линия 1: Name + Email.
+                    Иконка в left-3 (12px), text в pl-9 (36px) → ~6px зазор. Цвет иконки
+                    меняется по состоянию: default=muted, focus=brand-red, filled=text-primary.
+                    Border поля тоже становится красным при фокусе через focus:border-brand. */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div className="flex flex-col gap-2">
                     <label htmlFor="contact-name" className="text-xs font-medium text-text-secondary">
                       Name
                     </label>
-                    <input
-                      id="contact-name"
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      required
-                      placeholder="Your name"
-                      className="bg-surface-input border border-border-subtle rounded-lg px-4 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none transition-colors focus:border-brand focus:bg-surface-input-focus"
-                    />
+                    <div className="relative">
+                      {/* Иконка обёрнута в fixed-size flex-контейнер: гарантирует одинаковую
+                          вертикальную центровку независимо от того, какой Flaticon-глиф внутри
+                          (у разных глифов разное распределение в em-box, поэтому без обёртки
+                          иконки выглядят на разной высоте). */}
+                      <span
+                        className={`absolute left-3 top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-4 h-4 pointer-events-none transition-colors ${fieldColor("name", name)}`}
+                      >
+                        <i className="fi fi-rr-user text-sm leading-none" aria-hidden="true" />
+                      </span>
+                      <input
+                        id="contact-name"
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(capitalize(e.target.value))}
+                        onFocus={() => setFocused("name")}
+                        onBlur={() => setFocused(null)}
+                        required
+                        placeholder="Your name"
+                        className="w-full bg-surface-input border border-border-subtle rounded-md pl-9 pr-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted outline-none transition-colors focus:border-brand focus:bg-surface-input-focus"
+                      />
+                    </div>
                   </div>
                   <div className="flex flex-col gap-2">
                     <label htmlFor="contact-email" className="text-xs font-medium text-text-secondary">
                       Email
                     </label>
-                    <input
-                      id="contact-email"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      placeholder="you@example.com"
-                      className="bg-surface-input border border-border-subtle rounded-lg px-4 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none transition-colors focus:border-brand focus:bg-surface-input-focus"
-                    />
+                    <div className="relative">
+                      <span
+                        className={`absolute left-3 top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-4 h-4 pointer-events-none transition-colors ${fieldColor("email", email)}`}
+                      >
+                        <i className="fi fi-rr-envelope text-sm leading-none" aria-hidden="true" />
+                      </span>
+                      <input
+                        id="contact-email"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(capitalize(e.target.value))}
+                        onFocus={() => setFocused("email")}
+                        onBlur={() => setFocused(null)}
+                        required
+                        placeholder="You@example.com"
+                        className="w-full bg-surface-input border border-border-subtle rounded-md pl-9 pr-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted outline-none transition-colors focus:border-brand focus:bg-surface-input-focus"
+                      />
+                    </div>
                   </div>
                 </div>
 
-                {/* Поле Message */}
+                {/* Поле Message — иконка top-3 (textarea многострочный, не центрируем) */}
                 <div className="flex flex-col gap-2">
                   <label htmlFor="contact-message" className="text-xs font-medium text-text-secondary">
                     Message
                   </label>
-                  <textarea
-                    id="contact-message"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    required
-                    rows={4}
-                    placeholder="Tell me about your project…"
-                    className="bg-surface-input border border-border-subtle rounded-lg px-4 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none resize-none transition-colors focus:border-brand focus:bg-surface-input-focus"
-                  />
+                  <div className="relative">
+                    <span
+                      className={`absolute left-3 top-[11px] inline-flex items-center justify-center w-4 h-4 pointer-events-none transition-colors ${fieldColor("message", message)}`}
+                    >
+                      <i className="fi fi-rr-pencil text-sm leading-none" aria-hidden="true" />
+                    </span>
+                    <textarea
+                      id="contact-message"
+                      value={message}
+                      onChange={(e) => setMessage(capitalize(e.target.value))}
+                      onFocus={() => setFocused("message")}
+                      onBlur={() => setFocused(null)}
+                      required
+                      rows={4}
+                      placeholder="Tell me about your project…"
+                      className="w-full bg-surface-input border border-border-subtle rounded-md pl-9 pr-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted outline-none resize-none transition-colors focus:border-brand focus:bg-surface-input-focus"
+                    />
+                  </div>
                 </div>
 
                 {/* Кнопка отправки — primary стиль (как View Work) */}

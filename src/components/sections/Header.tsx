@@ -47,7 +47,7 @@ export default function Header() {
     <>
       {/* Мобильный навбар — sticky, show/hide on scroll */}
       <header
-        className={`md:hidden sticky top-0 z-50 bg-surface-page/80 backdrop-blur-xl border-b border-border-subtle transition-transform duration-300 ${
+        className={`md:hidden sticky top-0 z-50 site-header-glass backdrop-blur-md border-b border-border-subtle transition-transform duration-300 ${
           visible ? "translate-y-0" : "-translate-y-full"
         }`}
       >
@@ -102,13 +102,16 @@ export default function Header() {
 
       {/* Десктоп header — sticky */}
       <header
-        className={`hidden md:block sticky top-0 z-50 bg-surface-page/80 backdrop-blur-xl border-b border-border-subtle transition-transform duration-300 ${
+        className={`hidden md:block sticky top-0 z-50 site-header-glass backdrop-blur-md border-b border-border-subtle transition-transform duration-300 ${
           visible ? "translate-y-0" : "-translate-y-full"
         }`}
       >
-        <div className="mx-auto max-w-[1280px] px-6 h-16 flex items-center justify-between">
+        {/* grid 3-col: логотип / навигация / кнопка — каждая в своей фикс-колонке.
+            Когда CTA расширяется на hover (max-w-icon), ширина колонки не меняется,
+            а значит соседние ссылки навигации остаются на месте. */}
+        <div className="mx-auto max-w-[1280px] px-6 h-16 grid grid-cols-3 items-center">
           {/* Логотип + имя */}
-          <a href="#home" className="flex-shrink-0 flex items-center gap-3">
+          <a href="#home" className="flex-shrink-0 flex items-center gap-3 justify-self-start">
             <Image
               src="/images/logo.svg"
               alt="Hayk Manukyan logo"
@@ -122,23 +125,25 @@ export default function Header() {
             </span>
           </a>
 
-          {/* Навигация */}
-          <nav className="flex items-center gap-11">
+          {/* Навигация — по центру средней колонки */}
+          <nav className="flex items-center gap-11 justify-self-center">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-text-secondary hover:text-text-primary transition-colors"
+                className="text-sm font-medium text-text-secondary hover:text-brand"
               >
                 {link.label}
               </a>
             ))}
           </nav>
 
-          {/* CTA */}
-          <Button variant="primary" href="#contact" icon="comment">
-            Let&apos;s talk
-          </Button>
+          {/* CTA — прижата вправо в своей колонке */}
+          <div className="justify-self-end">
+            <Button variant="primary" href="#contact" icon="comment">
+              Let&apos;s talk
+            </Button>
+          </div>
         </div>
       </header>
     </>

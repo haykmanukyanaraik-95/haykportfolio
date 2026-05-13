@@ -37,7 +37,29 @@ export default function Hero() {
     typeof window !== "undefined" && window.matchMedia("(max-width: 1279px)").matches
   );
 
+  // Тема для фото — слушаем data-theme на <html>. При смене темы свопаем картинку.
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+
   useEffect(() => { setMounted(true); }, []);
+
+  useEffect(() => {
+    const updateTheme = () => {
+      const t = (document.documentElement.getAttribute("data-theme") as "dark" | "light") || "dark";
+      setTheme(t);
+    };
+    updateTheme();
+
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  const photoSrc = theme === "light"
+    ? "/images/hayk-photo 1light new.png"
+    : "/images/hayk-photo.png";
 
   // Цикл смены слов: первое через 3 сек, далее каждые 2.5 сек
   useEffect(() => {
@@ -58,7 +80,7 @@ export default function Hero() {
         <AnimatedContent distance={40} duration={0.8} delay={0} className="xl:hidden mb-10 flex justify-center">
           <Card className="relative p-3">
             <TiltedCard
-              imageSrc="/images/hayk-photo.png"
+              imageSrc={photoSrc}
               altText="Hayk Manukyan — UX / Product Designer"
               captionText=""
               showTooltip={false}
@@ -71,12 +93,12 @@ export default function Hero() {
               showMobileWarning={false}
             />
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10">
-              <div className="bg-surface-overlay-light backdrop-blur-2xl border border-border-subtle rounded-full px-4 py-2 flex items-center gap-2">
+              <div className="bg-[rgba(0,0,0,0.15)] backdrop-blur-2xl border border-white/10 rounded-full px-4 py-2 flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
-                  <span className="motion-safe:animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-success opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-success" />
+                  <span className="motion-safe:animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
                 </span>
-                <span className="text-xs font-medium text-text-primary whitespace-nowrap">Available for freelance</span>
+                <span className="text-sm font-medium text-text-on-brand whitespace-nowrap">Available for freelance</span>
               </div>
             </div>
           </Card>
@@ -88,9 +110,9 @@ export default function Hero() {
           <div className="text-center xl:text-left">
             {/* Заголовок */}
             <AnimatedContent distance={40} duration={0.8} delay={0}>
-              <h1 className="text-2xl sm:text-3xl xl:text-5xl font-bold leading-tight text-text-primary select-none cursor-default">
+              <h1 className="text-2xl sm:text-3xl xl:text-5xl font-bold leading-[1.1] text-text-primary select-none cursor-default">
                 <span className="block">Hello I&apos;m A Designer With</span>
-                <span className="block mt-1 sm:mt-2 whitespace-nowrap">
+                <span className="block whitespace-nowrap">
                   Passion To{" "}
                   {mounted ? (
                     <DecryptedText
@@ -113,7 +135,7 @@ export default function Hero() {
 
             {/* CTA кнопки */}
             <AnimatedContent distance={40} duration={0.8} delay={isMobile ? 0 : 0.2}>
-              <div className="flex flex-row justify-center xl:justify-start gap-3 sm:gap-6 mt-10 xl:mt-12">
+              <div className="flex flex-row justify-center xl:justify-start gap-3 sm:gap-6 mt-8 xl:mt-10">
                 <Button variant="primary" href="#work" icon="briefcase" centered>
                   View Work
                 </Button>
@@ -152,7 +174,7 @@ export default function Hero() {
             <div className="relative hidden xl:flex justify-end items-start">
               <Card className="relative p-3">
                 <TiltedCard
-                  imageSrc="/images/hayk-photo.png"
+                  imageSrc={photoSrc}
                   altText="Hayk Manukyan — UX / Product Designer"
                   captionText=""
                   showTooltip={false}
@@ -167,12 +189,12 @@ export default function Hero() {
 
                 {/* Бейдж "Available for freelance" — поверх фото */}
                 <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
-                  <div className="bg-surface-overlay-light backdrop-blur-2xl border border-border-subtle rounded-full px-5 py-2.5 flex items-center gap-2.5">
+                  <div className="bg-[rgba(0,0,0,0.15)] backdrop-blur-2xl border border-white/10 rounded-full px-5 py-2.5 flex items-center gap-2.5">
                     <span className="relative flex h-2.5 w-2.5">
-                      <span className="motion-safe:animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-success opacity-75" />
-                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent-success" />
+                      <span className="motion-safe:animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-400" />
                     </span>
-                    <span className="text-xs font-medium text-text-primary whitespace-nowrap">
+                    <span className="text-sm font-medium text-text-on-brand whitespace-nowrap">
                       Available for freelance
                     </span>
                   </div>

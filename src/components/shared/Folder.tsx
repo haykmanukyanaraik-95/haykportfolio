@@ -68,8 +68,8 @@ export default function Folder({
   }, [color]);
 
   const folderBackColor = darkenColor(resolvedColor, 0.08);
-  // Все 3 бумажки — единый серый цвет (10% затемнение от белого)
-  const paperColor = darkenColor("#ffffff", 0.1);
+  // Все 3 бумажки — почти белый (4% затемнение, было 10% — слишком серо в светлой теме)
+  const paperColor = darkenColor("#ffffff", 0.04);
   const paper1 = paperColor;
   const paper2 = paperColor;
   const paper3 = paperColor;
