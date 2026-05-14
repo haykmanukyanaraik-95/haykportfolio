@@ -1,4 +1,7 @@
 // PixelBlast — WebGL фон с пиксельным эффектом — ReactBits
+// Внешний компонент с собственной системой типов Three.js — оставляем @ts-nocheck.
+// Локально отключаем lint для этой директивы (ban-ts-comment), не трогая остальные правила.
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
 "use client";
 

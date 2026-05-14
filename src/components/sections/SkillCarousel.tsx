@@ -18,7 +18,7 @@ const skills: LogoImageItem[] = [
   { src: "/images/skills/Gemini.svg", title: "Gemini" },
   { src: "/images/skills/Perplexity.svg", title: "Perplexity" },
   { src: "/images/skills/Maze.svg", title: "Maze" },
-  { src: "/images/skills/UX Tweak.svg", title: "UX Tweak" },
+  { src: "/images/skills/UX-Tweak.svg", title: "UX Tweak" },
   { src: "/images/skills/Useberry.svg", title: "Useberry" },
   { src: "/images/skills/HTML.svg", title: "HTML" },
   { src: "/images/skills/CSS.svg", title: "CSS" },
@@ -36,6 +36,8 @@ const renderSkillItem = (item: LogoImageItem) => {
   const isMaze = item.title === "Maze";
   return (
     <div className="logoloop__node gap-3">
+      {/* SVG-иконки скиллов — vector, оптимизация Next.js Image не нужна */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={item.src}
         alt={item.title ?? ""}

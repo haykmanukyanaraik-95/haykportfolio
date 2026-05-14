@@ -320,6 +320,9 @@ export const LogoLoop = memo(
             {item.node}
           </span>
         ) : (
+          // Generic image fallback в LogoLoop — потребитель сам решает что передать (SVG/raster).
+          // Поэтому используем нативный img — Next.js Image требует фикс width/height.
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={item.src}
             srcSet={item.srcSet}

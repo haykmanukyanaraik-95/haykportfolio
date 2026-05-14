@@ -9,6 +9,7 @@ import CountUp from "@/components/shared/CountUp";
 import Section from "@/components/primitives/Section";
 import Card from "@/components/primitives/Card";
 import Button from "@/components/primitives/Button";
+import { useTheme, useMounted } from "@/lib/useTheme";
 
 // DecryptedText — только клиент (Math.random = hydration mismatch)
 const DecryptedText = dynamic(() => import("@/components/shared/DecryptedText"), {
@@ -29,7 +30,7 @@ const rotatingWords = ["Research", "Design", "Create", "Innovate", "Orchestratin
 
 export default function Hero() {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useMounted();
   // На мобилке/планшете (< xl=1280) все элементы появляются синхронно (delay=0).
   // На десктопе сохраняется каскад. Lazy init из window — корректное значение с первого
   // клиентского рендера (анимации запускаются в useEffect AnimatedContent на mount).
@@ -37,28 +38,11 @@ export default function Hero() {
     typeof window !== "undefined" && window.matchMedia("(max-width: 1279px)").matches
   );
 
-  // Тема для фото — слушаем data-theme на <html>. При смене темы свопаем картинку.
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
-
-  useEffect(() => { setMounted(true); }, []);
-
-  useEffect(() => {
-    const updateTheme = () => {
-      const t = (document.documentElement.getAttribute("data-theme") as "dark" | "light") || "dark";
-      setTheme(t);
-    };
-    updateTheme();
-
-    const observer = new MutationObserver(updateTheme);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["data-theme"],
-    });
-    return () => observer.disconnect();
-  }, []);
+  // Тема для фото — useTheme подписывается на data-theme через useSyncExternalStore.
+  const theme = useTheme();
 
   const photoSrc = theme === "light"
-    ? "/images/hayk-photo 1light new.png"
+    ? "/images/hayk-photo-light.png"
     : "/images/hayk-photo.png";
 
   // Цикл смены слов: первое через 3 сек, далее каждые 2.5 сек

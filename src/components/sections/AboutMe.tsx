@@ -24,9 +24,9 @@ const softSkills = [
 
 // iconClass — индивидуальный размер иконки (Behance имеет внутренний padding в SVG, поэтому увеличен)
 const socialLinks = [
-  { name: "LinkedIn", url: "https://www.linkedin.com/in/hayk-manukyanofficial/", icon: "/images/Social Link Icons/linkedin.svg", iconClass: "w-10 h-10" },
-  { name: "Instagram", url: "https://www.instagram.com/_______hayk_________/", icon: "/images/Social Link Icons/Instagram.svg", iconClass: "w-10 h-10" },
-  { name: "Behance", url: "https://www.behance.net/haykmanukyanofficial", icon: "/images/Social Link Icons/Behance.svg", iconClass: "w-12 h-12" },
+  { name: "LinkedIn", url: "https://www.linkedin.com/in/hayk-manukyanofficial/", icon: "/images/social-icons/linkedin.svg", iconClass: "w-10 h-10" },
+  { name: "Instagram", url: "https://www.instagram.com/_______hayk_________/", icon: "/images/social-icons/instagram.svg", iconClass: "w-10 h-10" },
+  { name: "Behance", url: "https://www.behance.net/haykmanukyanofficial", icon: "/images/social-icons/behance.svg", iconClass: "w-12 h-12" },
 ];
 
 function SkillChip({ label }: { label: string }) {
@@ -49,6 +49,8 @@ export default function AboutMe() {
       onClick={(e) => e.stopPropagation()}
       className="flex items-center justify-center w-full h-full"
     >
+      {/* SVG-иконки — Next.js Image-оптимизация не применима (vector), используем нативный img */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={link.icon} alt={link.name} className={`${link.iconClass} object-contain`} />
     </a>
   ));

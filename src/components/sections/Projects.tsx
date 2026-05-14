@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import AnimatedContent from "@/components/shared/AnimatedContent";
@@ -120,7 +121,7 @@ export default function Projects() {
                 <Card spotlight className="group active:border-border-strong cursor-pointer">
                   <div className="p-3 pb-0">
                     <div className="relative aspect-[16/10] w-full rounded overflow-hidden">
-                      <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
+                      <Image src={project.image} alt={project.title} fill sizes="260px" className="object-cover" />
                     </div>
                   </div>
                   <div className="p-3 flex items-center justify-between gap-2">
@@ -152,7 +153,7 @@ export default function Projects() {
               <Card spotlight hover className="group cursor-pointer transition-transform duration-200 hover:scale-[1.02]">
                 <div className="p-3 pb-0">
                   <div className="relative aspect-[16/10] w-full rounded overflow-hidden">
-                    <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
+                    <Image src={project.image} alt={project.title} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />
                     <div className="project-tooltip-wrap absolute inset-0 flex items-center justify-center">
                       <span className="bg-surface-overlay-strong border border-white/10 text-text-on-brand text-xs font-medium px-4 py-2 rounded-lg">
                         View Page — Coming Soon

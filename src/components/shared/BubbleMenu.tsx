@@ -54,8 +54,12 @@ export default function BubbleMenu({
     onNavigate?.();
   };
 
-  // В controlled-режиме показ overlay синхронизируется с пропом open
+  // В controlled-режиме показ overlay синхронизируется с пропом open.
+  // setState в useEffect здесь намеренный: реагируем на смену controlled-props
+  // (это легитимный pattern для controlled/uncontrolled API). Рефакторинг в derived state
+  // сломал бы анимацию плавного закрытия (showOverlay держится во время fade-out).
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (isControlled && controlledOpen) setShowOverlay(true);
   }, [isControlled, controlledOpen]);
 

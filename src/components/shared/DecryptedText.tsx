@@ -147,7 +147,6 @@ export default function DecryptedText({
 
   useEffect(() => {
     if (!isAnimating) return;
-    let interval: ReturnType<typeof setInterval>;
     let currentIteration = 0;
 
     const getNextIndex = (revealedSet: Set<number>): number => {
@@ -167,7 +166,7 @@ export default function DecryptedText({
       }
     };
 
-    interval = setInterval(() => {
+    const interval: ReturnType<typeof setInterval> = setInterval(() => {
       setRevealedIndices(prevRevealed => {
         if (sequential) {
           if (direction === 'forward') {
