@@ -247,17 +247,20 @@ hayk-portfolio/
 │   │   │   └── VerticalCarousel.css    — keyframes для вертикальных каруселей (Testimonials desktop)
 │   │   └── (ui/ удалена — пустая)
 │   └── lib/
-│       └── utils.ts            — cn() утилита (shadcn инфраструктура)
+│       ├── utils.ts                  — cn() утилита (shadcn инфраструктура)
+│       ├── useTheme.ts               — useSyncExternalStore для data-theme на <html>
+│       └── useCarouselAutoScroll.ts  — rAF auto-scroll + manual swipe + 5s touch pause
 ├── public/
+│   ├── Hayk_Manukyan_CV.pdf       — CV PDF (для Download CV кнопки)
 │   └── images/
-│       ├── logo.svg                — логотип
-│       ├── hayk-photo.png          — фото для Hero
-│       ├── hayk-photo2.png         — НЕ ИСПОЛЬЗУЕТСЯ (осталась от старого About Me layout)
-│       ├── Signature.svg           — подпись для Footer
-│       ├── projects/               — 6 обложек проектов
-│       ├── skills/                 — 21 SVG иконка скиллов
-│       ├── expertise/              — 6 SVG иконок для Expertise
-│       └── Social Link Icons/      — SVG логотипы соцсетей (LinkedIn, Instagram, Behance)
+│       ├── logo.svg                — логотип (всегда красный fill="#F23F3B")
+│       ├── hayk-photo.png          — фото Hero (тёмная тема)
+│       ├── hayk-photo-light.png    — фото Hero (светлая тема, swap через useTheme)
+│       ├── Signature.svg           — подпись для Footer (через mask-image)
+│       ├── projects/               — 6 обложек проектов (kebab-case)
+│       ├── skills/                 — 21 SVG скиллов + Maze-light.svg (#191919 для светлой)
+│       ├── expertise/              — 6 SVG для Expertise
+│       └── social-icons/           — SVG соцсетей (linkedin, instagram, behance)
 ├── CLAUDE.md                   — этот файл
 ├── README.md                   — короткое описание проекта
 ├── components.json             — shadcn конфиг (base-nova style, neutral palette)
@@ -450,49 +453,71 @@ hayk-portfolio/
 
 ---
 
-## 🔖 Next Session Pickup — Этап 5 закрыт ✅, готовы к Этапу 6
+## 🔖 Next Session Pickup — Small tablet 640-767 закрыт, дальше big tablet 768-1023
 
 **ВАЖНО: это инструкция для новой сессии. При старте прочитай этот блок первым.**
 **ПОДРОБНАЯ ВЕРСИЯ**: `_notes/Next Session.md` — там полный план + значения дизайн-системы.
 
-### Состояние проекта (2026-05-13)
-- ✅ 9/9 секций готовы (desktop + mobile)
+### Состояние проекта (2026-05-19 вечер)
+- ✅ 9/9 секций готовы (desktop + mobile 320-639 + small tablet 640-767)
 - ✅ Formspree подключён (`mlgajler`)
 - ✅ CV PDF в `public/Hayk_Manukyan_CV.pdf`
-- ✅ Деплой на Vercel: `https://vercel.com/haykmanukyanaraik-3843s-projects/haykportfolio`
-- ✅ **Этапы 1+2+3 закоммичены** (`9a08ce7`, `06ef3bf`)
-- ✅ **Этап 5 v1 закоммичен** (`776f549`)
-- ✅ **Этап 5 v2+v3 закоммичен и запушен** (`3c861d2`, 2026-05-13) — финальная полировка светлой темы, 21 файл, на GitHub, Vercel автодеплой
-- 📍 **СЛЕДУЮЩЕЕ**: Этап 6 (Multi-page split) или контент (отзывы Testimonials, текст About Me, CV PDF)
+- ✅ Деплой на Vercel (auto с main)
+- ✅ Этапы 1-5 v1/v2/v3 закоммичены (`e6a700d` — последний коммит на main)
+- 🟡 **Большой пакет НЕЗАКОММИЧЕН (~22 файла, 2026-05-15 — 2026-05-19 вечер)** — полная переработка мобилки 320-639 + small tablet 640-767 + точечные правки md-диапазона. Перед коммитом сделать визуальный sanity check.
+- 📍 **ДАЛЬШЕ**: большой планшет **768-1023** (md). Mobile-only логика на `max-sm:` или внутри `sm:hidden` — не трогать.
 
-### Этап 5 v3 — финальные правки (2026-05-13)
-1. **Светлая тема = DEFAULT** (`localStorage || 'light'` в init-script, system pref игнорируется)
-2. **Все карточки**: `#FFFFFF` + soft shadow + НЕТ border в светлой (cascade fix вне @layer base)
-3. **Inputs + skill chips**: единый цвет `#FBF9F5` (между bg и white) — `bg-surface-input`
-4. **Secondary buttons**: red animation в покое + grey static border на hover + red icon + НЕТ shine
-5. **Primary buttons**: убран `scale(1.04)` из GlareHover
-6. **Form icons**: Flaticon (`fi-rr-user/envelope/pencil`) в `<span w-4 h-4 flex>` + 3-state цвет + auto-capitalize первой буквы
-7. **Hero**: Available badge `rgba(0,0,0,0.15)` + `bg-green-400` dot, photo swap (light=`hayk-photo 1light new.png`)
-8. **Projects layout**: title+sphere LEFT (red), type RIGHT (gray) — flex justify-between
-9. **Header**: `grid grid-cols-3` + instant nav hover + `backdrop-blur-md` fallback
-10. **PixelBlast**: `position: fixed` + CSS radial mask (центр прозрачный, паттерн по бокам) + no ripples
-11. **Footer**: copyright LEFT, quote ABS CENTERED, signature RIGHT — text-lg quote
-12. **ThemeToggle**: `rounded-lg` + Flaticon (`fi-rr-moon`/`fi-rr-sun` = current theme) + muted/hover-red
-13. **Section padding**: `lg:py-40` → `lg:py-36`
-14. **Testimonials**: backdrop-blur на карточках + bigger gaps + `overflow-y: clip`
-15. **About Me**: удалён 2-й параграф, Skills card как Projects/Expertise (без borderGlow)
-16. **SkillCarousel**: -20% speed (80/40 → 64/32), цветные иконки
+### Что прорабатано в мобилке 320-639 (последняя серия сессий)
+1. **Header sticky** — лого + "Hayk Manukyan" даже на 320px. Бургер скрывается при открытом меню (вместо превращения в X — теперь крестик в overlay).
+2. **BubbleMenu overlay** — `flex-direction: column`: top-bar (лого слева + крестик справа в одной позиции с бургером) + список карточек ниже. Карточки `rounded-lg` (8px), внутр. padding `13px 12px`, иконки `22px`. Тогглер темы как отдельная карточка: «Switch to dark» + луна в светлой / «Switch to light» + brightness в тёмной. Overlay 82% непрозрачности + blur 8px → пиксельный паттерн проглядывает.
+3. **Hero** — text-center на мобилке. Заголовок 24px, 2 строки («Hello I'm A Designer» / «With Passion To [word]»). Фото 260×340 центр. Кнопки в ряд `w-[284px] mx-auto` (= ширина фото-карточки), primary в `flex-1` + `fullWidth` заполняет, secondary «CV» справа. Иконки на кнопках видны ВСЕГДА на мобилке (`max-sm:opacity-100`). Stats: 2-col, переключаются на 4-col при `min-[520px]:grid-cols-4`.
+4. **SectionHeading** — `text-xl sm:text-2xl mb-5 sm:mb-10` (на 1 размер меньше предыдущего; mb уменьшен в 2 раза на мобилке).
+5. **Projects mobile** — `overflow-x: auto` с **manual swipe** + автоскролл **43 px/s** через новый хук `useCarouselAutoScroll`. Касание → пауза 5 сек, продолжает с текущей позиции. Edge-to-edge через `-mr-6`. View All Works естественной ширины центр.
+6. **SkillCarousel** — LogoLoop 50 px/s, gap 56. Maze SVG свапается на `Maze-light.svg` (#191919) в светлой теме через `useTheme` hook.
+7. **About Me** — `flex-col` стэк. Folder бумажки `#ffffff` (было `#F5F5F5`). Skill chips класс `.skill-chip` — обводка убрана в светлой теме (cascade override).
+8. **Expertise mobile** — то же что Projects: JS-scroll с manual swipe, 43 px/s, 5-сек пауза, edge-to-edge.
+9. **Contact mobile** — ElectricLogo 320×305. Форма: chubby-иконки (`fi-rc-portrait` / `fi-rc-envelope` / `fi-rc-pencil`) — единый стиль. Иконки центрированы через `top-0 bottom-0` (не `translate(-50%)`). Label-input gap `1` (4px).
+10. **Testimonials mobile** — 2 ряда h-carousel CSS-анимация 10s/10s, `pointer-events: none` (декоративная, без интерактива).
+11. **Footer mobile** — горизонтальный layout: copyright (2-row до 480, 1-row на ≥480) | quote | signature.
+12. **ThemeToggle floating** — `hidden sm:inline-flex` (скрыт на мобилке, есть в меню).
+
+### Что прорабатано в small tablet 640-767 + правки md (сессия 2026-05-19 вечер)
+1. **Hero заголовок** — финальная формула `text-2xl min-[810px]:text-3xl xl:text-5xl` (24/30/48). Точку 810 выбрал пользователь после визуального теста. Убран `md:text-2xl` оверрайд.
+2. **Hero кнопки** — ВСЕГДА в ряд (правило пользователя «никогда не стэкать»). `gap-3 lg:gap-6`, `whitespace-nowrap` в Button.tsx, иконка `max-lg:` (видна до 1024 — планшеты тоже тач).
+3. **Hero stats** — `grid-cols-2 min-[520px]:grid-cols-4` (всегда 4-col с 520+, убран `md:grid-cols-2` оверрайд).
+4. **Available-for-freelance badge** — фон 0.20 (было 0.15), `font-semibold` (было medium), класс `.availability-badge` (border:0 на light через cascade).
+5. **Header** — grid `[auto 1fr auto]` (было `grid-cols-3`) для визуального баланса. Нав `gap-6 lg:gap-11 whitespace-nowrap`. Container `px-6 md:px-12` (совпадает с Section).
+6. **Contact section** — горизонтальный layout с 640+ (`sm:grid-cols-2`). ElectricLogo 4 размера (320/280/360/420). Name/Email стэк до lg, рядом с 1024+.
+7. **Carousel edge fade** — новый класс `.h-carousel-fade` (только градиенты, без `overflow-x: clip`). Применён к Projects и Expertise mobile карусели.
+8. **Projects card footer** — tag поднят к верхней линии (`items-center` → `items-start`).
+9. **Testimonials mobile** — карточки `h-full` через prop `className?: string` в TestimonialCard (одна высота в ряду).
+10. **Optical center fix для Flaticon icons** — `translate-y-[1px]` на ThemeToggle moon/sun, Contact form 3 иконки, BubbleMenu close cross. НЕ применять к иконкам в строке с текстом.
+11. **Folder hydration error** — `useState("#F23F3B")` константой вместо lazy-init с `getComputedStyle` (сервер/клиент возвращали разный case).
+
+### Новые компоненты/хуки/классы
+- **`src/lib/useCarouselAutoScroll.ts`** (мобилка) — rAF-based авто-скролл с пользовательским свайпом и 5-сек паузой. Projects + Expertise.
+- **`public/images/skills/Maze-light.svg`** — копия Maze.svg с fill `#191919` для светлой темы.
+- **`.h-carousel-fade`** (2026-05-19 вечер) — CSS-класс в `HorizontalCarousel.css` для edge-fade обёртки вокруг `overflow-x: auto` каруселей.
+- **`.availability-badge`** (2026-05-19 вечер) — класс для cascade-override border на бейдже Hero.
+- **CDN добавлен** `uicons-regular-chubby` в `layout.tsx` (для иконок формы `fi-rc-*`).
+
+### Удалено в чистке (2026-05-19)
+- `src/lib/useCarouselTouchPause.ts` — стало dead code после миграции на `useCarouselAutoScroll`.
+- `.DS_Store` файлы.
 
 ### ⚠️ Архитектурные правила (важно)
-- **Cascade**: override Tailwind utilities должны быть ВНЕ `@layer base` (иначе перебиваются)
-- **Header layout**: `grid grid-cols-3` ОБЯЗАТЕЛЬНО (не flex) — иначе nav сдвигается при hover CTA
-- **PixelBlast positioning**: `fixed inset-0` (не absolute) + CSS mask на center
-- **Form icons**: Flaticon font-glyphs в обёртке `w-4 h-4 inline-flex items-center justify-center`
-- **Secondary border**: `transparent` в покое, hover gray (логика в `StarBorder.css`)
-- **Все цвета** через CSS-переменные — никаких хардкодов в JSX
-
-### Cleanup history
-`public/images/hayk-photo 1Light.png` (1.1 MB) — удалён в коммите `3c861d2` (старая light-версия, заменена на `hayk-photo 1light new.png`).
+- **Hero кнопки ВСЕГДА В РЯД** — никогда не стэкать ни на каком размере. Правило пользователя.
+- **Button.tsx text — `whitespace-nowrap`** — внутри кнопки текст не переносится.
+- **Icons в кнопках** — видны до 1024 (`max-lg:opacity-100`) — планшеты тоже тач.
+- **Optical center fix** — иконки центрированные в контейнере → `translate-y-[1px]`. НЕ применять к icons рядом с текстом.
+- **Cascade overrides** должны быть ВНЕ `@layer base`. Применено к: `.card-shadow`, `.theme-toggle-btn`, `.skill-chip`, `.availability-badge`.
+- **Header layout** на десктопе: `grid grid-cols-[auto_1fr_auto]` (не `grid-cols-3` и не flex). Side-effect: hover CTA сдвигает нав ~13px (приоритет визуального баланса).
+- **PixelBlast positioning**: `fixed inset-0` (не absolute) + CSS mask на center.
+- **Form icons**: Flaticon font-glyphs в обёртке с явной высотой через `top-0 bottom-0`.
+- **Все цвета** через CSS-переменные — никаких хардкодов в JSX.
+- **Hydration safe**: НЕ читать `getComputedStyle` / `localStorage` в useState lazy init — только в useEffect после mount.
+- **Карусели с авто-анимацией + manual swipe** — `useCarouselAutoScroll` (для `overflow-x: auto`). CSS-animation подход (`.h-carousel`) оставить только для декоративных без интерактива (Testimonials).
+- **Carousel edge fade** — `.h-carousel-fade` для `overflow-x: auto`, `.h-carousel` для CSS-animation. Одна и та же логика градиентов (theme-aware через `--surface-page`).
 
 ### Порядок секций в page.tsx
 ```
@@ -504,64 +529,68 @@ Hero (#home) → Projects (#work) → SkillCarousel → About Me (#about)
 1. **Этап 1 — Токены** ✅ 2026-05-04
 2. **Этап 2 — Примитивы** ✅ 2026-05-04
 3. **Этап 3 — Responsive audit + 5 mobile UX** ✅ 2026-05-07
-4. **Этап 4 — Семантические цвета** ✅ 2026-05-11 (коммит `776f549`)
-5. **Этап 5 v1 — Светлая тема + переключатель** ✅ 2026-05-11 (коммит `776f549`)
-5b. **Этап 5 v2 — Полировка по фидбэку** 🔄 готов в коде, ждёт ревью + коммита
-6. **Этап 6 — Multi-page split** (`/`, `/work`, `/about`, `/contact`) — pending
+4. **Этап 4 — Семантические цвета** ✅ 2026-05-11
+5. **Этап 5 v1/v2/v3 — Светлая тема + переключатель + полировка** ✅
+6. **Мобилка 320-639 — полная переработка** ✅ 2026-05-19
+7. **Маленький планшет 640-767** ✅ 2026-05-19 (вечер) — некоммичен
+8. **Большой планшет 768-1023** ⏭ следующий этап
+9. **Этап 6 — Multi-page split** (`/work`, `/about`, `/contact`) — pending
+10. **Контент** — реальные отзывы для Testimonials, финальный текст About Me
 
 ### При старте новой сессии
-1. Прочитать `_notes/Next Session.md` — детальный план + открытый вопрос про фото
-2. Прочитать `_notes/Sessions.md` (последняя запись 2026-05-12)
-3. Прочитать `_notes/Decisions.md` (блок 🌗 Этап 5 v2 в начале — все правки v2)
-4. Резюмировать: 13 файлов + 2 фото изменены, ждут ревью; уточнить какой light-photo использовать
+1. Прочитать `_notes/Next Session.md` — детальный план big tablet 768-1023
+2. Прочитать `_notes/Sessions.md` — последние 2 записи 2026-05-19 (мобилка + small tablet)
+3. Прочитать `_notes/Decisions.md` — блоки «Маленький планшет 640-767» и «Мобилка 320-639»
+4. `npm run dev` → sanity check на 640/768/900/1023 в обеих темах → подтвердить пользователю → дальше big tablet
 
 ### Ждём от пользователя
-- **Решение по светлому фото** (2 файла, какой использовать)
-- **Финальное ОК** на v2 светлой темы (или точечные правки)
-- **Коммит** Этапа 5 v2 одним пакетом (13 файлов + 1-2 фото)
-- **Контент**: реальные отзывы для Testimonials
-- **Контент**: финальный текст About Me
+- **Команда: дальше big tablet** (диапазон 768-1023) → начать аудит и точечные правки
+- **Коммит** большого пакета (mobile + small tablet, ~22 файла) — сейчас или после big tablet?
+- **Контент** — реальные отзывы для Testimonials, финальный текст About Me
 
 ### ⏸ Отложено пользователем (не трогать без явной просьбы)
 - SEO (OG image, favicon, sitemap)
 - Accessibility (aria-labels, focus, контраст, prefers-reduced-motion)
-- Performance оптимизации (отключить PixelBlast на мобиле и т.д.)
-
-### Известные потенциальные шероховатости светлой темы (не проверены глазами)
-- **Folder paper colors** `#E6E6E6` — на кремовой странице могут быть бледными
-- **ShinyText shine** на secondary кнопках — dark gray → white shine может выглядеть резко
-- **ElectricLogo** в Contact — не проверен на светлой
+- Performance оптимизации
+- Известный минорный баг: анимация Testimonials визуально иногда «рестарт с нуля» — пользователь сказал «обсудим позже»
 
 ### 📚 ОБЯЗАТЕЛЬНО прочитать в новой сессии (по приоритету)
-1. `_notes/Next Session.md` — открытый вопрос про фото + план + актуальные значения тем
-2. `_notes/Sessions.md` — последняя сессия (2026-05-12 — Этап 5 v2)
-3. `_notes/Decisions.md` — блок 🌗 Этап 5 v2 (Header grid, кнопки, карточки без бордера, и т.д.)
-4. `_notes/Components.md` — справка по primitives + shared
+1. `_notes/Next Session.md` — план планшетов + актуальные значения дизайн-системы
+2. `_notes/Sessions.md` — последняя сессия (2026-05-19, мобилка-rework + cleanup)
+3. `_notes/Decisions.md` — блок «Мобилка 320-639» в начале
+4. `_notes/Components.md` — справка по primitives + shared + хукам (включая `useCarouselAutoScroll`)
 5. `_notes/Open Questions.md` — отложенные вопросы
 
 ### Правила поведения
 - **ВСЕГДА уточнять перед решениями** (даже мелкими) — главное правило пользователя
 - Все комментарии в коде — **на русском**
 - Объяснения — **простыми словами**
-- При создании новых секций/страниц использовать **примитивы** (`<Section>`, `<Card>`, `<Button>`, `<IconBadge>`, `<SectionHeading>`)
+- Использовать **примитивы** (`<Section>`, `<Card>`, `<Button>`, `<IconBadge>`, `<SectionHeading>`)
 - Темизация: **только через CSS-переменные** — компоненты НЕ знают про тему
 - Обновлять `_notes/Sessions.md` и `_notes/Next Session.md` по ходу работы
 - Обновлять `_notes/Decisions.md` **сразу** после принятия решения
 - В конце сессии — **чистка/обновление всех заметок**
 
 ### Дизайн-система (актуальные значения)
-**Темизация**: `data-theme="dark"` (default) | `data-theme="light"` — переопределение токенов в `:root[data-theme="light"]` (`globals.css`)
+**Темизация**: `data-theme="light"` (default) | `data-theme="dark"` — переопределение токенов в `:root[data-theme="light"]` (`globals.css`)
 **Glass card** (через `<Card>`): `bg-surface-glass backdrop-blur-[20px] border border-border-subtle rounded-lg`
 - Тёмная: glass = `rgba(255,255,255,0.015)` (полупрозрачное стекло)
-- Светлая: glass = `#FFFFFF` (сплошной белый)
+- Светлая: glass = `#FFFFFF` (сплошной белый), border снимается через `.card-shadow` cascade
 
 **Section padding**: hero `py-16 xl:pt-36 xl:pb-24` / standard `py-24 lg:py-36` / compact `py-16 lg:py-24` / footer `py-10` (применять через `<Section variant="...">`)
-**Typography**: hero h1 24/30/48 (`text-2xl sm:text-3xl xl:text-5xl`); section h2 30 uniform (`text-3xl`); body 14; caption 12
+**Typography**:
+- Hero h1: `text-2xl min-[810px]:text-3xl xl:text-5xl` (24/30/48 — точка 810 выбрана пользователем)
+- Section h2: `text-xl sm:text-2xl` (20/24) — на 1 размер меньше Hero
+- Body 14, caption 12
 **Brand**: `var(--brand)` или `bg-brand`/`text-brand` — НИКОГДА хардкоды
-**Mobile carousels**: Projects 6s, Expertise 7s, Testimonials 8s/10s
+**Hero buttons**: всегда `flex-row` (никогда не стэкать), `gap-3 lg:gap-6`, иконка `max-lg:opacity-100` (видна до 1024)
+**Mobile carousels** (320-639): Projects 43 px/s (manual swipe + 5s pause), Expertise 43 px/s (manual swipe + 5s pause), SkillCarousel 50 px/s, Testimonials 10s/10s (no interactivity)
+**Carousel edge fade**: `.h-carousel-fade` для `overflow-x: auto`, `.h-carousel` для CSS-animation. Ширина fade `clamp(48px, 15%, 80px)`, цвет `var(--surface-page)`.
 **Card padding**: 12 (sm) / 16 (md) / 24 (lg) — через `p-3 / p-4 / p-6`
 
-**ThemeToggle**: плавающий `fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50`, 48×48px **`rounded-lg`** + мягкая тень `rgba(0,0,0,0.10)`. Flaticon-иконка `fi-rr-moon` (в тёмной) / `fi-rr-sun` (в светлой) — показывает ТЕКУЩУЮ тему. Цвет: `text-text-muted opacity-60` → `hover:text-brand hover:opacity-100`
+**ThemeToggle floating**: `hidden md:inline-flex fixed bottom-8 right-8 z-50`, 48×48px **`rounded-lg`** + soft shadow. Flaticon `fi-rr-moon` (тёмная) / `fi-rr-sun` (светлая) — показывает ТЕКУЩУЮ тему. Иконка с `translate-y-[1px]` (optical center). Скрыт на мобилке (есть в BubbleMenu).
 **Логотип**: `/images/logo.svg` имеет `fill="#F23F3B"` — всегда красный, тема не меняет
-**Header layout**: **`grid grid-cols-3`** (не flex!) — чтобы CTA расширялась без сдвига навигации. Логотип `justify-self-start`, навигация `justify-self-center`, кнопка обёрнута в `<div className="justify-self-end">`.
-**Карточки**: класс `.card-shadow` (применяется через Card primitive автоматически + вручную в Testimonials). В светлой теме border у `.card-shadow` принудительно `transparent`.
+**Header layout** (десктоп): `grid grid-cols-[auto_1fr_auto]` (не grid-cols-3!) — лого/CTA natural, нав в средней 1fr центрирован → равные отступы. Side-effect: hover CTA сдвигает нав ~13px (приоритет визуального баланса).
+**Availability badge** (Hero): класс `.availability-badge`, `bg-[rgba(0,0,0,0.20)]`, `font-semibold`, border снимается на light через cascade.
+**Карточки**: класс `.card-shadow` (через Card primitive + вручную в Testimonials). В светлой теме border принудительно `0`.
+**Optical center Flaticon icons** — `translate-y-[1px]` если иконка центрирована в контейнере. НЕ применять рядом с текстом.

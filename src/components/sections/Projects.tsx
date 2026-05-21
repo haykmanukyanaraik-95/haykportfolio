@@ -10,6 +10,7 @@ import Section from "@/components/primitives/Section";
 import SectionHeading from "@/components/primitives/SectionHeading";
 import Card from "@/components/primitives/Card";
 import Button from "@/components/primitives/Button";
+import { useCarouselAutoScroll } from "@/lib/useCarouselAutoScroll";
 import "@/components/shared/HorizontalCarousel.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -50,6 +51,9 @@ const projects = [
 
 export default function Projects() {
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const mobileScrollRef = useRef<HTMLDivElement>(null);
+  // Авто-скролл 43 px/s (-15% от 50) + ручной свайп + пауза 5 сек на касание
+  useCarouselAutoScroll(mobileScrollRef, { pixelsPerSecond: 43 });
 
   // Анимация появления заголовка:
   // — Если элемент уже в viewport при загрузке страницы → анимируем сразу (синхронно с Hero)
@@ -108,35 +112,46 @@ export default function Projects() {
       </SectionHeading>
 
 
-        {/* Мобилка: горизонтальный скролл / Десктоп: сетка 3x2 */}
-        {/* Мобилка: горизонтальная карусель с анимацией + затемнение по краям */}
-        <div className="sm:hidden h-carousel">
+        {/* Мобилка (< sm = 640px): горизонтальный скролл с авто-анимацией + ручной свайп.
+            Обёртка .h-carousel-fade → градиент по краям (15% ширины, theme-aware).
+            Внутри overflow-x: auto → пользователь может физически свайпать пальцем.
+            requestAnimationFrame инкрементирует scrollLeft (см. useCarouselAutoScroll).
+            Касание → пауза 5 сек, потом продолжает с текущей позиции.
+            pt-2 pb-6 → запас под card-shadow.
+            -mx-6 → edge-to-edge. */}
+        <div className="sm:hidden -mx-6 h-carousel-fade">
           <div
-            className="h-carousel__track"
-            style={{ "--speed": "6s", "--gap": "16px" } as React.CSSProperties}
+            ref={mobileScrollRef}
+            className="overflow-x-auto scrollbar-none pt-2 pb-6"
+            style={{ touchAction: "pan-x", WebkitOverflowScrolling: "touch" }}
           >
-            {/* Дублируем для бесшовной петли */}
-            {[...projects, ...projects].map((project, i) => (
-              <div key={`${project.title}-${i}`} className="w-[260px] shrink-0">
-                <Card spotlight className="group active:border-border-strong cursor-pointer">
-                  <div className="p-3 pb-0">
-                    <div className="relative aspect-[16/10] w-full rounded overflow-hidden">
-                      <Image src={project.image} alt={project.title} fill sizes="260px" className="object-cover" />
+            <div className="flex w-max">
+              {[...projects, ...projects].map((project, i) => (
+                <a
+                  href="#"
+                  key={`${project.title}-${i}`}
+                  className="w-[260px] shrink-0 mr-4"
+                >
+                  <Card spotlight className="group active:border-border-strong cursor-pointer">
+                    <div className="p-3 pb-0">
+                      <div className="relative aspect-[16/10] w-full rounded overflow-hidden">
+                        <Image src={project.image} alt={project.title} fill sizes="260px" className="object-cover" />
+                      </div>
                     </div>
-                  </div>
-                  <div className="p-3 flex items-center justify-between gap-2">
-                    <div>
-                      <h3 className="text-sm font-semibold text-text-primary">{project.title}</h3>
-                      <p className="text-[10px] font-medium text-brand uppercase tracking-wider mt-1">{project.tags[0]}</p>
+                    <div className="p-3 flex items-start justify-between gap-2">
+                      <div>
+                        <h3 className="text-sm font-semibold text-text-primary">{project.title}</h3>
+                        <p className="text-[10px] font-medium text-brand uppercase tracking-wider mt-1">{project.tags[0]}</p>
+                      </div>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <i className={`${project.tags[1] === "Mobile App" ? "fi fi-sr-mobile-notch" : "fi fi-sr-browser"} text-[10px] text-text-secondary leading-none flex items-center`} aria-hidden="true" />
+                        <span className="text-[10px] font-medium text-text-secondary uppercase tracking-wider whitespace-nowrap">{project.tags[1]}</span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1 shrink-0">
-                      <i className={`${project.tags[1] === "Mobile App" ? "fi fi-sr-mobile-notch" : "fi fi-sr-browser"} text-[10px] text-text-secondary leading-none flex items-center`} aria-hidden="true" />
-                      <span className="text-[10px] font-medium text-text-secondary uppercase tracking-wider whitespace-nowrap">{project.tags[1]}</span>
-                    </div>
-                  </div>
-                </Card>
-              </div>
-            ))}
+                  </Card>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -161,7 +176,7 @@ export default function Projects() {
                     </div>
                   </div>
                 </div>
-                <div className="p-4 flex items-center justify-between gap-2">
+                <div className="p-4 flex items-start justify-between gap-2">
                   <div>
                     <h3 className="text-base font-semibold text-text-primary">{project.title}</h3>
                     <p className="text-[10px] font-medium text-brand uppercase tracking-wider mt-1">{project.tags[0]}</p>
@@ -176,8 +191,9 @@ export default function Projects() {
           ))}
         </div>
 
-        {/* Кнопка "View All Works" — secondary */}
-        <div className="flex justify-center mt-12">
+        {/* Кнопка "View All Works" — secondary, центрированная с естественной шириной.
+            Мобилка mt-4 (ближе к карточкам), sm+ mt-12. */}
+        <div className="flex justify-center mt-4 sm:mt-12">
           <AnimatedContent distance={30} duration={0.7} delay={0}>
             <Button variant="secondary" href="#" icon="eye">
               View All Works

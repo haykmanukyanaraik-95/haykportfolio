@@ -98,9 +98,11 @@ const column3: Testimonial[] = [
 ];
 
 // Карточка отзыва — glass-style
-function TestimonialCard({ t }: { t: Testimonial }) {
+// className — опциональный доп. класс (используется на мобильной h-carousel для h-full,
+// чтобы все карточки в ряду были одной высоты — максимальной в ряду).
+function TestimonialCard({ t, className = "" }: { t: Testimonial; className?: string }) {
   return (
-    <div className="bg-surface-glass-strong backdrop-blur-[20px] border border-border-subtle rounded-lg p-4 card-shadow">
+    <div className={`bg-surface-glass-strong backdrop-blur-[20px] border border-border-subtle rounded-lg p-4 card-shadow ${className}`}>
       {/* Аватар-инициалы + имя + роль */}
       <div className="flex items-center gap-3 mb-3">
         <div
@@ -150,35 +152,40 @@ export default function Testimonials() {
       {/* Раньше тут был сплошной фон, перекрывавший PixelBlast — убран,
           теперь PixelBlast виден сквозь секцию. Карточки сверху сами по себе непрозрачные. */}
 
-      <div className="relative mx-auto max-w-[1280px] px-6">
+      <div className="relative mx-auto max-w-[1280px] px-6 md:px-12">
 
         {/* Заголовок секции */}
         <SectionHeading>What People Saying</SectionHeading>
 
-        {/* Мобилка: 2 горизонтальные карусели с анимацией + затемнение */}
-        <div className="lg:hidden space-y-4">
-          {/* Ряд 1 — влево */}
-          <div className="h-carousel">
+        {/* Мобилка: 2 горизонтальные карусели с авто-анимацией.
+            pointer-events: none → НЕТ интерактивности: только визуал, без касаний/кликов.
+            -mx-6 → выходит за padding контейнера, карточки от края до края.
+            На md+ (планшет) добавляется md:-mx-12 чтобы покрыть и расширенный padding.
+            Скорость 10s = ~237 px/s (быстрая декоративная анимация, без интерактива).
+            8 уникальных × (280 + 16) = 2368px → 2368 / 237 ≈ 10s полный цикл. */}
+        <div className="lg:hidden space-y-4 pointer-events-none">
+          {/* Ряд 1 — влево. 2× дубль для seamless loop. */}
+          <div className="h-carousel -mx-6 md:-mx-12">
             <div
               className="h-carousel__track"
-              style={{ "--speed": "8s", "--gap": "16px" } as React.CSSProperties}
+              style={{ "--speed": "10s", "--gap": "16px" } as React.CSSProperties}
             >
               {[...column1, ...column2, ...column1, ...column2].map((t, i) => (
                 <div key={`row1-${i}`} className="w-[280px] shrink-0">
-                  <TestimonialCard t={t} />
+                  <TestimonialCard t={t} className="h-full" />
                 </div>
               ))}
             </div>
           </div>
-          {/* Ряд 2 — вправо (противоположное направление) */}
-          <div className="h-carousel">
+          {/* Ряд 2 — вправо. 2× дубль для seamless loop. */}
+          <div className="h-carousel -mx-6 md:-mx-12">
             <div
               className="h-carousel__track h-carousel__track--reverse"
               style={{ "--speed": "10s", "--gap": "16px" } as React.CSSProperties}
             >
               {[...column3, ...column1, ...column3, ...column1].map((t, i) => (
                 <div key={`row2-${i}`} className="w-[280px] shrink-0">
-                  <TestimonialCard t={t} />
+                  <TestimonialCard t={t} className="h-full" />
                 </div>
               ))}
             </div>

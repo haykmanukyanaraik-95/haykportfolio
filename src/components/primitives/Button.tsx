@@ -36,6 +36,10 @@ interface ButtonProps {
   fullWidth?: boolean;
   centered?: boolean;
   className?: string;
+
+  // Короткий лейбл для мобилки (< sm = 640px). Если задан — показывается вместо children.
+  // Используется только для secondary-кнопок (у primary через ShinyText не работает с двумя текстами).
+  mobileLabel?: string;
 }
 
 export default function Button({
@@ -52,6 +56,7 @@ export default function Button({
   fullWidth,
   centered,
   className,
+  mobileLabel,
 }: ButtonProps) {
   // Primary — текст белый, иконка через currentColor = белая.
   // Secondary — текст серый (text-secondary), иконка отдельно brand-red.
@@ -67,13 +72,15 @@ export default function Button({
   );
 
   // Иконка изначально схлопнута (max-w-0, mr-0, opacity-0). На hover расширяется.
+  // На мобилке + планшетах (< lg = 1024px) иконка ВСЕГДА видна —
+  // hover на тач-устройстве не работает (iPad и подобные тоже в этом диапазоне).
   // Для secondary иконка покрашена в brand-red отдельно от цвета текста.
   // Primary получает ShinyText (переливание), secondary — просто <span>.
   const iconColorClass = variant === "secondary" ? "text-brand" : "";
   const inner = (
     <>
       <i
-        className={`fi fi-rr-${icon} ${iconColorClass} text-sm leading-[1] flex items-center overflow-hidden opacity-0 max-w-0 mr-0 group-hover/btn:opacity-100 group-hover/btn:max-w-[18px] group-hover/btn:mr-2 transition-all duration-300 ease-out`}
+        className={`fi fi-rr-${icon} ${iconColorClass} text-sm leading-[1] flex items-center overflow-hidden opacity-0 max-w-0 mr-0 max-lg:opacity-100 max-lg:max-w-[18px] max-lg:mr-2 group-hover/btn:opacity-100 group-hover/btn:max-w-[18px] group-hover/btn:mr-2 transition-all duration-300 ease-out`}
         aria-hidden="true"
       />
       {variant === "primary" ? (
@@ -83,11 +90,20 @@ export default function Button({
           delay={3}
           color="var(--text-on-brand)"
           shineColor="color-mix(in srgb, var(--text-on-brand) 50%, transparent)"
-          className="leading-[1]"
+          className="leading-[1] whitespace-nowrap"
           pauseOnHover
         />
       ) : (
-        <span className="leading-[1]">{children}</span>
+        <span className="leading-[1] whitespace-nowrap">
+          {mobileLabel ? (
+            <>
+              <span className="sm:hidden">{mobileLabel}</span>
+              <span className="hidden sm:inline">{children}</span>
+            </>
+          ) : (
+            children
+          )}
+        </span>
       )}
     </>
   );
@@ -113,6 +129,10 @@ export default function Button({
     </button>
   );
 
+  // fullWidth=true → внешняя обёртка тоже растягивается до 100% родителя
+  // (нужно когда Button сидит во flex-1 контейнере и должен заполнить пространство)
+  const wrapperClass = fullWidth ? "w-full" : "";
+
   if (variant === "primary") {
     return (
       <GlareHover
@@ -126,6 +146,7 @@ export default function Button({
         glareAngle={-30}
         glareSize={275}
         transitionDuration={800}
+        className={wrapperClass}
       >
         {element}
       </GlareHover>
@@ -135,7 +156,7 @@ export default function Button({
   // Secondary — StarBorder даёт анимированную красную обводку по периметру.
   // Статичная серая 1px рамка + белая заливка живут в .inner-content (StarBorder.css).
   return (
-    <StarBorder color="var(--color-brand)" speed="6s">
+    <StarBorder color="var(--color-brand)" speed="6s" className={wrapperClass}>
       {element}
     </StarBorder>
   );

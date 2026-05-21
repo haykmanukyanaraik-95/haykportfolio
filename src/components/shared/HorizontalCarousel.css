@@ -1,13 +1,39 @@
+/* Утилита: скрыть scrollbar на горизонтальных скроллах (мобилка Projects)
+   Используется для статичных свайп-скроллов без авто-анимации. */
+.scrollbar-none {
+  scrollbar-width: none;          /* Firefox */
+  -ms-overflow-style: none;       /* IE/Edge */
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;                  /* Chrome, Safari */
+}
+
 /* Горизонтальная бесконечная карусель — для мобильных секций */
 
 .h-carousel {
   position: relative;
-  overflow: hidden;
+  /* overflow-x: clip + overflow-y: visible → клипает только горизонталь,
+     вертикальная тень карточек (card-shadow) видна полностью.
+     padding-block: запас под тень сверху/снизу. */
+  overflow-x: clip;
+  overflow-y: visible;
+  padding-block: 8px;
 }
 
-/* Затемнение по краям — мягкий fade (15% ширины, 48-80px), gradient через rgba для плавного перехода */
+/* Затемнение по краям — мягкий fade (15% ширины, 48-80px).
+   Theme-aware: цвет берётся из --surface-page (тёмный warm dark / светлый cream).
+   color-mix используется чтобы конечная точка имела ту же hue, но 0% непрозрачности —
+   избегает серой "дымки" посередине градиента.
+
+   Применяется к двум классам:
+   - .h-carousel — CSS-анимация (Testimonials)
+   - .h-carousel-fade — обёртка вокруг overflow-x:auto (Projects, Expertise)
+     Эта обёртка должна быть position:relative и иметь pointer-events:auto на детях
+     (градиент сам pointer-events:none и не мешает скроллу/тапу). */
 .h-carousel::before,
-.h-carousel::after {
+.h-carousel::after,
+.h-carousel-fade::before,
+.h-carousel-fade::after {
   content: "";
   position: absolute;
   top: 0;
@@ -16,34 +42,58 @@
   z-index: 10;
   pointer-events: none;
 }
-.h-carousel::before {
+.h-carousel::before,
+.h-carousel-fade::before {
   left: 0;
-  background: linear-gradient(to right, rgba(10, 10, 10, 1), rgba(10, 10, 10, 0));
+  background: linear-gradient(
+    to right,
+    var(--surface-page),
+    color-mix(in srgb, var(--surface-page) 0%, transparent)
+  );
 }
-.h-carousel::after {
+.h-carousel::after,
+.h-carousel-fade::after {
   right: 0;
-  background: linear-gradient(to left, rgba(10, 10, 10, 1), rgba(10, 10, 10, 0));
+  background: linear-gradient(
+    to left,
+    var(--surface-page),
+    color-mix(in srgb, var(--surface-page) 0%, transparent)
+  );
+}
+
+.h-carousel-fade {
+  position: relative;
 }
 
 .h-carousel__track {
   display: flex;
-  gap: var(--gap, 16px);
+  /* gap НЕ используется — иначе крайний boundary-gap между оригиналом и дублем
+     ломает синхронизацию translate(-50%). Вместо этого margin-right на каждом ребёнке. */
   will-change: transform;
+  /* translate3d форсит GPU layer → плавная анимация без сабпиксельных дёрганий */
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
   animation: h-scroll var(--speed, 30s) linear infinite;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   user-select: none;
 }
 
-/* Пауза при нажатии (touch / click) */
-.h-carousel__track:active,
+.h-carousel__track > * {
+  /* Равные интервалы между ВСЕМИ элементами (включая boundary оригинал-дубль)
+     — обеспечивает идеальный бесконечный loop через translateX(-50%). */
+  margin-right: var(--gap, 16px);
+  flex-shrink: 0;
+}
+
+/* Пауза только через .paused класс (управляется JS — 5-секундный таймер после касания) */
 .h-carousel__track.paused {
   animation-play-state: paused;
 }
 
 @keyframes h-scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
 }
 
 /* Обратное направление (справа налево → слева направо) */
@@ -52,6 +102,6 @@
 }
 
 @keyframes h-scroll-reverse {
-  0% { transform: translateX(-50%); }
-  100% { transform: translateX(0); }
+  0% { transform: translate3d(-50%, 0, 0); }
+  100% { transform: translate3d(0, 0, 0); }
 }

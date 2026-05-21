@@ -34,8 +34,10 @@ export default function Hero() {
   // На мобилке/планшете (< xl=1280) все элементы появляются синхронно (delay=0).
   // На десктопе сохраняется каскад. Lazy init из window — корректное значение с первого
   // клиентского рендера (анимации запускаются в useEffect AnimatedContent на mount).
+  // На мобилке (< md=768) элементы появляются синхронно (delay=0).
+  // На планшете/десктопе сохраняется каскад.
   const [isMobile] = useState(() =>
-    typeof window !== "undefined" && window.matchMedia("(max-width: 1279px)").matches
+    typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches
   );
 
   // Тема для фото — useTheme подписывается на data-theme через useSyncExternalStore.
@@ -59,45 +61,18 @@ export default function Hero() {
 
   return (
     <Section id="home" variant="hero">
-        {/* Фото — сверху на мобилке/планшете/маленьком десктопе (< 1280).
-            На мобилке оборачиваем в AnimatedContent, чтобы синхронно появлялось с заголовком/кнопками */}
-        <AnimatedContent distance={40} duration={0.8} delay={0} className="xl:hidden mb-10 flex justify-center">
-          <Card className="relative p-3">
-            <TiltedCard
-              imageSrc={photoSrc}
-              altText="Hayk Manukyan — UX / Product Designer"
-              captionText=""
-              showTooltip={false}
-              containerHeight="340px"
-              containerWidth="260px"
-              imageHeight="340px"
-              imageWidth="260px"
-              rotateAmplitude={4}
-              scaleOnHover={1.03}
-              showMobileWarning={false}
-            />
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10">
-              <div className="bg-[rgba(0,0,0,0.15)] backdrop-blur-2xl border border-white/10 rounded-full px-4 py-2 flex items-center gap-2">
-                <span className="relative flex h-2 w-2">
-                  <span className="motion-safe:animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
-                </span>
-                <span className="text-sm font-medium text-text-on-brand whitespace-nowrap">Available for freelance</span>
-              </div>
-            </div>
-          </Card>
-        </AnimatedContent>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-8 lg:gap-12 xl:gap-16 items-center">
 
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 xl:gap-16 items-center">
-
-          {/* Левая колонка — текст, кнопки, статистика (центр до xl, слева на xl+) */}
-          <div className="text-center xl:text-left">
-            {/* Заголовок */}
+          {/* Левая колонка — на мобилке центрируем все элементы, на md+ слева. */}
+          <div className="text-center md:text-left">
+            {/* Заголовок 24px на мобилке, 2 строки ("Hello I'm A Designer" / "With Passion To [word]") */}
             <AnimatedContent distance={40} duration={0.8} delay={0}>
-              <h1 className="text-2xl sm:text-3xl xl:text-5xl font-bold leading-[1.1] text-text-primary select-none cursor-default">
-                <span className="block">Hello I&apos;m A Designer With</span>
+              <h1 className="text-2xl min-[810px]:text-3xl xl:text-5xl font-bold leading-[1.15] sm:leading-[1.1] text-text-primary select-none cursor-default">
+                <span className="block">
+                  Hello I&apos;m A Designer<span className="hidden sm:inline"> With</span>
+                </span>
                 <span className="block whitespace-nowrap">
-                  Passion To{" "}
+                  <span className="sm:hidden">With </span>Passion To{" "}
                   {mounted ? (
                     <DecryptedText
                       key={`word-${currentWordIndex}`}
@@ -117,12 +92,47 @@ export default function Hero() {
               </h1>
             </AnimatedContent>
 
-            {/* CTA кнопки */}
+            {/* Фото — между заголовком и кнопками только на мобилке (< md). Центрировано на мобилке. */}
+            <AnimatedContent distance={40} duration={0.8} delay={0} className="md:hidden mt-10 flex justify-center">
+              <Card className="relative p-3">
+                <TiltedCard
+                  imageSrc={photoSrc}
+                  altText="Hayk Manukyan — UX / Product Designer"
+                  captionText=""
+                  showTooltip={false}
+                  containerHeight="340px"
+                  containerWidth="260px"
+                  imageHeight="340px"
+                  imageWidth="260px"
+                  rotateAmplitude={4}
+                  scaleOnHover={1.03}
+                  showMobileWarning={false}
+                />
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10">
+                  <div className="availability-badge bg-[rgba(0,0,0,0.20)] backdrop-blur-2xl border border-white/10 rounded-full px-4 py-2 flex items-center gap-2">
+                    <span className="relative flex h-2 w-2">
+                      <span className="motion-safe:animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
+                    </span>
+                    <span className="text-sm font-semibold text-text-on-brand whitespace-nowrap">Available for freelance</span>
+                  </div>
+                </div>
+              </Card>
+            </AnimatedContent>
+
+            {/* CTA кнопки — ВСЕГДА в одной линии (никаких стэков).
+                Mobile (< sm = 640): ряд w-[284px] mx-auto центрирует под фото (260+24 padding);
+                  primary во flex-1 заполняет, secondary натуральной ширины "CV".
+                ≥ sm (640+): natural width, gap-3 (компактно — чтобы на md 768 две
+                  кнопки с иконками (~340px) влезли в узкую колонку ~320px).
+                На sm 640-767: центр (text-center заголовка); с md+ слева. */}
             <AnimatedContent distance={40} duration={0.8} delay={isMobile ? 0 : 0.2}>
-              <div className="flex flex-row justify-center xl:justify-start gap-3 sm:gap-6 mt-8 xl:mt-10">
-                <Button variant="primary" href="#work" icon="briefcase" centered>
-                  View Work
-                </Button>
+              <div className="flex flex-row gap-3 lg:gap-6 mt-8 xl:mt-10 w-[284px] mx-auto sm:w-auto sm:justify-center md:justify-start">
+                <div className="flex-1 sm:flex-initial">
+                  <Button variant="primary" href="#work" icon="briefcase" centered fullWidth>
+                    View Work
+                  </Button>
+                </div>
                 <Button
                   variant="secondary"
                   href="/Hayk_Manukyan_CV.pdf"
@@ -131,17 +141,22 @@ export default function Hero() {
                   rel="noopener noreferrer"
                   icon="download"
                   centered
+                  mobileLabel="CV"
                 >
                   Download CV
                 </Button>
               </div>
             </AnimatedContent>
 
-            {/* Статистика */}
+            {/* Статистика — центр на мобилке, слева на md+.
+                Колонки:
+                  < 520px → 2 (узко, длинные лейблы не влезают в одну строку при 4-col)
+                  ≥ 520px → 4 (всегда одной строкой; на md фото справа сжимает левую
+                              колонку, но 4 узких слота с переносом лейблов влезают). */}
             <AnimatedContent distance={40} duration={0.8} delay={isMobile ? 0 : 0.4}>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-14 xl:mt-20">
+              <div className="grid grid-cols-2 min-[520px]:grid-cols-4 gap-4 mt-14 xl:mt-20">
                 {stats.map((stat) => (
-                  <div key={stat.label} className="text-center xl:text-left">
+                  <div key={stat.label} className="text-center md:text-left">
                     <span className="text-base font-semibold text-text-secondary">
                       <CountUp to={stat.value} duration={1.5} />
                       {stat.suffix}
@@ -153,32 +168,54 @@ export default function Hero() {
             </AnimatedContent>
           </div>
 
-          {/* Правая колонка — фото (только настоящий десктоп xl+, поэтому delay 0.3 не виден на мобилке) */}
+          {/* Правая колонка — фото (md+).
+              На md-lg показывается компактное фото 260×340, на xl+ — крупное 340×440.
+              Делается через two-photo swap (display block/hidden) — реагирует на resize. */}
           <AnimatedContent distance={60} duration={0.8} delay={0.3}>
-            <div className="relative hidden xl:flex justify-end items-start">
+            <div className="relative hidden md:flex justify-end items-start">
               <Card className="relative p-3">
-                <TiltedCard
-                  imageSrc={photoSrc}
-                  altText="Hayk Manukyan — UX / Product Designer"
-                  captionText=""
-                  showTooltip={false}
-                  containerHeight="440px"
-                  containerWidth="340px"
-                  imageHeight="440px"
-                  imageWidth="340px"
-                  rotateAmplitude={4}
-                  scaleOnHover={1.03}
-                  showMobileWarning={false}
-                />
+                {/* md-lg: 260×340 */}
+                <div className="block xl:hidden">
+                  <TiltedCard
+                    imageSrc={photoSrc}
+                    altText="Hayk Manukyan — UX / Product Designer"
+                    captionText=""
+                    showTooltip={false}
+                    containerHeight="340px"
+                    containerWidth="260px"
+                    imageHeight="340px"
+                    imageWidth="260px"
+                    rotateAmplitude={4}
+                    scaleOnHover={1.03}
+                    showMobileWarning={false}
+                  />
+                </div>
 
-                {/* Бейдж "Available for freelance" — поверх фото */}
-                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
-                  <div className="bg-[rgba(0,0,0,0.15)] backdrop-blur-2xl border border-white/10 rounded-full px-5 py-2.5 flex items-center gap-2.5">
-                    <span className="relative flex h-2.5 w-2.5">
+                {/* xl+: 340×440 */}
+                <div className="hidden xl:block">
+                  <TiltedCard
+                    imageSrc={photoSrc}
+                    altText="Hayk Manukyan — UX / Product Designer"
+                    captionText=""
+                    showTooltip={false}
+                    containerHeight="440px"
+                    containerWidth="340px"
+                    imageHeight="440px"
+                    imageWidth="340px"
+                    rotateAmplitude={4}
+                    scaleOnHover={1.03}
+                    showMobileWarning={false}
+                  />
+                </div>
+
+                {/* Бейдж — общий, position-respond к размеру фото через xl-варианты */}
+                <div className="absolute bottom-6 xl:bottom-8 left-1/2 -translate-x-1/2 z-10">
+                  <div className="availability-badge bg-[rgba(0,0,0,0.20)] backdrop-blur-2xl border border-white/10 rounded-full px-4 xl:px-5 py-2 xl:py-2.5 flex items-center gap-2 xl:gap-2.5">
+                    <span className="relative flex h-2 xl:h-2.5 w-2 xl:w-2.5">
                       <span className="motion-safe:animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-400" />
+                      <span className="relative inline-flex rounded-full h-2 xl:h-2.5 w-2 xl:w-2.5 bg-green-400" />
                     </span>
-                    <span className="text-sm font-medium text-text-on-brand whitespace-nowrap">
+                    <span className="text-sm font-semibold text-text-on-brand whitespace-nowrap">
                       Available for freelance
                     </span>
                   </div>

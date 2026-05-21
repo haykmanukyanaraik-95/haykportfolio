@@ -28,13 +28,18 @@ export default function Footer() {
           />
         </div>
 
-        {/* Мобилка — вертикальный стек */}
-        <div className="flex flex-col sm:hidden items-center gap-5">
-          <p className="text-text-muted text-lg">Live Love Laugh</p>
+        {/* Мобилка — горизонтальный layout: copyright слева, цитата центр, подпись справа.
+            При узких ширинах (< 480px) copyright переносится в 2 строки через max-w-[100px].
+            На ≥ 480px (есть запас места) max-w снимается — copyright помещается в одну строку. */}
+        <div className="flex sm:hidden items-center justify-between gap-2">
+          <p className="text-text-muted text-[10px] leading-tight max-w-[100px] min-[480px]:max-w-none">
+            &copy; 2026 Hayk Manukyan. All rights reserved.
+          </p>
+          <p className="text-text-muted text-xs whitespace-nowrap">Live Love Laugh</p>
           <span
             role="img"
             aria-label="Hayk Manukyan signature"
-            className="block h-10 aspect-[92/55] bg-text-muted"
+            className="block h-7 aspect-[92/55] bg-text-muted shrink-0"
             style={{
               maskImage: "url(/images/Signature.svg)",
               WebkitMaskImage: "url(/images/Signature.svg)",
@@ -44,7 +49,6 @@ export default function Footer() {
               WebkitMaskRepeat: "no-repeat",
             }}
           />
-          <p className="text-text-muted text-xs">&copy; 2026 Hayk Manukyan. All rights reserved.</p>
         </div>
     </Section>
   );

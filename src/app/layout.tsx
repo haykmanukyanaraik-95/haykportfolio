@@ -41,7 +41,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${roboto.variable} h-full antialiased`}>
+    <html lang="en" className={`${roboto.variable} h-full antialiased`} suppressHydrationWarning>
       <head>
         {/* Init темы — ставим data-theme на <html> ДО hydration, чтобы не было
             "вспышки" неправильной темы при загрузке. Источник: localStorage,
@@ -51,7 +51,7 @@ export default function RootLayout({
             __html: `(function(){try{var s=localStorage.getItem('theme');var t=s||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();`,
           }}
         />
-        {/* Flaticon uicons — библиотека иконок (regular + solid) */}
+        {/* Flaticon uicons — библиотека иконок (regular + solid + chubby) */}
         <link
           rel="stylesheet"
           href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css"
@@ -59,6 +59,10 @@ export default function RootLayout({
         <link
           rel="stylesheet"
           href="https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-rounded/css/uicons-solid-rounded.css"
+        />
+        <link
+          rel="stylesheet"
+          href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-chubby/css/uicons-regular-chubby.css"
         />
       </head>
       <body className="min-h-full flex flex-col relative">

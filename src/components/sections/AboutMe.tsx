@@ -31,7 +31,7 @@ const socialLinks = [
 
 function SkillChip({ label }: { label: string }) {
   return (
-    <li className="inline-flex items-center gap-2 bg-surface-input border border-border-subtle rounded-full px-3 py-1.5">
+    <li className="skill-chip inline-flex items-center gap-2 bg-surface-input border border-border-subtle rounded-full px-3 py-1.5">
       <i className="fi fi-sr-star text-[10px] text-brand leading-none flex items-center" aria-hidden="true" />
       <span className="text-xs text-text-secondary whitespace-nowrap">{label}</span>
     </li>
@@ -73,7 +73,7 @@ export default function AboutMe() {
                 Accomplished Product Designer with 6+ years of experience delivering innovative digital solutions. Skilled in user research, wireframing, prototyping, and information architecture — with hands-on expertise in Figma, Framer, and AI-augmented design workflows.
               </p>
 
-              <p className="text-sm text-text-muted leading-relaxed mt-3">
+              <p className="text-base text-text-muted leading-relaxed mt-3">
                 Want to see my social media? Feel free to explore the red folder below.
               </p>
 

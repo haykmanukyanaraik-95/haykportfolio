@@ -61,15 +61,19 @@ export default function Folder({
     Array.from({ length: maxItems }, () => ({ x: 0, y: 0 }))
   );
 
-  // Резолвим CSS-переменную после монтирования (на сервере window нет)
-  const [resolvedColor, setResolvedColor] = useState(() => resolveCssVar(color));
+  // Резолвим CSS-переменную ТОЛЬКО после mount.
+  // Если бы lazy-init читал getComputedStyle на клиенте, он бы вернул нормализованный
+  // lowercase (#f23f3b) — а на сервере fallback #F23F3B → hydration mismatch.
+  // Поэтому первый рендер (и сервер, и клиент) использует одну константу,
+  // а реальный resolve происходит в useEffect после mount.
+  const [resolvedColor, setResolvedColor] = useState("#F23F3B");
   useEffect(() => {
     setResolvedColor(resolveCssVar(color));
   }, [color]);
 
   const folderBackColor = darkenColor(resolvedColor, 0.08);
-  // Все 3 бумажки — почти белый (4% затемнение, было 10% — слишком серо в светлой теме)
-  const paperColor = darkenColor("#ffffff", 0.04);
+  // Все 3 бумажки — чистый белый
+  const paperColor = "#ffffff";
   const paper1 = paperColor;
   const paper2 = paperColor;
   const paper3 = paperColor;

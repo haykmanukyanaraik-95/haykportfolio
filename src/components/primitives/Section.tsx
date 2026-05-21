@@ -48,7 +48,7 @@ export default function Section({
   return (
     <Tag id={id} className={cn(padding, className)} style={style}>
       {bare ? children : (
-        <div className="mx-auto max-w-[1280px] px-6">{children}</div>
+        <div className="mx-auto max-w-[1280px] px-6 md:px-12">{children}</div>
       )}
     </Tag>
   );

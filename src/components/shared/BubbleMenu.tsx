@@ -3,6 +3,7 @@
 
 import { useState, useRef, useEffect, type ReactNode } from "react";
 import { gsap } from "gsap";
+import { useTheme } from "@/lib/useTheme";
 import "./BubbleMenu.css";
 
 interface MenuItem {
@@ -11,6 +12,8 @@ interface MenuItem {
   ariaLabel?: string;
   rotation?: number;
   hoverStyles?: { bgColor: string; textColor: string };
+  /** Если true — карточка работает как тогглер темы (вместо стрелки — иконка солнца/луны) */
+  isThemeToggle?: boolean;
 }
 
 interface BubbleMenuProps {
@@ -37,6 +40,7 @@ export default function BubbleMenu({
   const [internalOpen, setInternalOpen] = useState(false);
   const isOpen = isControlled ? controlledOpen : internalOpen;
   const [showOverlay, setShowOverlay] = useState(isControlled ? controlledOpen : false);
+  const theme = useTheme();
 
   const overlayRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
@@ -52,6 +56,19 @@ export default function BubbleMenu({
   const handleLinkClick = () => {
     if (!isControlled) setInternalOpen(false);
     onNavigate?.();
+  };
+
+  // Тогглер темы — не закрывает меню (пользователь может переключаться и видеть превью)
+  const handleThemeToggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const current = document.documentElement.getAttribute("data-theme") || "light";
+    const next = current === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    try {
+      localStorage.setItem("theme", next);
+    } catch {
+      // приватный режим — игнорируем
+    }
   };
 
   // В controlled-режиме показ overlay синхронизируется с пропом open.
@@ -145,34 +162,69 @@ export default function BubbleMenu({
           <div
             ref={bgRef}
             className="absolute inset-0"
-            style={{ background: overlayBg, backdropFilter: "blur(20px)" }}
+            style={{ background: overlayBg, backdropFilter: "blur(8px)" }}
           />
+
+          {/* Верхняя панель меню: логотип слева (px-6), крестик справа (px-6) — точно
+              в позиции где находится бургер в sticky-навбаре. Без анимации
+              переключения, чтобы не было визуальных артефактов. */}
+          <div className="bubble-menu-overlay__topbar relative z-20 h-14 px-6 flex items-center justify-between pointer-events-auto">
+            {logo && (
+              <a href="#home" onClick={handleLinkClick} className="flex-shrink-0">
+                {logo}
+              </a>
+            )}
+            <button
+              type="button"
+              onClick={handleLinkClick}
+              aria-label="Close menu"
+              className="w-9 h-9 inline-flex items-center justify-center text-text-primary"
+            >
+              <i className="fi fi-rr-cross-small text-2xl leading-none translate-y-[1px]" aria-hidden="true" />
+            </button>
+          </div>
           <ul className="pill-list relative z-10" role="menu">
-            {items.map((item, idx) => (
-              <li key={idx} role="none" className="pill-col">
-                <a
-                  role="menuitem"
-                  href={item.href}
-                  aria-label={item.ariaLabel || item.label}
-                  className="pill-link"
-                  style={{
-                    "--pill-bg": menuBg,
-                    "--pill-color": menuContentColor,
-                    "--hover-bg": item.hoverStyles?.bgColor || "var(--color-brand)",
-                    "--hover-color": item.hoverStyles?.textColor || "#ffffff",
-                  } as React.CSSProperties}
-                  ref={(el) => { bubblesRef.current[idx] = el; }}
-                  onClick={handleLinkClick}
-                >
-                  <span
-                    className="pill-label"
-                    ref={(el) => { labelsRef.current[idx] = el; }}
+            {items.map((item, idx) => {
+              // Для тогглера темы — иконка солнца/луны (текущая тема), клик переключает
+              // Для остальных — стрелка вправо (навигация)
+              // Theme toggle: показываем CELEVUЮ тему (на что переключим)
+              // — в тёмной теме иконка brightness (солнце) + "Switch to light"
+              // — в светлой теме иконка moon + "Switch to dark"
+              const iconClass = item.isThemeToggle
+                ? `fi ${theme === "dark" ? "fi-rr-brightness" : "fi-rr-moon"}`
+                : "fi fi-rr-angle-small-right";
+              const labelText = item.isThemeToggle
+                ? theme === "dark" ? "Switch to light" : "Switch to dark"
+                : item.label;
+              const onClick = item.isThemeToggle ? handleThemeToggle : handleLinkClick;
+
+              return (
+                <li key={idx} role="none" className="pill-col">
+                  <a
+                    role="menuitem"
+                    href={item.href}
+                    aria-label={item.ariaLabel || item.label}
+                    className="pill-link"
+                    style={{
+                      "--pill-bg": menuBg,
+                      "--pill-color": menuContentColor,
+                      "--hover-bg": item.hoverStyles?.bgColor || "var(--color-brand)",
+                      "--hover-color": item.hoverStyles?.textColor || "#ffffff",
+                    } as React.CSSProperties}
+                    ref={(el) => { bubblesRef.current[idx] = el; }}
+                    onClick={onClick}
                   >
-                    {item.label}
-                  </span>
-                </a>
-              </li>
-            ))}
+                    <span
+                      className="pill-label"
+                      ref={(el) => { labelsRef.current[idx] = el; }}
+                    >
+                      {labelText}
+                    </span>
+                    <i className={`pill-icon ${iconClass}`} aria-hidden="true" />
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}

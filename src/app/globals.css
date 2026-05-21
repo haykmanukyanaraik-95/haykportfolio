@@ -420,6 +420,9 @@
    создаёт видимый зазор между фоном страницы и фоном карточки.
    ВНЕ @layer — иначе Tailwind utilities перебивают из-за приоритета каскада слоёв. */
 :root[data-theme="light"] .card-shadow,
-:root[data-theme="light"] .theme-toggle-btn {
+:root[data-theme="light"] .theme-toggle-btn,
+:root[data-theme="light"] .skill-chip,
+:root[data-theme="light"] .availability-badge {
   border: 0;
 }
+

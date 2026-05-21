@@ -32,15 +32,17 @@ export default function ThemeToggle() {
       aria-label={
         theme === "dark" ? "Switch to light theme" : "Switch to dark theme"
       }
-      className="theme-toggle-btn fixed z-50 bottom-6 right-6 sm:bottom-8 sm:right-8
-                 w-12 h-12 inline-flex items-center justify-center rounded-lg
+      className="theme-toggle-btn hidden md:inline-flex fixed z-50 bottom-8 right-8
+                 w-12 h-12 items-center justify-center rounded-lg
                  bg-surface-elevated-1 border border-border-subtle
                  text-text-muted opacity-60 hover:text-brand hover:opacity-100 transition-all
                  shadow-[0_4px_12px_rgba(0,0,0,0.10)]"
     >
-      {/* Flaticon-глифы: dark→moon, light→sun (показывает текущее состояние). */}
+      {/* Flaticon-глифы: dark→moon, light→sun (показывает текущее состояние).
+          translate-y-[1px] — компенсация оптического центра шрифт-иконки
+          (у глифов больше пустого пространства под baseline, без сдвига выглядит вверху). */}
       <i
-        className={`fi ${theme === "dark" ? "fi-rr-moon" : "fi-rr-sun"} text-xl leading-none block`}
+        className={`fi ${theme === "dark" ? "fi-rr-moon" : "fi-rr-sun"} text-xl leading-none block translate-y-[1px]`}
         aria-hidden="true"
       />
     </button>

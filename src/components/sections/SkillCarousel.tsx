@@ -1,9 +1,9 @@
 // Секция 3: Skill Carousel — бесконечная горизонтальная прокрутка иконок+названий
 "use client";
 
-import { useState, useEffect } from "react";
 import LogoLoop, { type LogoImageItem } from "@/components/shared/LogoLoop";
 import Section from "@/components/primitives/Section";
+import { useTheme } from "@/lib/useTheme";
 
 // Список скиллов: порядок — дизайн → AI → research → код → communication
 const skills: LogoImageItem[] = [
@@ -30,47 +30,44 @@ const skills: LogoImageItem[] = [
   { src: "/images/skills/Microsoft_365.svg", title: "Microsoft 365" },
 ];
 
-// Кастомный рендер ячейки
-const renderSkillItem = (item: LogoImageItem) => {
-  const isJitter = item.title === "Jitter";
-  const isMaze = item.title === "Maze";
-  return (
-    <div className="logoloop__node gap-3">
-      {/* SVG-иконки скиллов — vector, оптимизация Next.js Image не нужна */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={item.src}
-        alt={item.title ?? ""}
-        className={`h-10 w-auto ${isMaze ? "opacity-50" : ""}`}
-        loading="lazy"
-        draggable={false}
-      />
-      {!isJitter && (
-        <span className="text-text-muted text-lg font-medium whitespace-nowrap">
-          {item.title}
-        </span>
-      )}
-    </div>
-  );
-};
-
 export default function SkillCarousel() {
-  // Мобилка: 32px/s, десктоп: 64px/s (на 20% медленнее предыдущих значений 40/80)
-  const [speed, setSpeed] = useState(64);
+  // 50 px/s — синхронно с Projects/Expertise/Testimonials каруселями
+  const speed = 50;
+  const theme = useTheme();
 
-  useEffect(() => {
-    const update = () => setSpeed(window.innerWidth < 768 ? 32 : 64);
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
+  // Кастомный рендер ячейки. Maze: в светлой теме грузим Maze-light.svg (#191919),
+  // в тёмной — оригинальный Maze.svg (#ffffff).
+  const renderSkillItem = (item: LogoImageItem) => {
+    const isJitter = item.title === "Jitter";
+    const isMaze = item.title === "Maze";
+    const src =
+      isMaze && theme === "light" ? "/images/skills/Maze-light.svg" : item.src;
+    return (
+      <div className="logoloop__node gap-3">
+        {/* SVG-иконки скиллов — vector, оптимизация Next.js Image не нужна */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={src}
+          alt={item.title ?? ""}
+          className={`h-10 w-auto ${isMaze ? "opacity-50" : ""}`}
+          loading="lazy"
+          draggable={false}
+        />
+        {!isJitter && (
+          <span className="text-text-muted text-lg font-medium whitespace-nowrap">
+            {item.title}
+          </span>
+        )}
+      </div>
+    );
+  };
 
   return (
     <Section id="skills-carousel" variant="compact" bare>
       <LogoLoop
         logos={skills}
         speed={speed}
-        gap={75}
+        gap={56}
         hoverSpeed={30}
         logoHeight={40}
         direction="left"

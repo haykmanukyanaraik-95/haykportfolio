@@ -86,21 +86,22 @@
   transform: translateY(-3.5px) rotate(-45deg);
 }
 
-/* Overlay */
+/* Overlay — flex-column: top-bar (логотип + крестик) сверху, pill-list под ним */
 .bubble-menu-overlay {
   position: fixed;
   inset: 0;
   z-index: 98;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
   pointer-events: none;
 }
 
 .bubble-menu-overlay .pill-list {
   list-style: none;
   margin: 0;
-  padding: 0 24px;
+  /* pt 24px = увеличенный отступ от top-bar (ранее 6px, ×4 для дыхания).
+     px 20px = чуть меньше, чем у логотипа (24px), визуально компактнее. */
+  padding: 24px 20px 24px 20px;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -110,7 +111,7 @@
 
 .bubble-menu-overlay .pill-col {
   display: flex;
-  justify-content: center;
+  justify-content: stretch;
   align-items: stretch;
 }
 
@@ -120,18 +121,23 @@
   --hover-bg: #f3f4f6;
   --hover-color: #111;
   width: 100%;
-  padding: 16px 0;
-  font-size: 1.3rem;
+  /* Внутренний padding: 13px vert, 12px horiz */
+  padding: 13px 12px;
+  /* Уменьшено: 1.15rem → 0.95rem (~15px) */
+  font-size: 0.95rem;
   font-weight: 600;
   line-height: 1.2;
-  border-radius: 999px;
+  /* Радиус как у обычных карточек проекта (rounded-lg = 8px) */
+  border-radius: 8px;
   background: var(--pill-bg);
   color: var(--pill-color);
   text-decoration: none;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
-  justify-content: center;
+  /* Текст слева, иконка справа */
+  justify-content: space-between;
+  gap: 12px;
   transition: background 0.3s ease, color 0.3s ease;
   will-change: transform;
   white-space: nowrap;
@@ -139,12 +145,30 @@
 }
 
 .bubble-menu-overlay .pill-link:active {
-  transform: scale(0.96);
+  transform: scale(0.98);
   background: var(--hover-bg);
+  color: var(--hover-color);
+}
+
+.bubble-menu-overlay .pill-link:active .pill-icon {
+  /* На active иконка становится белой (контраст на красном фоне) */
   color: var(--hover-color);
 }
 
 .bubble-menu-overlay .pill-label {
   display: inline-block;
   will-change: transform, opacity;
+  text-align: left;
+}
+
+/* Иконка справа — красная стрелка (или солнце/луна для тогглера темы) */
+.bubble-menu-overlay .pill-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brand, #F23F3B);
+  font-size: 22px;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color 0.3s ease;
 }
