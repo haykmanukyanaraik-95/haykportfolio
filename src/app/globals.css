@@ -427,6 +427,14 @@
   border: 0;
 }
 
+/* В светлой теме убираем красный focus outline на ThemeToggle —
+   глобальное правило `* { outline: outline-ring/50 }` даёт красный (brand) outline,
+   что плохо смотрится на белой кнопке. В тёмной теме оставляем как есть. */
+:root[data-theme="light"] .theme-toggle-btn:focus,
+:root[data-theme="light"] .theme-toggle-btn:focus-visible {
+  outline: none;
+}
+
 /* MorphMenuButton — CSS-бургер с 3 линиями.
    На .is-open линии трансформируются в X: top → 45° + центрирование,
    middle → scaleX(0) + opacity:0, bottom → -45° + центрирование.

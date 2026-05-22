@@ -63,7 +63,7 @@ export default function Button({
   //            Обёртывается в StarBorder → анимированная красная обводка по периметру,
   //            а статичный 1px серый border + белая заливка живут в .inner-content (StarBorder.css).
   const innerClasses = cn(
-    "group/btn inline-flex items-center text-base font-medium px-5 py-3",
+    "group/btn inline-flex items-center text-base font-medium pl-4 pr-5 py-3",
     variant === "primary" ? "text-text-on-brand" : "text-text-secondary",
     centered && "justify-center",
     fullWidth && "w-full",

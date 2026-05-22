@@ -453,24 +453,28 @@ hayk-portfolio/
 
 ---
 
-## 🔖 Next Session Pickup — Lottie-фаза rough finish, дальше визуальная проверка + big tablet
+## 🔖 Next Session Pickup — Сессия 2026-05-22 завершена пользователем фрустрированным, возможно переход в Codex
 
 **ВАЖНО: это инструкция для новой сессии. При старте прочитай этот блок первым.**
-**ПОДРОБНАЯ ВЕРСИЯ**: `_notes/Next Session.md` — там полный план + правила после фрустрации.
+**ПОДРОБНАЯ ВЕРСИЯ**: `_notes/Next Session.md` — там полный план + критичный URL-encoding баг.
 
-### 🟠 Состояние проекта (2026-05-21 вечер) — Хайк недоволен последней сессией
+### 🟠 Состояние проекта (2026-05-22) — Хайк закончил со словами «перейду в codex»
 - ✅ Mobile (320-639) + small tablet (640-767) — закрыты в коммите `81cbfee`
-- ✅ **Lottie иконки Expertise** — 6 иконок с сиквенцией 1→2→3→4→5→6→loop, theme-aware pre-baked colors (brand red контур + text-primary акценты), IntersectionObserver pause вне viewport
-- ✅ **Морф-бургер** — CSS-вариант (3 линии, не Lottie), цвет через `var(--text-primary)`, размер 28×28
-- ✅ Header — h-14, bg = page bg сплошной, scroll-spy nav-ссылок (`text-text-secondary` active / `text-text-muted` inactive), логотипы некликабельные
-- ✅ Hero h1 — `text-2xl md:text-3xl xl:text-4xl` (24/30/36), badge «Ready for Cooperation»
-- ✅ Page light bg `#FCF8F3`, PixelBlast pattern `#F6EBE6`
-- ✅ Footer цитата «Live Love Laugh» — `text-brand font-bold` (700)
-- 🟡 **Огромный пакет ~30+ файлов НЕЗАКОММИЧЕН** после `81cbfee` — вся Lottie-фаза + точечные правки. Включает: новый `LottieIcon.tsx`, переписанный `MorphMenuButton.tsx` (CSS), 18 файлов в `public/images/expertise/` (6 originals + 12 themed JSONs), 21+ modified компонентов и стилей, package.json (dotlottie-react)
-- 🟠 **Хайк прервал сессию недовольным**: «сегодняшняя работа твоя мне не понравилась». Причина — слишком много итераций на Lottie (цвета/размеры/load/reverse/squeeze/бургер). См. `memory/feedback_minimize_iterations.md` — главный урок: думать ДО действий, не угадывать API
-- ⏭ **Big tablet 768-1023** — изначальный план, отложен из-за Lottie-фазы. Возобновить
-- ⏭ **Решение по коммиту** — спросить Хайка перед началом big tablet
-- ⏭ **Цвет акцентов в dark mode Expertise** — Хайк не ответил на AskUserQuestion в конце (был прерван). Возможно оставит как есть, возможно попросит ярче (#FFF вместо warm off-white) или reverse-в-dark. **Не предлагать самостоятельно**
+- ✅ Lottie иконки Expertise + морф-бургер + Header/Hero/Footer polish — закоммичены в `c7d891b`
+- ✅ **2026-05-22 точечные правки** (~20+ файлов НЕЗАКОММИЧЕНО после `c7d891b`):
+  - Button.tsx: ассиметричный padding `pl-4 pr-5 py-3` (все 4 кнопки)
+  - Мобильное меню architectural refactor: top-bar (лого+X) **внутри** BubbleMenu overlay (не sticky header поверх). Sticky header conditional render `{!mobileMenuOpen && <header>}`. Body lock через **position:fixed** (на html скролл, body lock не работал)
+  - BubbleMenu align с frame grid: top-bar `px-6`, pill-list `padding 38px 24px 24px 24px`, pill ассиметричный `13px 10px 13px 12px`
+  - MorphMenuButton поддерживает раздельные width/height (24×28 в Header)
+  - AboutMe: Skills card `xl:w-fit` (hug content, не overflow), chips inline-flex intrinsic, статика без spotlight/hover, удалён абзац про social media
+  - AboutMe: новая Lottie-иконка `fast-backward` справа от Folder, loop с 2-сек паузой, 3 grey/white тона
+  - LottieIcon: новые props `loop` + `loopDelay`, **URL-encoding fix** (critical), cache-bust query
+  - ThemeToggle: cascade-override `outline:none` в light mode
+  - Expertise jsons: 4 неудачных recolor попытки → откат в дефолт (= `c7d891b`)
+- 🚨 **КРИТИЧНЫЙ БАГ обнаружен в самом конце** — URL encoding в LottieIcon. Пробелы в именах файлов (`AI Driven Practice.json`) → Next.js dev server возвращал HTTP 000 → DotLottie показывал старый кэш / fallback. ЭТО причина почему все 4 попытки recolor в этой сессии НЕ показывались Хайку. Зафиксировано в `memory/reference_lottie_integration.md` как 4-е правило.
+- 🟠 **Хайк прервал сессию**: «мне больше не хочется с тобой работать… я перейду в codex». Причина — длинная серия неудачных recolor (я не находил URL encoding багу).
+- ⏭ **Big tablet 768-1023** — изначальный план, всё ещё не начат
+- ⏭ **Решение по коммиту 20+ файлов** — спросить пользователя при возврате
 
 ### Состояние проекта (2026-05-19 вечер)
 - ✅ 9/9 секций готовы (desktop + mobile 320-639 + small tablet 640-767)
