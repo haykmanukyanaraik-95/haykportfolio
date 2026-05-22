@@ -4,6 +4,7 @@
 
 import AnimatedContent from "@/components/shared/AnimatedContent";
 import Folder from "@/components/shared/Folder";
+import LottieIcon from "@/components/shared/LottieIcon";
 import Section from "@/components/primitives/Section";
 import SectionHeading from "@/components/primitives/SectionHeading";
 import Card from "@/components/primitives/Card";
@@ -30,6 +31,7 @@ const socialLinks = [
 ];
 
 function SkillChip({ label }: { label: string }) {
+  // inline-flex = intrinsic size (hug content). Chip ровно по содержимому, не растягивается.
   return (
     <li className="skill-chip inline-flex items-center gap-2 bg-surface-input border border-border-subtle rounded-full px-3 py-1.5">
       <i className="fi fi-sr-star text-[10px] text-brand leading-none flex items-center" aria-hidden="true" />
@@ -73,18 +75,33 @@ export default function AboutMe() {
                 Accomplished Product Designer with 6+ years of experience delivering innovative digital solutions. Skilled in user research, wireframing, prototyping, and information architecture — with hands-on expertise in Figma, Framer, and AI-augmented design workflows.
               </p>
 
-              <p className="text-base text-text-muted leading-relaxed mt-6">
-                Want to see my social media? Feel free to explore the red folder below.
-              </p>
-
-              <div className="mt-10">
+              {/* Folder + декоративная Lottie-иконка справа.
+                  Цвета: 3 grey/white-tone в зависимости от темы (low contrast).
+                  loop=true → бесконечная анимация без интеракции.
+                  -translate-y-2 (-8px) — выравнивание visual body центра Folder с icon:
+                  Folder layout box = 100×80, после scale 0.8 + origin-top-left
+                  visual body занимает 0..64, центр = y=32.
+                  Flex items-center ставит icon center на y=40 (layout center 80/2).
+                  Сдвигаем icon вверх на 8px чтобы попасть в visual body центр. */}
+              <div className="mt-10 flex items-center gap-6">
                 <Folder color="var(--color-brand)" size={0.8} items={folderItems} className="origin-top-left" />
+                <div className="-translate-y-2.5">
+                  <LottieIcon
+                    src="/images/about/fast-backward.json"
+                    loop
+                    loopDelay={2000}
+                    size={56}
+                  />
+                </div>
               </div>
             </div>
 
-            {/* ПРАВАЯ: Skills карточка — высота определяется контентом (короче левого блока).
+            {/* ПРАВАЯ: Skills карточка — статичная, hug content.
+                xl:w-fit — ширина карточки = ширина содержимого (chips). Без empty space
+                справа внутри карточки. На странице справа от карточки может остаться
+                свободное место — это нормально, главное чтобы внутри карточки пустоты не было.
                 space-y-8 — фиксированный отступ 32px между Hard и Soft Skills */}
-            <Card spotlight hover className="p-4 xl:w-[680px] xl:shrink-0 space-y-8">
+            <Card className="p-4 xl:w-fit space-y-8">
               <div>
                 <h3 className="text-base font-semibold text-text-primary mb-2">Hard Skills</h3>
                 <ul className="flex flex-wrap gap-x-2.5 gap-y-3">
