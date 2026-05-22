@@ -453,12 +453,19 @@ hayk-portfolio/
 
 ---
 
-## 🔖 Next Session Pickup — Сессия 2026-05-23 завершена успешно, дальше контент
+## 🔖 Next Session Pickup — Сессия 2026-05-23 (вечер) на hold, завтра carousel bug
 
 **ВАЖНО: это инструкция для новой сессии. При старте прочитай этот блок первым.**
-**ПОДРОБНАЯ ВЕРСИЯ**: `_notes/Next Session.md` — там полный план + правила работы.
+**ПОДРОБНАЯ ВЕРСИЯ**: `_notes/Next Session.md` — полный план + правила отладки carousel.
 
-### ✅ Состояние проекта (2026-05-23) — все коммиты на main, дальше контент-фаза
+### 🚨 ОТКРЫТЫЙ БАГ (приоритет #1 завтра)
+**Carousel auto-scroll на Projects + Expertise mobile НЕ работает** на live версии после двух попыток в этой сессии:
+1. Добавление `px-12` на track — сломало loop (асимметричный halfWidth)
+2. Откат на leading spacer per copy — Хайк говорит всё равно не работает
+
+Завтра — **НЕ итерировать вслепую**. Сначала diagnose через Safari Web Inspector на iPhone, затем fix. См. `_notes/Next Session.md` для конкретных шагов.
+
+### ✅ Состояние проекта (2026-05-23 вечер) — 11 коммитов на main + 2 mobile-фазы вечером
 - ✅ Mobile (320-639) + small tablet (640-767) — закрыты в `81cbfee`
 - ✅ Lottie иконки Expertise + морф-бургер + Header/Hero/Footer polish — `c7d891b`
 - ✅ **2026-05-22 правки** (button padding + mobile-menu refactor + AboutMe Skills + LottieIcon URL-encoding fix) — закоммичены в 4 блока: `2e2e6c6 → 6bbf81d`
