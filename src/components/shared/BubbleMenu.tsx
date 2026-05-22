@@ -80,6 +80,20 @@ export default function BubbleMenu({
     if (isControlled && controlledOpen) setShowOverlay(true);
   }, [isControlled, controlledOpen]);
 
+  // Mount-time cleanup: при инициализации компонента принудительно сбрасываем
+  // все потенциальные scroll-lock'и на body и html. Нужно потому что <html> и <body>
+  // живут ВНЕ React-дерева, и dev hot reload может оставить inline-стили от
+  // предыдущей версии компонента (lock не снялся → пользователь не может скроллить).
+  useEffect(() => {
+    document.body.style.overflow = "";
+    document.body.style.position = "";
+    document.body.style.top = "";
+    document.body.style.left = "";
+    document.body.style.right = "";
+    document.body.style.width = "";
+    document.documentElement.style.overflow = "";
+  }, []);
+
   useEffect(() => {
     const overlay = overlayRef.current;
     const bg = bgRef.current;
@@ -89,8 +103,14 @@ export default function BubbleMenu({
     if (!overlay || !bg || !bubbles.length) return;
 
     if (isOpen) {
-      // Блокируем скролл
-      document.body.style.overflow = "hidden";
+      // Блокируем скролл через position:fixed на body (надёжнее чем overflow:hidden —
+      // не оставляет artifacts при hot reload, сохраняет позицию скролла).
+      const scrollY = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.left = "0";
+      document.body.style.right = "0";
+      document.body.style.width = "100%";
       gsap.set(overlay, { display: "flex" });
       gsap.killTweensOf([bg, ...bubbles, ...labels]);
       gsap.set(bg, { opacity: 0 });
@@ -121,13 +141,29 @@ export default function BubbleMenu({
         onComplete: () => {
           gsap.set(overlay, { display: "none" });
           setShowOverlay(false);
-          document.body.style.overflow = "";
+          // Восстанавливаем скролл: читаем сохранённый top, сбрасываем стили,
+          // возвращаем пользователя на ту же позицию что и до открытия меню.
+          const top = document.body.style.top;
+          const savedY = top ? Math.abs(parseInt(top, 10)) : 0;
+          document.body.style.position = "";
+          document.body.style.top = "";
+          document.body.style.left = "";
+          document.body.style.right = "";
+          document.body.style.width = "";
+          window.scrollTo(0, savedY);
         },
       });
     }
 
     return () => {
+      // Cleanup при re-run useEffect или unmount: сбрасываем все scroll-lock стили.
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
+      document.body.style.width = "";
       document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     };
   }, [isOpen, showOverlay]);
 
@@ -165,10 +201,21 @@ export default function BubbleMenu({
             style={{ background: overlayBg, backdropFilter: "blur(8px)" }}
           />
 
-          {/* Spacer 56px — высота sticky-хедера, который теперь лежит ПОВЕРХ overlay'а
-              (z-100 > z-98). Логотип и MorphMenuButton рендерятся в sticky-хедере,
-              а здесь просто резервируем место чтобы pill-list начинался ниже хедера. */}
-          <div className="h-14 flex-shrink-0" aria-hidden="true" />
+          {/* Top-bar ВНУТРИ overlay: лого слева + X справа.
+              pointer-events: auto обязательно — родительский overlay имеет
+              pointer-events: none (чтобы тапы шли мимо неинтерактивных зон),
+              а кнопка X должна ловить клики. */}
+          <div className="relative z-10 h-14 px-6 flex items-center justify-between flex-shrink-0 pointer-events-auto">
+            {logo}
+            <button
+              type="button"
+              onClick={handleLinkClick}
+              aria-label="Close menu"
+              className="inline-flex items-center justify-center w-9 h-9 text-text-primary cursor-pointer"
+            >
+              <i className="fi fi-rr-cross-small text-[24px] leading-[1] translate-y-[1px]" aria-hidden="true" />
+            </button>
+          </div>
           <ul className="pill-list relative z-10" role="menu">
             {items.map((item, idx) => {
               // Для тогглера темы — иконка солнца/луны (текущая тема), клик переключает

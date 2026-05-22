@@ -40,13 +40,38 @@ export default function Header() {
         setVisible(true);
       } else {
         setVisible(false);
-        setMobileMenuOpen(false);
       }
       lastScrollY.current = currentY;
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // При закрытии меню сбрасываем lastScrollY на текущую позицию —
+  // иначе после закрытия следующий малейший скролл сравнится с устаревшим
+  // значением и может неожиданно скрыть/показать header.
+  useEffect(() => {
+    if (!mobileMenuOpen) {
+      lastScrollY.current = window.scrollY;
+    }
+  }, [mobileMenuOpen]);
+
+  // Логотип + имя для overlay BubbleMenu (живёт ВНУТРИ overlay, не в sticky-хедере)
+  const mobileLogo = (
+    <div className="flex items-center gap-2.5">
+      <Image
+        src="/images/logo.svg"
+        alt="Hayk Manukyan logo"
+        width={26}
+        height={24}
+        priority
+      />
+      <span className="text-base font-medium leading-none">
+        <span className="text-text-primary">Hayk</span>{" "}
+        <span className="text-text-muted">Manukyan</span>
+      </span>
+    </div>
+  );
 
   // Scroll-spy: наблюдаем за всеми секциями из navLinks, активную выставляем
   // ту, что попала в среднюю 20% вертикальной полосы viewport'а.
@@ -74,48 +99,38 @@ export default function Header() {
   return (
     <>
       {/* Мобильный навбар — sticky, show/hide on scroll.
-          z-[100] выше чем у BubbleMenu overlay (z-98) — sticky-хедер всегда сверху,
-          MorphMenuButton остаётся кликабельной даже при открытом меню. */}
-      <header
-        className={`md:hidden sticky top-0 z-[100] site-header-glass border-b border-border-subtle transition-transform duration-300 ${
-          visible ? "translate-y-0" : "-translate-y-full"
-        }`}
-      >
-        <div className="px-6 h-14 flex items-center justify-between">
-          {/* Логотип + имя на мобилке (помещается даже на 320px).
-              По запросу пользователя логотип НЕ кликабельный — обычный div. */}
-          <div className="flex-shrink-0 flex items-center gap-2.5">
-            <Image
-              src="/images/logo.svg"
-              alt="Hayk Manukyan logo"
-              width={26}
-              height={24}
-              priority
+          При открытом меню НЕ рендерится: лого и кнопка закрытия (X) живут
+          ВНУТРИ BubbleMenu overlay, чтобы избежать z-index/transform/blur
+          конфликтов между sticky-хедером и overlay'ем. */}
+      {!mobileMenuOpen && (
+        <header
+          className={`md:hidden sticky top-0 z-[100] site-header-glass border-b border-border-subtle transition-transform duration-300 ${
+            visible ? "translate-y-0" : "-translate-y-full"
+          }`}
+        >
+          <div className="px-6 h-14 flex items-center justify-between">
+            {/* Логотип + имя на мобилке (помещается даже на 320px).
+                По запросу пользователя логотип НЕ кликабельный — обычный div. */}
+            {mobileLogo}
+
+            {/* Morph-кнопка: CSS-бургер (3 линии). Клик открывает меню. */}
+            <MorphMenuButton
+              open={false}
+              onClick={() => setMobileMenuOpen(true)}
+              className="inline-flex items-center justify-center w-9 h-9"
+              width={24}
+              height={28}
             />
-            <span className="text-base font-medium leading-none">
-              <span className="text-text-primary">Hayk</span>{" "}
-              <span className="text-text-muted">Manukyan</span>
-            </span>
           </div>
+        </header>
+      )}
 
-          {/* Morph-кнопка: Lottie-анимация бургер ⇄ X.
-              Видна всегда. Клик переключает открытие меню; компонент сам
-              запускает анимацию в нужную сторону по prop `open`. */}
-          <MorphMenuButton
-            open={mobileMenuOpen}
-            onClick={() => setMobileMenuOpen((o) => !o)}
-            className="inline-flex items-center justify-center w-9 h-9"
-            size={28}
-          />
-        </div>
-      </header>
-
-      {/* BubbleMenu overlay — controlled режим, только overlay (sticky-хедер выше
-          и перекрывает верхнюю часть overlay'а через z-index).
-          Логотип и кнопка morph живут в sticky-хедере, в overlay не дублируются. */}
+      {/* BubbleMenu overlay — controlled режим. Top-bar (лого + X) живёт
+          ВНУТРИ overlay'а: больше никаких sticky-хедер-поверх-overlay через z-index. */}
       <div className="md:hidden">
         <BubbleMenu
           items={bubbleItems}
+          logo={mobileLogo}
           menuBg="var(--surface-elevated-1)"
           menuContentColor="var(--text-primary)"
           overlayBg="color-mix(in srgb, var(--surface-page) 82%, transparent)"

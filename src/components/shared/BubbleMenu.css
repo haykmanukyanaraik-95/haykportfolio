@@ -101,8 +101,9 @@
   margin: 0;
   /* pt 24px = увеличенный отступ от top-bar (ранее 6px, ×4 для дыхания).
      px 20px = чуть меньше, чем у логотипа (24px), визуально компактнее. */
-  /* top 48px (×2 от исходных 24px) — увеличенный отступ между топ-баром и первой карточкой */
-  padding: 48px 20px 24px 20px;
+  /* top 38px — расстояние от top-bar до первой карточки.
+     Горизонтальный padding 24px = px-6 (выровнен с Section primitive frame grid: px-6 на мобилке). */
+  padding: 38px 24px 24px 24px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -122,8 +123,8 @@
   --hover-bg: #f3f4f6;
   --hover-color: #111;
   width: 100%;
-  /* Внутренний padding: 13px vert, 12px horiz */
-  padding: 13px 12px;
+  /* Внутренний padding: 13px vert, 12px left, 10px right (ассиметрично) */
+  padding: 13px 10px 13px 12px;
   /* Уменьшено: 1.15rem → 0.95rem (~15px) */
   font-size: 0.95rem;
   font-weight: 600;
