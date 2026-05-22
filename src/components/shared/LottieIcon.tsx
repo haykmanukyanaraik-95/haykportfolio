@@ -15,7 +15,7 @@
 //   - onAnimationEnd:   эмитится на event 'complete'
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { useTheme } from "@/lib/useTheme";
 
@@ -29,26 +29,48 @@ type DotLottiePlayer = {
 
 interface LottieIconProps {
   src: string;
-  isActive: boolean;
+  isActive?: boolean;
   onAnimationEnd?: () => void;
   staticFrame?: boolean;
   size?: number;
+  /** Бесконечный цикл без интеракции. Если true — isActive игнорируется,
+      иконка автоматически проигрывается в loop с момента load. */
+  loop?: boolean;
+  /** Пауза между прогонами в loop-режиме (мс). 0 = без паузы (плотный loop).
+      При loopDelay > 0 используется DotLottie loop=false + restart через setTimeout. */
+  loopDelay?: number;
 }
 
+// Cache-bust версия: меняй число чтобы заставить браузер/DotLottie повторно
+// загрузить JSON после правки цветов. JSON-файлы агрессивно кэшируются,
+// hard refresh иногда не помогает — query string гарантирует свежий запрос.
+const CACHE_BUST = "5";
+
 function themedSrc(src: string, theme: "dark" | "light"): string {
-  return src.replace(/\.json$/, `.${theme}.json`);
+  // URL-encode каждый сегмент пути. Без этого имена с пробелами
+  // ("AI Driven Practice.json") не доходят до dev server (HTTP 000),
+  // и DotLottie молча показывает fallback / старый кэш.
+  const themed = src.replace(/\.json$/, `.${theme}.json`);
+  const encodedPath = themed.split("/").map(encodeURIComponent).join("/");
+  return `${encodedPath}?v=${CACHE_BUST}`;
 }
 
 export default function LottieIcon({
   src,
-  isActive,
+  isActive = false,
   onAnimationEnd,
   staticFrame = false,
   size = 60,
+  loop = false,
+  loopDelay = 0,
 }: LottieIconProps) {
   const theme = useTheme();
   const [player, setPlayer] = useState<DotLottiePlayer | null>(null);
   const [isReady, setIsReady] = useState(false);
+  const loopTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Используем DotLottie internal loop только если loopDelay=0.
+  // При loopDelay>0 управляем рестартом сами через 'complete' event + setTimeout.
+  const useNativeLoop = loop && loopDelay === 0;
 
   // Подписка на 'load' — флаг готовности к play.
   // setIsReady в эффекте — намеренный pattern: ready-state управляется событием
@@ -68,13 +90,38 @@ export default function LottieIcon({
   // Воспроизведение — только когда player готов (data загружена).
   useEffect(() => {
     if (!player || !isReady || staticFrame) return;
+    if (loop) {
+      // Loop-режим: запускаем (если useNativeLoop=true, DotLottie сам зациклит;
+      // если loopDelay>0 — используем 'complete' event ниже для повтора с задержкой).
+      player.play();
+      return;
+    }
     if (isActive) {
       player.setFrame(0);
       player.play();
     } else {
       player.pause();
     }
-  }, [player, isReady, isActive, staticFrame]);
+  }, [player, isReady, isActive, staticFrame, loop]);
+
+  // Loop с задержкой: подписываемся на 'complete', через loopDelay рестартим.
+  useEffect(() => {
+    if (!player || !isReady || staticFrame || !loop || loopDelay === 0) return;
+    const onComplete = () => {
+      loopTimeoutRef.current = setTimeout(() => {
+        player.setFrame(0);
+        player.play();
+      }, loopDelay);
+    };
+    player.addEventListener("complete", onComplete);
+    return () => {
+      player.removeEventListener("complete", onComplete);
+      if (loopTimeoutRef.current) {
+        clearTimeout(loopTimeoutRef.current);
+        loopTimeoutRef.current = null;
+      }
+    };
+  }, [player, isReady, staticFrame, loop, loopDelay]);
 
   // Complete для сиквенции в родителе.
   useEffect(() => {
@@ -87,10 +134,12 @@ export default function LottieIcon({
 
   return (
     <DotLottieReact
-      // key с темой — при смене темы DotLottieReact полностью пересоздаётся
-      key={`${src}::${theme}`}
+      // key — themed URL включает CACHE_BUST, чтобы при его смене DotLottieReact
+      // полностью пересоздавался и грузил новый JSON. Без cache-bust в key
+      // React переиспользует mounted player с уже загруженной (старой) data.
+      key={themedSrc(src, theme)}
       src={themedSrc(src, theme)}
-      loop={false}
+      loop={useNativeLoop}
       autoplay={false}
       dotLottieRefCallback={(ref) => {
         setPlayer(ref as DotLottiePlayer | null);
