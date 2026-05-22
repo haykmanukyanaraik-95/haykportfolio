@@ -19,7 +19,7 @@ interface MenuItem {
 interface BubbleMenuProps {
   logo?: ReactNode;
   items: MenuItem[];
-  onNavigate?: () => void;
+  onNavigate?: (href: string) => void;
   menuBg?: string;
   menuContentColor?: string;
   overlayBg?: string;
@@ -53,9 +53,9 @@ export default function BubbleMenu({
     if (!isControlled) setInternalOpen(next);
   };
 
-  const handleLinkClick = () => {
+  const handleLinkClick = (href?: string) => {
     if (!isControlled) setInternalOpen(false);
-    onNavigate?.();
+    if (href !== undefined) onNavigate?.(href);
   };
 
   // Тогглер темы — не закрывает меню (пользователь может переключаться и видеть превью)
@@ -209,7 +209,7 @@ export default function BubbleMenu({
             {logo}
             <button
               type="button"
-              onClick={handleLinkClick}
+              onClick={() => handleLinkClick()}
               aria-label="Close menu"
               className="inline-flex items-center justify-center w-9 h-9 text-text-primary cursor-pointer"
             >
@@ -229,7 +229,7 @@ export default function BubbleMenu({
               const labelText = item.isThemeToggle
                 ? theme === "dark" ? "Switch to light" : "Switch to dark"
                 : item.label;
-              const onClick = item.isThemeToggle ? handleThemeToggle : handleLinkClick;
+              const onClick = item.isThemeToggle ? handleThemeToggle : () => handleLinkClick(item.href);
 
               return (
                 <li key={idx} role="none" className="pill-col">
@@ -245,7 +245,15 @@ export default function BubbleMenu({
                       "--hover-color": item.hoverStyles?.textColor || "#ffffff",
                     } as React.CSSProperties}
                     ref={(el) => { bubblesRef.current[idx] = el; }}
-                    onClick={onClick}
+                    onClick={(e) => {
+                      // Скролл к секции работает только для Home. Остальные пункты
+                      // (My Work, About Me, Contact Me) в будущем станут роутами —
+                      // сейчас клик просто закрывает меню без перехода.
+                      if (!item.isThemeToggle && item.href !== "#home") {
+                        e.preventDefault();
+                      }
+                      onClick(e);
+                    }}
                   >
                     <span
                       className="pill-label"

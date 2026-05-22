@@ -28,9 +28,10 @@ const bubbleItems = [
 export default function Header() {
   const [visible, setVisible] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  // Активная секция (для подсветки nav-ссылки). Дефолт "home" — при загрузке
-  // страница в самом верху → Home должен быть активным сразу.
-  const [activeId, setActiveId] = useState<string>("home");
+  // Активная nav-ссылка — всегда "home". Текущая страница и есть домашняя,
+  // остальные пункты (My Work, About Me, Contact Me) в будущем станут отдельными
+  // роутами и подсветка переедет на router. Scroll-spy убран по запросу пользователя.
+  const activeId = "home";
   const lastScrollY = useRef(0);
 
   useEffect(() => {
@@ -77,25 +78,6 @@ export default function Header() {
   // ту, что попала в среднюю 20% вертикальной полосы viewport'а.
   // rootMargin -40%/-40% сужает зону пересечения → только одна секция в зоне
   // в каждый момент времени.
-  useEffect(() => {
-    const ids = navLinks.map((l) => l.href.slice(1));
-    const sections = ids
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => el !== null);
-    if (!sections.length) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) setActiveId(entry.target.id);
-        });
-      },
-      { rootMargin: "-40% 0px -40% 0px", threshold: 0 }
-    );
-    sections.forEach((s) => observer.observe(s));
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <>
       {/* Мобильный навбар — sticky, show/hide on scroll.
@@ -135,7 +117,12 @@ export default function Header() {
           menuContentColor="var(--text-primary)"
           overlayBg="color-mix(in srgb, var(--surface-page) 82%, transparent)"
           open={mobileMenuOpen}
-          onNavigate={() => setMobileMenuOpen(false)}
+          onNavigate={(href) => {
+            setMobileMenuOpen(false);
+            // При клике на Home — принудительно показываем Header
+            // (даже если до этого он был спрятан auto-hide логикой).
+            if (href === "#home") setVisible(true);
+          }}
         />
       </div>
 
@@ -178,6 +165,15 @@ export default function Header() {
                 <a
                   key={link.href}
                   href={link.href}
+                  onClick={(e) => {
+                    if (link.href === "#home") {
+                      // При клике на Home принудительно показываем Header.
+                      setVisible(true);
+                    } else {
+                      // Остальные пункты — заглушка до отдельных роутов.
+                      e.preventDefault();
+                    }
+                  }}
                   className={`text-sm font-medium hover:text-brand whitespace-nowrap transition-colors ${
                     isActive ? "text-text-secondary" : "text-text-muted"
                   }`}
