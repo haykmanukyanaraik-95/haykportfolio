@@ -1,7 +1,7 @@
 // Секция 2: Latest Projects — сетка 3x2 с карточками проектов
 "use client";
 
-import { useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -125,11 +125,18 @@ export default function Projects() {
             className="overflow-x-auto scrollbar-none pt-2 pb-6"
             style={{ touchAction: "pan-x", WebkitOverflowScrolling: "touch" }}
           >
-            <div className="flex w-max px-12">
-              {[...projects, ...projects].map((project, i) => (
+            {/* Дубль-копия для seamless loop. В КАЖДОЙ копии leading spacer 48px —
+                так halfWidth остаётся симметричным (useCarouselAutoScroll использует
+                scrollWidth/2 как точку reset), а первая/последняя карточка не залезают
+                под edge-fade когда swipe доходит до начала или конца. */}
+            <div className="flex w-max">
+              {[0, 1].map((copyIdx) => (
+                <Fragment key={copyIdx}>
+                  <div className="w-12 shrink-0" aria-hidden />
+                  {projects.map((project, i) => (
                 <a
                   href="#"
-                  key={`${project.title}-${i}`}
+                  key={`${copyIdx}-${project.title}-${i}`}
                   className="w-[260px] shrink-0 mr-4"
                 >
                   <Card spotlight className="group active:border-border-strong cursor-pointer">
@@ -150,6 +157,8 @@ export default function Projects() {
                     </div>
                   </Card>
                 </a>
+                  ))}
+                </Fragment>
               ))}
             </div>
           </div>

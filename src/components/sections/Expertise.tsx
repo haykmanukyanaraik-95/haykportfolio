@@ -12,7 +12,7 @@
 // Карточки — статичные (без hover/click states), по запросу пользователя.
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { Fragment, useEffect, useRef, useState, useCallback } from "react";
 import AnimatedContent from "@/components/shared/AnimatedContent";
 import Section from "@/components/primitives/Section";
 import SectionHeading from "@/components/primitives/SectionHeading";
@@ -105,19 +105,27 @@ export default function Expertise() {
           className="overflow-x-auto scrollbar-none pt-2 pb-6"
           style={{ touchAction: "pan-x", WebkitOverflowScrolling: "touch" }}
         >
-          <div className="flex w-max px-12">
-            {[...areas, ...areas].map((area, i) => (
-              <div key={`${area.title}-${i}`} className="w-[260px] shrink-0 mr-4">
-                <Card className="h-full p-4 flex flex-col items-start text-left">
-                  <LottieIcon src={area.iconSrc} isActive={false} staticFrame size={48} />
-                  <h3 className="text-sm font-semibold text-text-primary mt-2 mb-2">
-                    {area.title}
-                  </h3>
-                  <p className="text-xs text-text-secondary leading-relaxed">
-                    {area.description}
-                  </p>
-                </Card>
-              </div>
+          {/* Дубль-копия для seamless loop. Leading spacer 48px В КАЖДОЙ копии —
+              так halfWidth (scrollWidth/2) остаётся симметричным, и крайние карточки
+              не залезают под edge-fade при достижении начала/конца. */}
+          <div className="flex w-max">
+            {[0, 1].map((copyIdx) => (
+              <Fragment key={copyIdx}>
+                <div className="w-12 shrink-0" aria-hidden />
+                {areas.map((area, i) => (
+                  <div key={`${copyIdx}-${area.title}-${i}`} className="w-[260px] shrink-0 mr-4">
+                    <Card className="h-full p-4 flex flex-col items-start text-left">
+                      <LottieIcon src={area.iconSrc} isActive={false} staticFrame size={48} />
+                      <h3 className="text-sm font-semibold text-text-primary mt-2 mb-2">
+                        {area.title}
+                      </h3>
+                      <p className="text-xs text-text-secondary leading-relaxed">
+                        {area.description}
+                      </p>
+                    </Card>
+                  </div>
+                ))}
+              </Fragment>
             ))}
           </div>
         </div>
