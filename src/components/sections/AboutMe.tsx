@@ -69,7 +69,7 @@ export default function AboutMe() {
 
             {/* ЛЕВАЯ: заголовок + описание + текст про соцсети + папка */}
             <div className="flex flex-col items-start xl:w-[488px] shrink-0">
-              <SectionHeading className="mb-2 lg:mb-2">About Me</SectionHeading>
+              <SectionHeading className="mb-4 sm:mb-4 lg:mb-4">About Me</SectionHeading>
 
               <p className="text-sm text-text-secondary leading-relaxed">
                 Accomplished Product Designer with 6+ years of experience delivering innovative digital solutions. Skilled in user research, wireframing, prototyping, and information architecture — with hands-on expertise in Figma, Framer, and AI-augmented design workflows.
@@ -103,13 +103,13 @@ export default function AboutMe() {
                 space-y-8 — фиксированный отступ 32px между Hard и Soft Skills */}
             <Card className="p-4 xl:w-fit space-y-8">
               <div>
-                <h3 className="text-base font-semibold text-text-primary mb-2">Hard Skills</h3>
+                <h3 className="text-base font-semibold text-text-primary mb-3">Hard Skills</h3>
                 <ul className="flex flex-wrap gap-x-2.5 gap-y-3">
                   {hardSkills.map((s) => <SkillChip key={s} label={s} />)}
                 </ul>
               </div>
               <div>
-                <h3 className="text-base font-semibold text-text-primary mb-2">Soft Skills</h3>
+                <h3 className="text-base font-semibold text-text-primary mb-3">Soft Skills</h3>
                 <ul className="flex flex-wrap gap-x-2.5 gap-y-3">
                   {softSkills.map((s) => <SkillChip key={s} label={s} />)}
                 </ul>

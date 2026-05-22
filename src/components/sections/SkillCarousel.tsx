@@ -49,7 +49,7 @@ export default function SkillCarousel() {
         <img
           src={src}
           alt={item.title ?? ""}
-          className={`h-10 w-auto ${isMaze ? "opacity-50" : ""}`}
+          className={`h-9 w-auto ${isMaze ? "opacity-50" : ""}`}
           loading="lazy"
           draggable={false}
         />
@@ -68,12 +68,10 @@ export default function SkillCarousel() {
         logos={skills}
         speed={speed}
         gap={56}
-        hoverSpeed={30}
-        logoHeight={40}
+        logoHeight={36}
         direction="right"
         fadeOut
         fadeOutColor="var(--surface-page)"
-        scaleOnHover
         renderItem={(item) => renderSkillItem(item as LogoImageItem)}
         ariaLabel="Skills carousel"
       />
