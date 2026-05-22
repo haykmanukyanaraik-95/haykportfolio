@@ -52,8 +52,8 @@ const projects = [
 export default function Projects() {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const mobileScrollRef = useRef<HTMLDivElement>(null);
-  // Авто-скролл 43 px/s (-15% от 50) + ручной свайп + пауза 5 сек на касание
-  useCarouselAutoScroll(mobileScrollRef, { pixelsPerSecond: 43 });
+  // Авто-скролл 32 px/s — синхронно с Expertise (по запросу пользователя).
+  useCarouselAutoScroll(mobileScrollRef, { pixelsPerSecond: 32 });
 
   // Анимация появления заголовка:
   // — Если элемент уже в viewport при загрузке страницы → анимируем сразу (синхронно с Hero)

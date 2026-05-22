@@ -73,7 +73,7 @@ export default function AboutMe() {
                 Accomplished Product Designer with 6+ years of experience delivering innovative digital solutions. Skilled in user research, wireframing, prototyping, and information architecture — with hands-on expertise in Figma, Framer, and AI-augmented design workflows.
               </p>
 
-              <p className="text-base text-text-muted leading-relaxed mt-3">
+              <p className="text-base text-text-muted leading-relaxed mt-6">
                 Want to see my social media? Feel free to explore the red folder below.
               </p>
 

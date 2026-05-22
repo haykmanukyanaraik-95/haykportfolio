@@ -453,10 +453,24 @@ hayk-portfolio/
 
 ---
 
-## 🔖 Next Session Pickup — Small tablet 640-767 закрыт, дальше big tablet 768-1023
+## 🔖 Next Session Pickup — Lottie-фаза rough finish, дальше визуальная проверка + big tablet
 
 **ВАЖНО: это инструкция для новой сессии. При старте прочитай этот блок первым.**
-**ПОДРОБНАЯ ВЕРСИЯ**: `_notes/Next Session.md` — там полный план + значения дизайн-системы.
+**ПОДРОБНАЯ ВЕРСИЯ**: `_notes/Next Session.md` — там полный план + правила после фрустрации.
+
+### 🟠 Состояние проекта (2026-05-21 вечер) — Хайк недоволен последней сессией
+- ✅ Mobile (320-639) + small tablet (640-767) — закрыты в коммите `81cbfee`
+- ✅ **Lottie иконки Expertise** — 6 иконок с сиквенцией 1→2→3→4→5→6→loop, theme-aware pre-baked colors (brand red контур + text-primary акценты), IntersectionObserver pause вне viewport
+- ✅ **Морф-бургер** — CSS-вариант (3 линии, не Lottie), цвет через `var(--text-primary)`, размер 28×28
+- ✅ Header — h-14, bg = page bg сплошной, scroll-spy nav-ссылок (`text-text-secondary` active / `text-text-muted` inactive), логотипы некликабельные
+- ✅ Hero h1 — `text-2xl md:text-3xl xl:text-4xl` (24/30/36), badge «Ready for Cooperation»
+- ✅ Page light bg `#FCF8F3`, PixelBlast pattern `#F6EBE6`
+- ✅ Footer цитата «Live Love Laugh» — `text-brand font-bold` (700)
+- 🟡 **Огромный пакет ~30+ файлов НЕЗАКОММИЧЕН** после `81cbfee` — вся Lottie-фаза + точечные правки. Включает: новый `LottieIcon.tsx`, переписанный `MorphMenuButton.tsx` (CSS), 18 файлов в `public/images/expertise/` (6 originals + 12 themed JSONs), 21+ modified компонентов и стилей, package.json (dotlottie-react)
+- 🟠 **Хайк прервал сессию недовольным**: «сегодняшняя работа твоя мне не понравилась». Причина — слишком много итераций на Lottie (цвета/размеры/load/reverse/squeeze/бургер). См. `memory/feedback_minimize_iterations.md` — главный урок: думать ДО действий, не угадывать API
+- ⏭ **Big tablet 768-1023** — изначальный план, отложен из-за Lottie-фазы. Возобновить
+- ⏭ **Решение по коммиту** — спросить Хайка перед началом big tablet
+- ⏭ **Цвет акцентов в dark mode Expertise** — Хайк не ответил на AskUserQuestion в конце (был прерван). Возможно оставит как есть, возможно попросит ярче (#FFF вместо warm off-white) или reverse-в-dark. **Не предлагать самостоятельно**
 
 ### Состояние проекта (2026-05-19 вечер)
 - ✅ 9/9 секций готовы (desktop + mobile 320-639 + small tablet 640-767)
@@ -464,7 +478,7 @@ hayk-portfolio/
 - ✅ CV PDF в `public/Hayk_Manukyan_CV.pdf`
 - ✅ Деплой на Vercel (auto с main)
 - ✅ Этапы 1-5 v1/v2/v3 закоммичены (`e6a700d` — последний коммит на main)
-- 🟡 **Большой пакет НЕЗАКОММИЧЕН (~22 файла, 2026-05-15 — 2026-05-19 вечер)** — полная переработка мобилки 320-639 + small tablet 640-767 + точечные правки md-диапазона. Перед коммитом сделать визуальный sanity check.
+- ✅ **Mobile (320-639) + small tablet (640-767) закрыты** в коммите `81cbfee`
 - 📍 **ДАЛЬШЕ**: большой планшет **768-1023** (md). Mobile-only логика на `max-sm:` или внутри `sm:hidden` — не трогать.
 
 ### Что прорабатано в мобилке 320-639 (последняя серия сессий)

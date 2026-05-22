@@ -9,8 +9,12 @@
 //
 // bare — отключает встроенный контейнер. Используется когда секции нужна особая разметка
 // (Testimonials с absolute-фоном, SkillCarousel с full-width LogoLoop).
+//
+// forwardRef — для случаев когда нужно подписаться на secition элемент
+// (IntersectionObserver в Expertise для паузы Lottie-сиквенции).
 
 import { cn } from "@/lib/utils";
+import { forwardRef } from "react";
 
 type Variant = "hero" | "standard" | "compact" | "footer";
 
@@ -33,23 +37,28 @@ interface SectionProps {
   style?: React.CSSProperties;
 }
 
-export default function Section({
-  id,
-  variant = "standard",
-  as = "section",
-  bare = false,
-  className,
-  children,
-  style,
-}: SectionProps) {
+const Section = forwardRef<HTMLElement, SectionProps>(function Section(
+  {
+    id,
+    variant = "standard",
+    as = "section",
+    bare = false,
+    className,
+    children,
+    style,
+  },
+  ref
+) {
   const Tag = as;
   const padding = paddingMap[variant];
 
   return (
-    <Tag id={id} className={cn(padding, className)} style={style}>
+    <Tag ref={ref} id={id} className={cn(padding, className)} style={style}>
       {bare ? children : (
         <div className="mx-auto max-w-[1280px] px-6 md:px-12">{children}</div>
       )}
     </Tag>
   );
-}
+});
+
+export default Section;

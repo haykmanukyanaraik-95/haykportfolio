@@ -31,8 +31,8 @@ const skills: LogoImageItem[] = [
 ];
 
 export default function SkillCarousel() {
-  // 50 px/s — синхронно с Projects/Expertise/Testimonials каруселями
-  const speed = 50;
+  // 38 px/s (-25% от 50, по запросу пользователя — общее замедление каруселей).
+  const speed = 38;
   const theme = useTheme();
 
   // Кастомный рендер ячейки. Maze: в светлой теме грузим Maze-light.svg (#191919),
@@ -70,7 +70,7 @@ export default function SkillCarousel() {
         gap={56}
         hoverSpeed={30}
         logoHeight={40}
-        direction="left"
+        direction="right"
         fadeOut
         fadeOutColor="var(--surface-page)"
         scaleOnHover

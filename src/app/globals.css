@@ -205,9 +205,10 @@
      В тёмной теме слабая (карточки и так темнее фона), в светлой — заметнее. */
   --shadow-card: 0 4px 14px rgba(0, 0, 0, 0.14);
 
-  /* Header в тёмной теме — surface-page/80 + blur (texture-стекло) */
-  --header-bg: color-mix(in srgb, var(--surface-page) 80%, transparent);
-  --header-blur: blur(20px);
+  /* Header — сплошной фон, идентичный странице (по запросу пользователя).
+     Без прозрачности и blur, чтобы граница "обычный текст / Header" не отличалась по цвету. */
+  --header-bg: var(--surface-page);
+  --header-blur: none;
 
   /* === Legacy shadcn-токены (используются shadcn инфраструктурой, не трогаем) === */
   --background: var(--surface-page);
@@ -273,7 +274,7 @@
    =========================================================================== */
 :root[data-theme="light"] {
   /* Поверхности — почти белый фон с лёгкой кремовой ноткой + чисто белые карточки */
-  --surface-page: #FCFAF5;                              /* ещё светлее, очень близко к белому */
+  --surface-page: #FCF8F3;                              /* тёплый кремовый — финальный по запросу пользователя */
   --surface-elevated-1: #FFFFFF;                        /* чистый белый — для бейджей и т.д. */
   --surface-elevated-2: #FDFBF6;                        /* off-white вспом. поверхности */
   --surface-elevated-3: #F2EEE5;                        /* hover/active поверхности */
@@ -307,14 +308,14 @@
   --accent-success: #16a34a;
 
   /* Декоративный фон (PixelBlast) — паттерн ближе к фону (контраст уменьшен ~50%) */
-  --bg-pattern: #F6EDE8;
+  --bg-pattern: #F6EBE6;
 
   /* Тень карточек в светлой теме — мягкая, без сильного контраста (по запросу пользователя −25-30%) */
   --shadow-card: 0 6px 18px rgba(0, 0, 0, 0.07);
 
-  /* Header в светлой теме — цвет фона страницы с низкой прозрачностью + blur */
-  --header-bg: color-mix(in srgb, var(--surface-page) 70%, transparent);
-  --header-blur: blur(20px);
+  /* Header — сплошной фон, идентичный странице (по запросу пользователя). */
+  --header-bg: var(--surface-page);
+  --header-blur: none;
 
   /* Legacy shadcn-токены — обновляем чтобы shadcn-компоненты не остались тёмными */
   --card: #FFFFFF;
@@ -424,5 +425,82 @@
 :root[data-theme="light"] .skill-chip,
 :root[data-theme="light"] .availability-badge {
   border: 0;
+}
+
+/* MorphMenuButton — CSS-бургер с 3 линиями.
+   На .is-open линии трансформируются в X: top → 45° + центрирование,
+   middle → scaleX(0) + opacity:0, bottom → -45° + центрирование.
+   Цвет = var(--text-primary) → theme-aware. */
+.morph-burger {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  gap: 5px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+.morph-burger__line {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--text-primary);
+  border-radius: 2px;
+  transform-origin: center;
+  transition: transform 0.3s ease, opacity 0.2s ease;
+}
+.morph-burger.is-open .morph-burger__line:nth-child(1) {
+  /* (line-height 2 + gap 5) = 7px между центрами → translate 7px вниз чтобы совпасть с центром middle */
+  transform: translateY(7px) rotate(45deg);
+}
+.morph-burger.is-open .morph-burger__line:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.morph-burger.is-open .morph-burger__line:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* В светлой теме edge-fade у каруселей чуть уже (-17.5% по ширине, по запросу).
+   Тёмная тема — без изменений (там fade слегка больше для драматичности на тёмном фоне).
+   Затрагивает:
+   - .h-carousel (Testimonials)
+   - .h-carousel-fade (Projects mobile, Expertise mobile)
+   - .logoloop--fade (SkillCarousel) */
+:root[data-theme="light"] .h-carousel::before,
+:root[data-theme="light"] .h-carousel::after,
+:root[data-theme="light"] .h-carousel-fade::before,
+:root[data-theme="light"] .h-carousel-fade::after {
+  width: clamp(40px, 12%, 66px);
+}
+:root[data-theme="light"] .logoloop--fade::before,
+:root[data-theme="light"] .logoloop--fade::after {
+  width: clamp(33px, 12%, 198px);
+}
+
+/* В светлой теме у интерактивных карточек (с prop `hover` в Card-primitive) при
+   наведении показываем мягкую тёмную обводку — компенсирует визуальный фидбэк
+   потерянный из-за `border: 0` выше. Targeting через сочетание классов
+   `.card-shadow.hover\:border-border-strong:hover` — затрагивает только карточки
+   с hover-эффектом (Projects desktop, About Me skills и т.п.), не статичные. */
+:root[data-theme="light"] .card-shadow.hover\:border-border-strong:hover {
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--border-strong);
+}
+
+/* В светлой теме ThemeToggle — сплошной белый, без прозрачности и blur.
+   Иконка темнее (text-secondary вместо text-muted) — для читаемости на светлом фоне.
+   Hover явно сохраняем — оверрайдим только дефолтное состояние. */
+:root[data-theme="light"] .theme-toggle-btn {
+  opacity: 1;
+  color: var(--text-secondary);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+:root[data-theme="light"] .theme-toggle-btn:hover {
+  color: var(--brand);
 }
 

@@ -12,7 +12,7 @@ export default function Footer() {
             Мобилка: вертикальный стек. */}
         <div className="hidden sm:flex relative items-center justify-between">
           <p className="text-text-muted text-xs">&copy; 2026 Hayk Manukyan. All rights reserved.</p>
-          <p className="text-text-muted text-lg absolute left-1/2 -translate-x-1/2">Live Love Laugh</p>
+          <p className="text-brand text-lg font-bold absolute left-1/2 -translate-x-1/2">Live Love Laugh</p>
           <span
             role="img"
             aria-label="Hayk Manukyan signature"
@@ -35,7 +35,7 @@ export default function Footer() {
           <p className="text-text-muted text-[10px] leading-tight max-w-[100px] min-[480px]:max-w-none">
             &copy; 2026 Hayk Manukyan. All rights reserved.
           </p>
-          <p className="text-text-muted text-xs whitespace-nowrap">Live Love Laugh</p>
+          <p className="text-brand text-xs font-bold whitespace-nowrap">Live Love Laugh</p>
           <span
             role="img"
             aria-label="Hayk Manukyan signature"

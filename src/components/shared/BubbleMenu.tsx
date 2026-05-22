@@ -165,24 +165,10 @@ export default function BubbleMenu({
             style={{ background: overlayBg, backdropFilter: "blur(8px)" }}
           />
 
-          {/* Верхняя панель меню: логотип слева (px-6), крестик справа (px-6) — точно
-              в позиции где находится бургер в sticky-навбаре. Без анимации
-              переключения, чтобы не было визуальных артефактов. */}
-          <div className="bubble-menu-overlay__topbar relative z-20 h-14 px-6 flex items-center justify-between pointer-events-auto">
-            {logo && (
-              <a href="#home" onClick={handleLinkClick} className="flex-shrink-0">
-                {logo}
-              </a>
-            )}
-            <button
-              type="button"
-              onClick={handleLinkClick}
-              aria-label="Close menu"
-              className="w-9 h-9 inline-flex items-center justify-center text-text-primary"
-            >
-              <i className="fi fi-rr-cross-small text-2xl leading-none translate-y-[1px]" aria-hidden="true" />
-            </button>
-          </div>
+          {/* Spacer 56px — высота sticky-хедера, который теперь лежит ПОВЕРХ overlay'а
+              (z-100 > z-98). Логотип и MorphMenuButton рендерятся в sticky-хедере,
+              а здесь просто резервируем место чтобы pill-list начинался ниже хедера. */}
+          <div className="h-14 flex-shrink-0" aria-hidden="true" />
           <ul className="pill-list relative z-10" role="menu">
             {items.map((item, idx) => {
               // Для тогглера темы — иконка солнца/луны (текущая тема), клик переключает
@@ -220,7 +206,10 @@ export default function BubbleMenu({
                     >
                       {labelText}
                     </span>
-                    <i className={`pill-icon ${iconClass}`} aria-hidden="true" />
+                    <i
+                      className={`pill-icon ${iconClass}${item.isThemeToggle ? " pill-icon--theme" : ""}`}
+                      aria-hidden="true"
+                    />
                   </a>
                 </li>
               );

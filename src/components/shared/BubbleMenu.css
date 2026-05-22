@@ -101,10 +101,11 @@
   margin: 0;
   /* pt 24px = увеличенный отступ от top-bar (ранее 6px, ×4 для дыхания).
      px 20px = чуть меньше, чем у логотипа (24px), визуально компактнее. */
-  padding: 24px 20px 24px 20px;
+  /* top 48px (×2 от исходных 24px) — увеличенный отступ между топ-баром и первой карточкой */
+  padding: 48px 20px 24px 20px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 20px;
   width: 100%;
   pointer-events: auto;
 }
@@ -171,4 +172,13 @@
   line-height: 1;
   flex-shrink: 0;
   transition: color 0.3s ease;
+}
+
+/* Модификатор для иконки тогглера темы — меньше остальных pill-иконок (16px вместо 22px).
+   margin-right 4px — компенсирует встроенный "воздух" у chevron-глифа справа:
+   chevron визуально сидит чуть левее правого края своего глиф-бокса, а moon-глиф
+   плотно у края. Без компенсации moon выглядит ближе к бортику pill, чем стрелочки. */
+.bubble-menu-overlay .pill-icon.pill-icon--theme {
+  font-size: 16px;
+  margin-right: 4px;
 }

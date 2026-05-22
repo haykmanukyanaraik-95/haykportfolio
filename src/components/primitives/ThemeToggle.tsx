@@ -3,7 +3,8 @@
 // — крупный квадратный "пилл" с иконкой
 // — читает текущую тему из data-theme на <html> через useSyncExternalStore
 // — toggle меняет data-theme + сохраняет в localStorage
-// — иконка показывает ТЕКУЩУЮ тему (луна в тёмной, солнце в светлой)
+// — иконка показывает ЦЕЛЕВУЮ тему (на что переключим): в тёмной — солнце (light),
+//   в светлой — луна (dark). Эту же логику использует BubbleMenu на мобилке.
 "use client";
 
 import { useTheme, useMounted } from "@/lib/useTheme";
@@ -38,11 +39,11 @@ export default function ThemeToggle() {
                  text-text-muted opacity-60 hover:text-brand hover:opacity-100 transition-all
                  shadow-[0_4px_12px_rgba(0,0,0,0.10)]"
     >
-      {/* Flaticon-глифы: dark→moon, light→sun (показывает текущее состояние).
+      {/* Flaticon-глифы: dark→sun (переключим в light), light→moon (переключим в dark).
           translate-y-[1px] — компенсация оптического центра шрифт-иконки
           (у глифов больше пустого пространства под baseline, без сдвига выглядит вверху). */}
       <i
-        className={`fi ${theme === "dark" ? "fi-rr-moon" : "fi-rr-sun"} text-xl leading-none block translate-y-[1px]`}
+        className={`fi ${theme === "dark" ? "fi-rr-sun" : "fi-rr-moon"} text-xl leading-none block translate-y-[1px]`}
         aria-hidden="true"
       />
     </button>

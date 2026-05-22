@@ -67,7 +67,7 @@ export default function Hero() {
           <div className="text-center md:text-left">
             {/* Заголовок 24px на мобилке, 2 строки ("Hello I'm A Designer" / "With Passion To [word]") */}
             <AnimatedContent distance={40} duration={0.8} delay={0}>
-              <h1 className="text-2xl min-[810px]:text-3xl xl:text-5xl font-bold leading-[1.15] sm:leading-[1.1] text-text-primary select-none cursor-default">
+              <h1 className="text-2xl md:text-3xl xl:text-4xl font-bold leading-[1.15] sm:leading-[1.1] text-text-primary select-none cursor-default">
                 <span className="block">
                   Hello I&apos;m A Designer<span className="hidden sm:inline"> With</span>
                 </span>
@@ -114,7 +114,7 @@ export default function Hero() {
                       <span className="motion-safe:animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
                     </span>
-                    <span className="text-sm font-semibold text-text-on-brand whitespace-nowrap">Available for freelance</span>
+                    <span className="text-sm font-semibold text-text-on-brand whitespace-nowrap">Ready for Cooperation</span>
                   </div>
                 </div>
               </Card>
@@ -139,7 +139,7 @@ export default function Hero() {
                   download
                   target="_blank"
                   rel="noopener noreferrer"
-                  icon="download"
+                  icon="file-download"
                   centered
                   mobileLabel="CV"
                 >
@@ -161,7 +161,7 @@ export default function Hero() {
                       <CountUp to={stat.value} duration={1.5} />
                       {stat.suffix}
                     </span>
-                    <p className="text-xs text-text-muted mt-1 leading-tight">{stat.label}</p>
+                    <p className="text-xs font-medium text-text-muted mt-1 leading-tight">{stat.label}</p>
                   </div>
                 ))}
               </div>
@@ -216,7 +216,7 @@ export default function Hero() {
                       <span className="relative inline-flex rounded-full h-2 xl:h-2.5 w-2 xl:w-2.5 bg-green-400" />
                     </span>
                     <span className="text-sm font-semibold text-text-on-brand whitespace-nowrap">
-                      Available for freelance
+                      Ready for Cooperation
                     </span>
                   </div>
                 </div>
