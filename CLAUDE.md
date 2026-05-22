@@ -217,13 +217,13 @@ hayk-portfolio/
 │   │   │   ├── SectionHeading.tsx       — h2 единого стиля (text-3xl + mb)
 │   │   │   ├── Card.tsx                 — стеклянная карточка (опц. spotlight/hover/borderGlow)
 │   │   │   ├── Button.tsx               — primary (GlareHover) / secondary (StarBorder) с ShinyText
-│   │   │   └── IconBadge.tsx            — SVG-иконка через mask-image
+│   │   │   └── ThemeToggle.tsx          — плавающий тогглер темы (md+, lg:right-8)
 │   │   ├── sections/
-│   │   │   ├── Header.tsx          ✅ Десктоп sticky навбар + мобилка BubbleMenu overlay (НЕ обёрнут в Section)
-│   │   │   ├── Hero.tsx            ✅ Section + Card + Button — мобилка: фото сверху, кнопки в ряд
+│   │   │   ├── Header.tsx          ✅ Десктоп sticky навбар + мобилка BubbleMenu overlay. Scroll-spy убран — Home всегда активна. Non-home links — заглушки (preventDefault)
+│   │   │   ├── Hero.tsx            ✅ Section + Card + Button. h1 layout: разные раскладки на mobile/sm/md/lg+ (см. Hero Details)
 │   │   │   ├── Projects.tsx        ✅ Section + SectionHeading + Card + Button — мобилка карусель
-│   │   │   ├── SkillCarousel.tsx   ✅ Section bare compact — speed mobile=40 / desktop=80
-│   │   │   ├── Expertise.tsx       ✅ Section + SectionHeading + Card + IconBadge
+│   │   │   ├── SkillCarousel.tsx   ✅ Section bare compact — speed 38 px/s, logoHeight 36, без hover-эффектов
+│   │   │   ├── Expertise.tsx       ✅ Section + SectionHeading + Card + LottieIcon (6 анимированных иконок, brand red + light-red)
 │   │   │   ├── AboutMe.tsx         ✅ Section + SectionHeading + Card + Folder (size=0.8)
 │   │   │   ├── Contact.tsx         ✅ Section + Card + Button (submit)
 │   │   │   ├── Testimonials.tsx    ✅ Section bare + SectionHeading (карточки кастомные — без blur, perf)
@@ -453,28 +453,28 @@ hayk-portfolio/
 
 ---
 
-## 🔖 Next Session Pickup — Сессия 2026-05-22 завершена пользователем фрустрированным, возможно переход в Codex
+## 🔖 Next Session Pickup — Сессия 2026-05-23 завершена успешно, дальше контент
 
 **ВАЖНО: это инструкция для новой сессии. При старте прочитай этот блок первым.**
-**ПОДРОБНАЯ ВЕРСИЯ**: `_notes/Next Session.md` — там полный план + критичный URL-encoding баг.
+**ПОДРОБНАЯ ВЕРСИЯ**: `_notes/Next Session.md` — там полный план + правила работы.
 
-### 🟠 Состояние проекта (2026-05-22) — Хайк закончил со словами «перейду в codex»
-- ✅ Mobile (320-639) + small tablet (640-767) — закрыты в коммите `81cbfee`
-- ✅ Lottie иконки Expertise + морф-бургер + Header/Hero/Footer polish — закоммичены в `c7d891b`
-- ✅ **2026-05-22 точечные правки** (~20+ файлов НЕЗАКОММИЧЕНО после `c7d891b`):
-  - Button.tsx: ассиметричный padding `pl-4 pr-5 py-3` (все 4 кнопки)
-  - Мобильное меню architectural refactor: top-bar (лого+X) **внутри** BubbleMenu overlay (не sticky header поверх). Sticky header conditional render `{!mobileMenuOpen && <header>}`. Body lock через **position:fixed** (на html скролл, body lock не работал)
-  - BubbleMenu align с frame grid: top-bar `px-6`, pill-list `padding 38px 24px 24px 24px`, pill ассиметричный `13px 10px 13px 12px`
-  - MorphMenuButton поддерживает раздельные width/height (24×28 в Header)
-  - AboutMe: Skills card `xl:w-fit` (hug content, не overflow), chips inline-flex intrinsic, статика без spotlight/hover, удалён абзац про social media
-  - AboutMe: новая Lottie-иконка `fast-backward` справа от Folder, loop с 2-сек паузой, 3 grey/white тона
-  - LottieIcon: новые props `loop` + `loopDelay`, **URL-encoding fix** (critical), cache-bust query
-  - ThemeToggle: cascade-override `outline:none` в light mode
-  - Expertise jsons: 4 неудачных recolor попытки → откат в дефолт (= `c7d891b`)
-- 🚨 **КРИТИЧНЫЙ БАГ обнаружен в самом конце** — URL encoding в LottieIcon. Пробелы в именах файлов (`AI Driven Practice.json`) → Next.js dev server возвращал HTTP 000 → DotLottie показывал старый кэш / fallback. ЭТО причина почему все 4 попытки recolor в этой сессии НЕ показывались Хайку. Зафиксировано в `memory/reference_lottie_integration.md` как 4-е правило.
-- 🟠 **Хайк прервал сессию**: «мне больше не хочется с тобой работать… я перейду в codex». Причина — длинная серия неудачных recolor (я не находил URL encoding багу).
-- ⏭ **Big tablet 768-1023** — изначальный план, всё ещё не начат
-- ⏭ **Решение по коммиту 20+ файлов** — спросить пользователя при возврате
+### ✅ Состояние проекта (2026-05-23) — все коммиты на main, дальше контент-фаза
+- ✅ Mobile (320-639) + small tablet (640-767) — закрыты в `81cbfee`
+- ✅ Lottie иконки Expertise + морф-бургер + Header/Hero/Footer polish — `c7d891b`
+- ✅ **2026-05-22 правки** (button padding + mobile-menu refactor + AboutMe Skills + LottieIcon URL-encoding fix) — закоммичены в 4 блока: `2e2e6c6 → 6bbf81d`
+- ✅ **2026-05-23 правки** — закоммичены в 5 блоков: `353a2e9 → ed86aef`:
+  - **Expertise icons recolor** — полная перекраска через recursive walker (Fill Effects были причиной всех неудачных попыток). Все 6 иконок: brand red + #FFA8A8 light-red акценты. `CACHE_BUST=7`
+  - **Hero h1** — переразбивка строк на md range (768-1023): "Hello I'm A Designer" / "With Passion To" / "Innovate"
+  - **Header / nav refactor** — scroll-spy убран, Home всегда активна. Non-home links → заглушки (preventDefault). При клике Home — setVisible(true) (header не скрывается)
+  - **Style polish** — AboutMe spacing (heading mb-4, chip mb-3), SkillCarousel (36px иконки + hover отключён), ThemeToggle (opacity 100% + lg:right-8 grid-aligned)
+  - **Cleanup** — IconBadge.tsx удалён (был неиспользуемый)
+- ✅ **Build / typecheck / ESLint** — все три чистые
+
+### ⏭ Что дальше
+1. **КОНТЕНТ-ФАЗА** (приоритет следующей сессии) — реальные testimonials, финал текста About Me, реальные projects, реальный фото CV
+2. **Big tablet 768-1023** — изначальный план, частично доделан (Hero h1), остальное может всплыть когда будет реальный контент. Не критично.
+3. **Multi-page split** (`/work`, `/about`, `/contact`) — навигация уже подготовлена (non-home links — заглушки), переезд на роуты будет минимально-invasive
+4. **Deferred** — SEO, accessibility, performance (см. `_notes/Open Questions.md`)
 
 ### Состояние проекта (2026-05-19 вечер)
 - ✅ 9/9 секций готовы (desktop + mobile 320-639 + small tablet 640-767)
@@ -583,7 +583,7 @@ Hero (#home) → Projects (#work) → SkillCarousel → About Me (#about)
 - **ВСЕГДА уточнять перед решениями** (даже мелкими) — главное правило пользователя
 - Все комментарии в коде — **на русском**
 - Объяснения — **простыми словами**
-- Использовать **примитивы** (`<Section>`, `<Card>`, `<Button>`, `<IconBadge>`, `<SectionHeading>`)
+- Использовать **примитивы** (`<Section>`, `<Card>`, `<Button>`, `<SectionHeading>`, `<ThemeToggle>`)
 - Темизация: **только через CSS-переменные** — компоненты НЕ знают про тему
 - Обновлять `_notes/Sessions.md` и `_notes/Next Session.md` по ходу работы
 - Обновлять `_notes/Decisions.md` **сразу** после принятия решения
