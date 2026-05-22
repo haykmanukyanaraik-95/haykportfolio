@@ -44,7 +44,7 @@ interface LottieIconProps {
 // Cache-bust версия: меняй число чтобы заставить браузер/DotLottie повторно
 // загрузить JSON после правки цветов. JSON-файлы агрессивно кэшируются,
 // hard refresh иногда не помогает — query string гарантирует свежий запрос.
-const CACHE_BUST = "5";
+const CACHE_BUST = "7";
 
 function themedSrc(src: string, theme: "dark" | "light"): string {
   // URL-encode каждый сегмент пути. Без этого имена с пробелами
