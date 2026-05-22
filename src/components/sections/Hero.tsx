@@ -68,26 +68,32 @@ export default function Hero() {
             {/* Заголовок 24px на мобилке, 2 строки ("Hello I'm A Designer" / "With Passion To [word]") */}
             <AnimatedContent distance={40} duration={0.8} delay={0}>
               <h1 className="text-2xl md:text-3xl xl:text-4xl font-bold leading-[1.15] sm:leading-[1.1] text-text-primary select-none cursor-default">
+                {/* "With" живёт в первой строке на sm и lg+ (где места хватает),
+                    и во второй строке на mobile и md-range 768-1023 (где text column узкий ~320px). */}
                 <span className="block">
-                  Hello I&apos;m A Designer<span className="hidden sm:inline"> With</span>
+                  Hello I&apos;m A Designer<span className="hidden sm:inline md:hidden lg:inline"> With</span>
                 </span>
                 <span className="block whitespace-nowrap">
-                  <span className="sm:hidden">With </span>Passion To{" "}
-                  {mounted ? (
-                    <DecryptedText
-                      key={`word-${currentWordIndex}`}
-                      text={rotatingWords[currentWordIndex]}
-                      animateOn="view"
-                      sequential
-                      speed={80}
-                      revealDirection="start"
-                      characters="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-                      className="text-brand"
-                      encryptedClassName="text-brand/40"
-                    />
-                  ) : (
-                    <span className="text-brand">{rotatingWords[0]}</span>
-                  )}
+                  <span className="sm:hidden md:inline lg:hidden">With </span>Passion To{" "}
+                  {/* На md range DecryptedText на отдельной (3-й) строке через display:block.
+                      На lg+ — снова inline в одной строке с "Passion To". */}
+                  <span className="md:block lg:inline">
+                    {mounted ? (
+                      <DecryptedText
+                        key={`word-${currentWordIndex}`}
+                        text={rotatingWords[currentWordIndex]}
+                        animateOn="view"
+                        sequential
+                        speed={80}
+                        revealDirection="start"
+                        characters="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+                        className="text-brand"
+                        encryptedClassName="text-brand/40"
+                      />
+                    ) : (
+                      <span className="text-brand">{rotatingWords[0]}</span>
+                    )}
+                  </span>
                 </span>
               </h1>
             </AnimatedContent>
