@@ -38,7 +38,7 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  width: clamp(48px, 15%, 80px);
+  width: clamp(38px, 12%, 64px);
   z-index: 10;
   pointer-events: none;
 }

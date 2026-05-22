@@ -125,7 +125,7 @@ export default function Projects() {
             className="overflow-x-auto scrollbar-none pt-2 pb-6"
             style={{ touchAction: "pan-x", WebkitOverflowScrolling: "touch" }}
           >
-            <div className="flex w-max">
+            <div className="flex w-max px-12">
               {[...projects, ...projects].map((project, i) => (
                 <a
                   href="#"

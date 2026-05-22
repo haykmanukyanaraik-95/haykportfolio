@@ -105,7 +105,7 @@ export default function Expertise() {
           className="overflow-x-auto scrollbar-none pt-2 pb-6"
           style={{ touchAction: "pan-x", WebkitOverflowScrolling: "touch" }}
         >
-          <div className="flex w-max">
+          <div className="flex w-max px-12">
             {[...areas, ...areas].map((area, i) => (
               <div key={`${area.title}-${i}`} className="w-[260px] shrink-0 mr-4">
                 <Card className="h-full p-4 flex flex-col items-start text-left">

@@ -55,7 +55,10 @@ export default function BubbleMenu({
 
   const handleLinkClick = (href?: string) => {
     if (!isControlled) setInternalOpen(false);
-    if (href !== undefined) onNavigate?.(href);
+    // onNavigate вызываем ВСЕГДА — в controlled mode это единственный способ
+    // сообщить родителю что меню должно закрыться (даже когда href отсутствует —
+    // например клик по кнопке X закрывает меню без навигации).
+    onNavigate?.(href ?? "");
   };
 
   // Тогглер темы — не закрывает меню (пользователь может переключаться и видеть превью)

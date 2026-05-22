@@ -120,8 +120,8 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  /* Увеличенный fade — плавнее затухание к краям (было 8%/120px) */
-  width: clamp(40px, 15%, 240px);
+  /* fade -20% от прежнего (было 40/15%/240) — мобилка чувствовала перебор */
+  width: clamp(32px, 12%, 192px);
   pointer-events: none;
   z-index: 10;
 }

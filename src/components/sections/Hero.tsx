@@ -164,7 +164,7 @@ export default function Hero() {
                 {stats.map((stat) => (
                   <div key={stat.label} className="text-center md:text-left">
                     <span className="text-base font-semibold text-text-secondary">
-                      <CountUp to={stat.value} duration={1.5} />
+                      <CountUp to={stat.value} duration={1.2} />
                       {stat.suffix}
                     </span>
                     <p className="text-xs font-medium text-text-muted mt-1 leading-tight">{stat.label}</p>
