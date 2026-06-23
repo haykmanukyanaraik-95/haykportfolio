@@ -24,9 +24,10 @@ Personal portfolio website for **Hayk Manukyan**, UX / Product Designer with 6+ 
 src/
   app/              — Next.js App Router (layout, page, globals.css)
   components/
+    primitives/      — design-system building blocks (Section, Card, Button, SectionHeading, ThemeToggle)
     sections/        — 9 page sections (Header, Hero, Projects, etc.)
-    shared/          — 20 reusable animated components
-  lib/               — Utilities (cn function)
+    shared/          — reusable animated components (PixelBlast, LogoLoop, Lottie, etc.)
+  lib/               — Utilities + hooks (cn, useTheme, useCarouselAutoScroll)
 public/
   images/            — All static assets (SVG icons, PNG photos)
 ```
@@ -37,14 +38,14 @@ public/
 2. **Projects** — 6 project cards with spotlight effect
 3. **Skill Carousel** — Infinite horizontal logo loop (21 skills)
 4. **About Me** — Bio, social links folder, hard/soft skills
-5. **Expertise** — 6 areas with custom SVG icons
+5. **Expertise** — 6 areas with animated Lottie icons
 6. **Contact** — ElectricLogo animation + Formspree form
 7. **Testimonials** — Vertical/horizontal carousels
 8. **Footer** — Copyright, quote, signature
 
 ## Key Features
 
-- Dark theme with glass-morphism design system
+- Dark + light theme (toggle, persisted) with glass-morphism design system
 - WebGL PixelBlast animated background (Three.js)
 - Mobile-first responsive design with horizontal carousels
 - BubbleMenu with GSAP animations (mobile navigation)

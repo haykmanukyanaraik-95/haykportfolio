@@ -52,14 +52,14 @@ Dark immersive backgrounds with layered surfaces:
 - **Text Primary:** `#ffffff` — headings and primary text
 - **Text Secondary:** `#b3b3b3` — descriptions, muted labels
 - **Text Muted:** `#6b6b6b` — tertiary text
-- **Success Green:** `#22c55e` — "Available for freelance" badge
+- **Success Green:** `#22c55e` — "Ready for Cooperation" badge (бывш. "Available for freelance")
 - **Border:** `#2a2a2a` — subtle borders on dark surfaces
 - **Card Border:** `#333333` — card outlines when needed
 
 ### Button Style (актуальное — что реально в коде, финал 2026-04-15 вечер)
 - Primary (View Work, Let's talk, Send Message): GlareHover (#F23F3B, glareColor=#ffa8a8, 800ms) + ShinyText (speed=3.5, delay=3, pauseOnHover) + rounded-lg (8px) + иконка fade-in on hover
-- Secondary (Download CV, View All Works): StarBorder (color=#F23F3B, speed=8s) + ShinyText + rounded-lg
-- У всех кнопок: px-5 py-3, text-base font-medium
+- Secondary (Download CV, View All Works): StarBorder (color=#F23F3B, speed=6s) + ShinyText + rounded-lg
+- У всех кнопок: `pl-4 pr-5 py-3` (ассиметричный padding: 16px слева / 20px справа), text-base font-medium
 - Иконка fade-in: `transition-all duration-300 ease-out` (было 150ms — стало плавнее)
 - **Scale hover УБРАН с кнопок** — иконка достаточна
 - Рамка secondary кнопок при hover: `hover:border-white/15`
@@ -103,7 +103,7 @@ Dark immersive backgrounds with layered surfaces:
   - 125+ Projects Completed
   - 72 Happy Clients
   - 8 Award Wins
-- RIGHT: User's photo + "Available for freelance" badge with pulsing green dot
+- RIGHT: User's photo + "Ready for Cooperation" badge with pulsing green dot
 
 ### Section 2: Latest Projects
 - 3x2 grid (6 cards)
@@ -176,7 +176,7 @@ Attention to Details, Empathy Builder
 1. Hero rotating word — DecryptedText scramble (только красное слово, 9 слов в ротации, первое через 3с, далее каждые 3с, speed=80)
 2. PixelBlast — WebGL фон на всю страницу (Three.js, scrollable, color=#141011, pixelSize=8, edgeFade=0.2, patternScale=4.5)
 3. GlareHover — блик при наведении на primary-кнопки
-4. StarBorder — анимированная бегущая обводка на secondary-кнопках (speed=8s, пауза ~3с)
+4. StarBorder — анимированная бегущая обводка на secondary-кнопках (speed=6s, пауза ~3с)
 5. SpotlightCard — радиальный красный spotlight при наведении на карточки проектов
 6. TiltedCard — 3D-наклон фото в Hero (rotateAmplitude=4, scaleOnHover=1.03)
 7. AnimatedContent (GSAP) — каскадное появление элементов при скролле/загрузке
@@ -239,6 +239,8 @@ hayk-portfolio/
 │   │   │   ├── GlareHover.tsx/.css     — блик (primary кнопки)
 │   │   │   ├── HorizontalCarousel.css  — горизонтальная карусель (Projects/Expertise/Testimonials mobile)
 │   │   │   ├── LogoLoop.tsx/.css       — бесконечный loop (SkillCarousel)
+│   │   │   ├── LottieIcon.tsx          — Lottie-иконки (Expertise + About Me), theme-swap .dark/.light.json
+│   │   │   ├── MorphMenuButton.tsx     — CSS бургер↔X (мобильный Header, .morph-burger в globals.css)
 │   │   │   ├── PixelBlast.tsx/.css     — WebGL фон (Three.js)
 │   │   │   ├── ShinyText.tsx           — переливающийся текст
 │   │   │   ├── SpotlightCard.tsx/.css  — радиальный spotlight (Projects, Expertise, About Me)
@@ -259,7 +261,8 @@ hayk-portfolio/
 │       ├── Signature.svg           — подпись для Footer (через mask-image)
 │       ├── projects/               — 6 обложек проектов (kebab-case)
 │       ├── skills/                 — 21 SVG скиллов + Maze-light.svg (#191919 для светлой)
-│       ├── expertise/              — 6 SVG для Expertise
+│       ├── expertise/              — 6 Lottie иконок: base .json (исходник) + pre-baked .dark.json/.light.json
+│       ├── about/                  — fast-backward Lottie (base + .dark/.light) для About Me
 │       └── social-icons/           — SVG соцсетей (linkedin, instagram, behance)
 ├── CLAUDE.md                   — этот файл
 ├── README.md                   — короткое описание проекта
@@ -342,14 +345,14 @@ hayk-portfolio/
 - Rotating words: Research, Design, Create, Innovate, Orchestrating, Automating, Optimising, Leading, Coordinating
 - AnimatedContent: каскадное появление (заголовок 0s → кнопки 0.2s → фото 0.3s → статистика 0.4s)
 - Кнопки:
-  - "View Work" — GlareHover (bg-brand, glareColor=#ffa8a8) + ShinyText (speed=3.5, delay=3, pauseOnHover) + scale hover
-  - "Download CV" — StarBorder (color=#F23F3B, speed=8s) + ShinyText (speed=3.5, delay=3, pauseOnHover) + scale hover
-  - Gap между кнопками: gap-6
-  - rounded-lg (8px), px-5 py-3
+  - "View Work" — GlareHover (bg-brand, glareColor=#ffa8a8) + ShinyText (speed=3.5, delay=3, pauseOnHover) — scale hover УБРАН
+  - "Download CV" — StarBorder (color=#F23F3B, speed=6s) + ShinyText (speed=3.5, delay=3, pauseOnHover) — scale hover УБРАН
+  - Gap между кнопками: `gap-3 lg:gap-6` (всегда в ряд, никогда не стэк)
+  - rounded-lg (8px), `pl-4 pr-5 py-3`
 - Статистика: 7 / 125+ / 72 / 8 — компактная, text-secondary, без анимации, mt-14 lg:mt-20
 - Фото: стеклянная карточка (bg-white/[0.03] backdrop-blur-3xl rounded-lg p-3) →
   - TiltedCard внутри (rotateAmplitude=4, scaleOnHover=1.03, 340x440px, фото border-radius 7px)
-  - Бейдж "Available for freelance" поверх фото (bg-black/60 backdrop-blur-2xl rounded-full)
+  - Бейдж "Ready for Cooperation" поверх фото (класс `.availability-badge`, bg rgba(0,0,0,0.20), font-semibold, rounded-full)
   - Фото: public/images/hayk-photo.png
 - CV: public/images/Hayk_Manukyan_CV.pdf — ОЖИДАЕТ файл от пользователя
 - Контейнер: max-w-[1280px], px-6
@@ -368,9 +371,9 @@ hayk-portfolio/
 ### SkillCarousel Details (for reference)
 - 21 скилл: Figma, Illustrator, Photoshop, Adobe, Zeplin, Framer, Jitter, Claude, Gemini, Perplexity, Maze, UX Tweak, Useberry, HTML, CSS, React, Next.js, Slack, Jira, ClickUp, Microsoft 365
 - Файлы в `public/images/skills/` — **PascalCase с расширением .svg** (пользователь назвал вручную):
-  `Figma.svg Illustrator.svg Photoshop.svg Adobe.svg Zeplin.svg Framer.svg Jitter.svg Claude.svg Gemini.svg Perplexity.svg Maze.svg "UX Tweak.svg" Useberry.svg HTML.svg CSS.svg React.svg Next-js.svg Slack.svg Jira.svg ClickUp.svg Microsoft_365.svg`
-- LogoLoop параметры: `speed={80} gap={75} hoverSpeed={30} logoHeight={38} direction="left" fadeOut fadeOutColor="#0a0a0a" scaleOnHover`
-- renderItem: ячейка `logoloop__node gap-3` → иконка `h-[38px] w-auto grayscale` + текст `text-text-muted text-base font-medium`
+  `Figma.svg Illustrator.svg Photoshop.svg Adobe.svg Zeplin.svg Framer.svg Jitter.svg Claude.svg Gemini.svg Perplexity.svg Maze.svg UX-Tweak.svg Useberry.svg HTML.svg CSS.svg React.svg Next-js.svg Slack.svg Jira.svg ClickUp.svg Microsoft_365.svg` (+ `Maze-light.svg` для светлой темы)
+- LogoLoop параметры (актуально 2026-06-23): `speed={38} gap={56} logoHeight={36} direction="right" fadeOut fadeOutColor="var(--surface-page)"` — без hoverSpeed/scaleOnHover (декоративная)
+- renderItem: ячейка `logoloop__node gap-3` → иконка `h-9 w-auto` (Maze `opacity-50`) + текст `text-text-muted text-lg font-medium` (Jitter — без подписи)
 - Секция без заголовка, `py-16`, полная ширина (не max-w-1280) для edge-to-edge fade
 - Fade в LogoLoop.css увеличен: `clamp(40px, 15%, 240px)` (было `clamp(24px, 8%, 120px)`)
 
@@ -424,7 +427,7 @@ hayk-portfolio/
 - Фото внутри карточки: border-radius всегда на 10% меньше чем у карточки
 - ShinyText: все кнопки, speed=3.5, delay=3, pauseOnHover=true
 - GlareHover: primary кнопки (glareColor=#ffa8a8, opacity=0.3, angle=-30, size=275, duration=800ms)
-- StarBorder: secondary кнопки (color=#F23F3B, speed=8s, с паузой ~3s)
+- StarBorder: secondary кнопки (color=#F23F3B, speed=6s, с паузой ~3s)
 - SpotlightCard: карточки проектов (красный spotlight при наведении)
 
 ### PixelBlast Background (for reference)
@@ -453,35 +456,31 @@ hayk-portfolio/
 
 ---
 
-## 🔖 Next Session Pickup — Сессия 2026-05-23 (вечер) на hold, завтра carousel bug
+## 🔖 Next Session Pickup — Сессия 2026-06-23: генеральная уборка ✅, дальше — полировка
 
 **ВАЖНО: это инструкция для новой сессии. При старте прочитай этот блок первым.**
-**ПОДРОБНАЯ ВЕРСИЯ**: `_notes/Next Session.md` — полный план + правила отладки carousel.
+**ПОДРОБНАЯ ВЕРСИЯ**: `_notes/Next Session.md`.
 
-### 🚨 ОТКРЫТЫЙ БАГ (приоритет #1 завтра)
-**Carousel auto-scroll на Projects + Expertise mobile НЕ работает** на live версии после двух попыток в этой сессии:
-1. Добавление `px-12` на track — сломало loop (асимметричный halfWidth)
-2. Откат на leading spacer per copy — Хайк говорит всё равно не работает
+### 🧹 Сделано 2026-06-23 — генеральная уборка документации и репозитория
+Большой проход синхронизации заметок с реальным кодом + чистка (последний коммит на main: `f55a282`, working tree до уборки был чист):
+- Удалены `.DS_Store` (корень + `public/`)
+- **`Components.md`** — убран удалённый IconBadge; обновлены параметры SkillCarousel (`speed 38, gap 56, logoHeight 36, direction right`, без hover) и скорость каруселей (43→32 px/s); добавлены `LottieIcon` + `MorphMenuButton`
+- **`CLAUDE.md`** — Hero h1 (`md:text-3xl xl:text-4xl`), бейдж «Ready for Cooperation», button padding `pl-4 pr-5 py-3`, StarBorder `6s`, структура файлов (+LottieIcon/MorphMenuButton, expertise/about Lottie)
+- **`README.md`** — Expertise теперь Lottie, упомянута светлая тема
+- **`Decisions.md`** — добавлен snapshot «АКТУАЛЬНЫЕ ЗНАЧЕНИЯ» наверху как единый источник правды
+- **`Sessions.md`** + **`Next Session.md`** — обновлены
+- ✅ Build / typecheck / lint — все чистые
+- По решению Хайка **оставлены**: базовые Lottie `.json` (исходники для перекраски), reference-доки (DESIGN-*.md, awesome-design-md — в .gitignore)
 
-Завтра — **НЕ итерировать вслепую**. Сначала diagnose через Safari Web Inspector на iPhone, затем fix. См. `_notes/Next Session.md` для конкретных шагов.
+### 🚨 ОТКРЫТЫЙ БАГ (всё ещё приоритет #1) — carousel auto-scroll
+**Projects + Expertise mobile carousel** авто-скролл не работает на live. В уборку НЕ трогали. Правило: **сначала diagnose через Safari Web Inspector на iPhone, не итерировать вслепую**. Детали + гипотезы — `_notes/Next Session.md`.
 
-### ✅ Состояние проекта (2026-05-23 вечер) — 11 коммитов на main + 2 mobile-фазы вечером
-- ✅ Mobile (320-639) + small tablet (640-767) — закрыты в `81cbfee`
-- ✅ Lottie иконки Expertise + морф-бургер + Header/Hero/Footer polish — `c7d891b`
-- ✅ **2026-05-22 правки** (button padding + mobile-menu refactor + AboutMe Skills + LottieIcon URL-encoding fix) — закоммичены в 4 блока: `2e2e6c6 → 6bbf81d`
-- ✅ **2026-05-23 правки** — закоммичены в 5 блоков: `353a2e9 → ed86aef`:
-  - **Expertise icons recolor** — полная перекраска через recursive walker (Fill Effects были причиной всех неудачных попыток). Все 6 иконок: brand red + #FFA8A8 light-red акценты. `CACHE_BUST=7`
-  - **Hero h1** — переразбивка строк на md range (768-1023): "Hello I'm A Designer" / "With Passion To" / "Innovate"
-  - **Header / nav refactor** — scroll-spy убран, Home всегда активна. Non-home links → заглушки (preventDefault). При клике Home — setVisible(true) (header не скрывается)
-  - **Style polish** — AboutMe spacing (heading mb-4, chip mb-3), SkillCarousel (36px иконки + hover отключён), ThemeToggle (opacity 100% + lg:right-8 grid-aligned)
-  - **Cleanup** — IconBadge.tsx удалён (был неиспользуемый)
-- ✅ **Build / typecheck / ESLint** — все три чистые
-
-### ⏭ Что дальше
-1. **КОНТЕНТ-ФАЗА** (приоритет следующей сессии) — реальные testimonials, финал текста About Me, реальные projects, реальный фото CV
-2. **Big tablet 768-1023** — изначальный план, частично доделан (Hero h1), остальное может всплыть когда будет реальный контент. Не критично.
-3. **Multi-page split** (`/work`, `/about`, `/contact`) — навигация уже подготовлена (non-home links — заглушки), переезд на роуты будет минимально-invasive
-4. **Deferred** — SEO, accessibility, performance (см. `_notes/Open Questions.md`)
+### ⏭ Что дальше (план Хайка)
+1. **🎨 Полировка сайта** — главный фокус ближайших сессий (вместе с Хайком, по секциям)
+2. **🐛 Carousel bug** — починить перед/во время полировки (авто-скролл на мобилке)
+3. **Контент-фаза** — реальные testimonials, финал текста About Me, реальные projects, фото CV
+4. **→ Pull / публикация сайта** — финальная цель после полировки
+5. **Deferred** — SEO, accessibility, performance (см. `_notes/Open Questions.md`)
 
 ### Состояние проекта (2026-05-19 вечер)
 - ✅ 9/9 секций готовы (desktop + mobile 320-639 + small tablet 640-767)
@@ -497,17 +496,17 @@ hayk-portfolio/
 2. **BubbleMenu overlay** — `flex-direction: column`: top-bar (лого слева + крестик справа в одной позиции с бургером) + список карточек ниже. Карточки `rounded-lg` (8px), внутр. padding `13px 12px`, иконки `22px`. Тогглер темы как отдельная карточка: «Switch to dark» + луна в светлой / «Switch to light» + brightness в тёмной. Overlay 82% непрозрачности + blur 8px → пиксельный паттерн проглядывает.
 3. **Hero** — text-center на мобилке. Заголовок 24px, 2 строки («Hello I'm A Designer» / «With Passion To [word]»). Фото 260×340 центр. Кнопки в ряд `w-[284px] mx-auto` (= ширина фото-карточки), primary в `flex-1` + `fullWidth` заполняет, secondary «CV» справа. Иконки на кнопках видны ВСЕГДА на мобилке (`max-sm:opacity-100`). Stats: 2-col, переключаются на 4-col при `min-[520px]:grid-cols-4`.
 4. **SectionHeading** — `text-xl sm:text-2xl mb-5 sm:mb-10` (на 1 размер меньше предыдущего; mb уменьшен в 2 раза на мобилке).
-5. **Projects mobile** — `overflow-x: auto` с **manual swipe** + автоскролл **43 px/s** через новый хук `useCarouselAutoScroll`. Касание → пауза 5 сек, продолжает с текущей позиции. Edge-to-edge через `-mr-6`. View All Works естественной ширины центр.
-6. **SkillCarousel** — LogoLoop 50 px/s, gap 56. Maze SVG свапается на `Maze-light.svg` (#191919) в светлой теме через `useTheme` hook.
+5. **Projects mobile** — `overflow-x: auto` с **manual swipe** + автоскролл **32 px/s** через новый хук `useCarouselAutoScroll`. Касание → пауза 5 сек, продолжает с текущей позиции. Edge-to-edge через `-mr-6`. View All Works естественной ширины центр.
+6. **SkillCarousel** — LogoLoop 38 px/s, gap 56. Maze SVG свапается на `Maze-light.svg` (#191919) в светлой теме через `useTheme` hook.
 7. **About Me** — `flex-col` стэк. Folder бумажки `#ffffff` (было `#F5F5F5`). Skill chips класс `.skill-chip` — обводка убрана в светлой теме (cascade override).
-8. **Expertise mobile** — то же что Projects: JS-scroll с manual swipe, 43 px/s, 5-сек пауза, edge-to-edge.
+8. **Expertise mobile** — то же что Projects: JS-scroll с manual swipe, 32 px/s, 5-сек пауза, edge-to-edge.
 9. **Contact mobile** — ElectricLogo 320×305. Форма: chubby-иконки (`fi-rc-portrait` / `fi-rc-envelope` / `fi-rc-pencil`) — единый стиль. Иконки центрированы через `top-0 bottom-0` (не `translate(-50%)`). Label-input gap `1` (4px).
 10. **Testimonials mobile** — 2 ряда h-carousel CSS-анимация 10s/10s, `pointer-events: none` (декоративная, без интерактива).
 11. **Footer mobile** — горизонтальный layout: copyright (2-row до 480, 1-row на ≥480) | quote | signature.
 12. **ThemeToggle floating** — `hidden sm:inline-flex` (скрыт на мобилке, есть в меню).
 
 ### Что прорабатано в small tablet 640-767 + правки md (сессия 2026-05-19 вечер)
-1. **Hero заголовок** — финальная формула `text-2xl min-[810px]:text-3xl xl:text-5xl` (24/30/48). Точку 810 выбрал пользователь после визуального теста. Убран `md:text-2xl` оверрайд.
+1. **Hero заголовок** — на тот момент формула была `text-2xl min-[810px]:text-3xl xl:text-5xl` (24/30/48). ⚠️ Позже (2026-05-21) **упрощена** до `text-2xl md:text-3xl xl:text-4xl` (24/30/36) — breakpoint 810 убран. Актуальное значение — в разделе «Дизайн-система».
 2. **Hero кнопки** — ВСЕГДА в ряд (правило пользователя «никогда не стэкать»). `gap-3 lg:gap-6`, `whitespace-nowrap` в Button.tsx, иконка `max-lg:` (видна до 1024 — планшеты тоже тач).
 3. **Hero stats** — `grid-cols-2 min-[520px]:grid-cols-4` (всегда 4-col с 520+, убран `md:grid-cols-2` оверрайд).
 4. **Available-for-freelance badge** — фон 0.20 (было 0.15), `font-semibold` (было medium), класс `.availability-badge` (border:0 на light через cascade).
@@ -604,12 +603,12 @@ Hero (#home) → Projects (#work) → SkillCarousel → About Me (#about)
 
 **Section padding**: hero `py-16 xl:pt-36 xl:pb-24` / standard `py-24 lg:py-36` / compact `py-16 lg:py-24` / footer `py-10` (применять через `<Section variant="...">`)
 **Typography**:
-- Hero h1: `text-2xl min-[810px]:text-3xl xl:text-5xl` (24/30/48 — точка 810 выбрана пользователем)
+- Hero h1: `text-2xl md:text-3xl xl:text-4xl` (24/30/36) — формула упрощена 2026-05-21, breakpoint 810 убран
 - Section h2: `text-xl sm:text-2xl` (20/24) — на 1 размер меньше Hero
 - Body 14, caption 12
 **Brand**: `var(--brand)` или `bg-brand`/`text-brand` — НИКОГДА хардкоды
 **Hero buttons**: всегда `flex-row` (никогда не стэкать), `gap-3 lg:gap-6`, иконка `max-lg:opacity-100` (видна до 1024)
-**Mobile carousels** (320-639): Projects 43 px/s (manual swipe + 5s pause), Expertise 43 px/s (manual swipe + 5s pause), SkillCarousel 50 px/s, Testimonials 10s/10s (no interactivity)
+**Mobile carousels** (320-639): Projects 32 px/s (manual swipe + 5s pause), Expertise 32 px/s (manual swipe + 5s pause), SkillCarousel 38 px/s, Testimonials 10s/10s (no interactivity)
 **Carousel edge fade**: `.h-carousel-fade` для `overflow-x: auto`, `.h-carousel` для CSS-animation. Ширина fade `clamp(48px, 15%, 80px)`, цвет `var(--surface-page)`.
 **Card padding**: 12 (sm) / 16 (md) / 24 (lg) — через `p-3 / p-4 / p-6`
 
